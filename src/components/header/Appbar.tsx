@@ -9,96 +9,121 @@ import Typography from "@material-ui/core/Typography";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PropTypes from "prop-types";
 import React from "react";
+import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
 
 const styles = {
-    // 증가하는 부분
-    grow: {
-        flexGrow: 1,
-    },
-    root: {
-        flexGrow: 1,
-    },
+  grow: {
+    flexGrow: 1,
+  },
+  root: {
+    flexGrow: 1,
+  },
 };
 
 export interface IProps extends WithStyles<typeof styles> {
-
+  setLocale: (lang: string) => void;
 }
 
 export interface IState {
-    isLoggedIn: boolean;
-    anchorElement: null | HTMLElement;
+  isLoggedIn: boolean;
+  anchorElement: null | HTMLElement;
 }
 
 class Appbar extends React.Component<IProps, IState> {
-    public state: IState = {
-        anchorElement: null,
-        isLoggedIn: false,
-    };
+  public state: IState = {
+    anchorElement: null,
+    isLoggedIn: false,
+  };
 
-    public render() {
-        const { classes } = this.props;
-        const { isLoggedIn, anchorElement } = this.state;
-        const isOpen = Boolean(anchorElement); // anchorElement가 값이 있을 경우
+  public setLocale = (lang: string) => {
+    localStorage.setItem("lang", lang);
+    this.props.setLocale(lang);
+}
 
-        return (
-            <div className = { classes.root }>
-                <AppBar position = "static">
-                    <Toolbar>
-                        <Typography variant = "h6" color = "inherit" className = { classes.grow }>
-                            릴레이 소설
-                        </Typography>
-                        { isLoggedIn ? (
-                            <div>
-                                <IconButton
-                                    aria-owns = { isOpen ? "menu-appbar" : undefined }
-                                    aria-haspopup = "true"
-                                    onClick = { this.handlePopup }
-                                    color = "inherit"
-                                    >
-                                        <AccountCircle />
-                                    </IconButton>
-                                    <Menu
-                                        id = "menu-appbar"
-                                        anchorEl = { anchorElement }
-                                        anchorOrigin = {{
-                                            horizontal: "right",
-                                            vertical: "top",
-                                        }}
-                                        transformOrigin = {{
-                                            horizontal: "right",
-                                            vertical: "top",
-                                        }}
-                                        open = { isOpen }
-                                        onClose = { this.handlePopupClose }
-                                        >
-                                        {/* Todo: 페이지 이동 까지 구현 */}
-                                        <MenuItem onClick = { this.handlePopupClose }>프로필</MenuItem>
-                                        <MenuItem onClick = { this.handlePopupClose }>내 정보</MenuItem>
-                                    </Menu>
-                            </div>) : (
-                                <div>
-                                    <Button>회원가입</Button>
-                                    <Button>로그인</Button>
-                                </div>
-                            ) }
-                    </Toolbar>
-                </AppBar>
-            </div>
-        );
-    }
+  public render() {
+    const { classes } = this.props;
+    const { isLoggedIn, anchorElement } = this.state;
+    const isProfileClicked = Boolean(anchorElement); // anchorElement가 값이 있을 경우
+    const changeLanguageButtons =
+    (<div>
+      <Button onClick={() => this.setLocale("ko")}>한국어</Button>
+      <Button onClick={() => this.setLocale("en")}>English</Button>
+    </div>);
 
-    private handlePopup = (event: React.MouseEvent<HTMLElement>) => {
-        this.setState({ anchorElement: event.currentTarget });
-    }
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+            <FormattedMessage id="title" />
+            </Typography>
+            { changeLanguageButtons }
+            {isLoggedIn ? (
+              <div>
+                <IconButton
+                  aria-owns={isProfileClicked ? "menu-appbar" : undefined}
+                  aria-haspopup="true"
+                  onClick={this.handlePopup}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElement}
+                  anchorOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  transformOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  open={isProfileClicked}
+                  onClose={this.handlePopupClose}
+                >
+                  <MenuItem onClick={this.login}><FormattedMessage id="appbar_profile" /></MenuItem>
+                  <MenuItem onClick={this.signup}><FormattedMessage id="appbar_myinfo" /></MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              <div>
+                <Button>
+                  <Link to="/signup"><FormattedMessage id="appbar_signup" /></Link>
+                </Button>
+                <Button>
+                  <Link to="/login"><FormattedMessage id="appbar_login" /></Link>
+                </Button>
+              </div>
+            )}
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
 
-    private handlePopupClose = () => {
-        this.setState({ anchorElement: null });
-    }
+  private handlePopup = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ anchorElement: event.currentTarget });
+  }
 
+  private handlePopupClose = () => {
+    this.setState({ anchorElement: null });
+  }
+
+  private login = () => {
+    this.handlePopupClose();
+    // TODO: 페이지 이동
+  }
+
+  private signup = () => {
+    this.handlePopupClose();
+    // TODO: 페이지 이동
+  }
 }
 
 (Appbar as React.ComponentClass<IProps, IState>).propTypes = {
-    classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 } as any;
 
 export default withStyles(styles)(Appbar);

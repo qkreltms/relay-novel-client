@@ -1,15 +1,11 @@
 import React, { Component } from "react";
-import Appbar from "./components/header/Appbar";
-
-interface IProps {
-  setLocale: (lang: string) => void;
-}
+import Router from "./router";
 
 class App extends Component {
   public render() {
     return (
       <div className="App">
-        <Appbar/>
+        <Router />
       </div>
     );
   }
