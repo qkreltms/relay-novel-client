@@ -6,4 +6,5 @@ export default {
   appbar_myinfo: "MyInfo",
   appbar_signup: "Sign Up",
   appbar_login: "Log In",
+  signup_password: "Password",
 };

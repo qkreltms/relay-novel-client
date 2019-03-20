@@ -9,6 +9,6 @@ export class MainPage extends React.Component<IProps, {}> {
     }
 
     public render() {
-        return ( <div></div> );
+        return ( <div> 메인 페이지 </div> );
     }
 }

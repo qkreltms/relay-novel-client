@@ -11,16 +11,12 @@ const createEmpty = () => ({
 export const localeReducer = (state = createEmpty(), action: ILocaleAction) => {
     switch (action.type) {
         case SET_LOCALE: {
-            return handleSetLocaleCompleted(state, action);
+            return {
+                lang: action.lang,
+            } as ILocaleAction;
         }
 
         default:
             return state;
     }
-};
-
-const handleSetLocaleCompleted = (state = createEmpty(), action: ILocaleAction) => {
-    return {
-        lang: action.lang,
-    };
 };

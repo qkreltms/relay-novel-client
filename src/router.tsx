@@ -4,8 +4,10 @@ import en from "react-intl/locale-data/en";
 import ko from "react-intl/locale-data/ko";
 import { connect } from "react-redux";
 import { HashRouter, Route, Switch } from "react-router-dom";
-import { setLocale } from "./actions";
-import Appbar from "./components/header/Appbar";
+import { AppbarContainer as Appbar } from "./components/header";
+import { LoginPageContainer as LoginPage } from "./components/login_page";
+import { MainPage } from "./components/main_page";
+import { SignupPageContainer as SignupPage } from "./components/signup_page";
 import locale from "./i18n";
 import { ICombineReducersState } from "./reducers";
 
@@ -21,12 +23,12 @@ const Router: React.SFC<IProps> = (props) => {
     <IntlProvider locale={props.lang} messages={locale[props.lang]}>
       <HashRouter>
         <div>
-            <Appbar setLocale={props.setLocale}/>
-            <Switch>
-              {/* <Route exact path="/" component={App} />
-        <Route exact path="/signup" component={App} />
-        <Route path="/login" component={App} /> */}
-            </Switch>
+          <Appbar />
+          <Switch>
+            <Route exact path="/" component= { MainPage } />
+            <Route exact path="/signup" component={ SignupPage } />
+            <Route exact path="/login" component={ LoginPage } />
+          </Switch>
           <footer />
         </div>
       </HashRouter>
@@ -38,11 +40,6 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   lang: state.locale.lang,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-  setLocale: (lang: string) => dispatch(setLocale(lang)),
-});
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
 )(Router);

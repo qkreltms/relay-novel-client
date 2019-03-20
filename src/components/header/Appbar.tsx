@@ -22,107 +22,109 @@ const styles = {
 };
 
 export interface IProps extends WithStyles<typeof styles> {
+  // isLoggedIn: boolean;
+  anchorElement: HTMLElement;
+  setHtmlElementOnMenu: (anchorElement: any) => void;
   setLocale: (lang: string) => void;
 }
 
-export interface IState {
-  isLoggedIn: boolean;
-  anchorElement: null | HTMLElement;
-}
-
-class Appbar extends React.Component<IProps, IState> {
-  public state: IState = {
-    anchorElement: null,
-    isLoggedIn: false,
+const Appbar: React.SFC<IProps> = (props) => {
+  const setLocale = (lang: string) => {
+    localStorage.setItem("lang", lang);
+    props.setLocale(lang);
   };
 
-  public setLocale = (lang: string) => {
-    localStorage.setItem("lang", lang);
-    this.props.setLocale(lang);
-}
+  const { classes } = props;
+  const isProfileClicked = Boolean(props.anchorElement); // anchorElement가 값이 있을 경우
+  const changeLanguageButtons = (
+    <div>
+      <Button onClick={() => setLocale("ko")}>한국어</Button>
+      <Button onClick={() => setLocale("en")}>English</Button>
+    </div>
+  );
 
-  public render() {
-    const { classes } = this.props;
-    const { isLoggedIn, anchorElement } = this.state;
-    const isProfileClicked = Boolean(anchorElement); // anchorElement가 값이 있을 경우
-    const changeLanguageButtons =
-    (<div>
-      <Button onClick={() => this.setLocale("ko")}>한국어</Button>
-      <Button onClick={() => this.setLocale("en")}>English</Button>
-    </div>);
+  const handlePopup = (event: React.MouseEvent<HTMLElement>) => {
+    props.setHtmlElementOnMenu(event.currentTarget);
+  };
 
-    return (
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-            <FormattedMessage id="title" />
-            </Typography>
-            { changeLanguageButtons }
-            {isLoggedIn ? (
-              <div>
-                <IconButton
-                  aria-owns={isProfileClicked ? "menu-appbar" : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handlePopup}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElement}
-                  anchorOrigin={{
-                    horizontal: "right",
-                    vertical: "top",
-                  }}
-                  transformOrigin={{
-                    horizontal: "right",
-                    vertical: "top",
-                  }}
-                  open={isProfileClicked}
-                  onClose={this.handlePopupClose}
-                >
-                  <MenuItem onClick={this.login}><FormattedMessage id="appbar_profile" /></MenuItem>
-                  <MenuItem onClick={this.signup}><FormattedMessage id="appbar_myinfo" /></MenuItem>
-                </Menu>
-              </div>
-            ) : (
-              <div>
-                <Button>
-                  <Link to="/signup"><FormattedMessage id="appbar_signup" /></Link>
-                </Button>
-                <Button>
-                  <Link to="/login"><FormattedMessage id="appbar_login" /></Link>
-                </Button>
-              </div>
-            )}
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
-  }
+  const handlePopupClose = () => {
+    props.setHtmlElementOnMenu(null);
+  };
 
-  private handlePopup = (event: React.MouseEvent<HTMLElement>) => {
-    this.setState({ anchorElement: event.currentTarget });
-  }
-
-  private handlePopupClose = () => {
-    this.setState({ anchorElement: null });
-  }
-
-  private login = () => {
-    this.handlePopupClose();
+  const login = () => {
+    handlePopupClose();
     // TODO: 페이지 이동
-  }
+  };
 
-  private signup = () => {
-    this.handlePopupClose();
+  const signup = () => {
+    handlePopupClose();
     // TODO: 페이지 이동
-  }
-}
+  };
+  const isLoggedIn = true;
 
-(Appbar as React.ComponentClass<IProps, IState>).propTypes = {
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            <Link to="/">
+              <FormattedMessage id="title" />
+            </Link>
+          </Typography>
+          {changeLanguageButtons}
+          {isLoggedIn ? (
+            <div>
+              <IconButton
+                aria-owns={isProfileClicked ? "menu-appbar" : undefined}
+                aria-haspopup="true"
+                onClick={handlePopup}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={props.anchorElement}
+                anchorOrigin={{
+                  horizontal: "right",
+                  vertical: "top",
+                }}
+                transformOrigin={{
+                  horizontal: "right",
+                  vertical: "top",
+                }}
+                open={isProfileClicked}
+                onClose={handlePopupClose}
+              >
+                <MenuItem onClick={login}>
+                  <FormattedMessage id="appbar_profile" />
+                </MenuItem>
+                <MenuItem onClick={signup}>
+                  <FormattedMessage id="appbar_myinfo" />
+                </MenuItem>
+              </Menu>
+            </div>
+          ) : (
+            <div>
+              <Button>
+                <Link to="/signup">
+                  <FormattedMessage id="appbar_signup" />
+                </Link>
+              </Button>
+              <Button>
+                <Link to="/login">
+                  <FormattedMessage id="appbar_login" />
+                </Link>
+              </Button>
+            </div>
+          )}
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
+};
+
+(Appbar as React.SFC<IProps>).propTypes = {
   classes: PropTypes.object.isRequired,
 } as any;
 
