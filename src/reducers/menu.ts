@@ -1,7 +1,7 @@
 import { IAppbarAction, SET_HTML_ELEMENT_ON_MENU } from "../actions";
 
 export interface IAppbarState {
-    anchorElement: any;
+    anchorElement: HTMLElement;
 }
 
 const createEmpty = () => ({

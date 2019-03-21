@@ -60,7 +60,7 @@ const Appbar: React.SFC<IProps> = (props) => {
     handlePopupClose();
     // TODO: 페이지 이동
   };
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
   return (
     <div className={classes.root}>

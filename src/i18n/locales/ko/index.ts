@@ -7,4 +7,7 @@ export default {
     appbar_signup: "회원가입",
     appbar_login: "로그인",
     signup_password: "비밀번호",
+    signup_email: "이메일",
+    signup_nickname: "닉네임",
+    signup_signup: "회원가입 하기",
 };
