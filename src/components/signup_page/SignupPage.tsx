@@ -79,12 +79,14 @@ export const SignupPage: React.SFC<IProps> = props => {
       password: props.password
     };
     axios
-      .post(`http://localhost:3001/api/users/`, body)
+      .post(`${config.REACT_APP_SERVER_URL}/users/`, body)
       .then(res => {
         console.log(res);
+        // if 성공하면 페이지 넘기기
       })
       .catch(err => {
         console.log(err);
+        // 실패하면 뭐가 실패했는지 알려주기
       });
   };
 

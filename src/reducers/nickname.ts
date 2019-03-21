@@ -28,5 +28,6 @@ const validateNickname = (nickname: string):boolean => {
     if (nickname.length >= 1 && nickname.length <= 30) {
         return true;
     }
+    
     return false;
 }
