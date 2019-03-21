@@ -3,11 +3,13 @@ import { IPasswordAction, SET_PASSWORD, SHOW_PASSWORD } from "../actions";
 export interface IPasswordState {
     password: string;
     passwordVisibility: boolean;
+    isPasswordError: boolean;
 }
 
 const createEmpty = () => ({
     password: "",
     passwordVisibility: false,
+    isPasswordError: false,
 });
 
 export const passwordReducer = (state = createEmpty(), action: IPasswordAction) => {
@@ -16,6 +18,7 @@ export const passwordReducer = (state = createEmpty(), action: IPasswordAction) 
             return {
                 password: action.password,
                 passwordVisibility: state.passwordVisibility,
+                isPasswordError: !validatePassword(action.password),
             } as IPasswordState;
         }
 
@@ -23,6 +26,7 @@ export const passwordReducer = (state = createEmpty(), action: IPasswordAction) 
             return {
                 password: state.password,
                 passwordVisibility: action.passwordVisibility,
+                isPasswordError: state.isPasswordError,
             } as IPasswordState;
         }
 
@@ -30,3 +34,10 @@ export const passwordReducer = (state = createEmpty(), action: IPasswordAction) 
             return state;
     }
 };
+
+const validatePassword = (password: string):boolean => {
+    if (password.length >= 6 && password.length <= 15) {
+        return true;
+    }
+    return false;
+}

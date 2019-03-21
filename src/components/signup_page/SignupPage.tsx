@@ -18,6 +18,7 @@ import { FormattedMessage } from "react-intl";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import config from "../../config";
+import { FormLabel } from "@material-ui/core";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -45,9 +46,16 @@ interface IProps extends WithStyles<typeof styles> {
   password: string;
   email: string;
   nickname: string;
+  isPasswordError: boolean;
+  isNicknameError: boolean;
+  isEmailError: boolean;
 }
 
 export const SignupPage: React.SFC<IProps> = props => {
+  let isPasswordError = props.isPasswordError;
+  let isNicknameError = props.isNicknameError;
+  let isEmailError = props.isEmailError;
+
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setPassword(event.target.value);
   };
@@ -85,12 +93,12 @@ export const SignupPage: React.SFC<IProps> = props => {
       <FormControl
         className={classNames(props.classes.margin, props.classes.textField)}
       >
-        <InputLabel error={false} htmlFor="adornment-password">
+        <InputLabel error={isPasswordError} htmlFor="adornment-password">
           <FormattedMessage id="signup_password" />
         </InputLabel>
         <Input
           name="password"
-          error={false}
+          error={isPasswordError}
           id="adornment-password"
           type={props.passwordVisibility ? "text" : "password"}
           value={props.password}
@@ -110,12 +118,12 @@ export const SignupPage: React.SFC<IProps> = props => {
       <FormControl
         className={classNames(props.classes.margin, props.classes.textField)}
       >
-        <InputLabel error={false} htmlFor="adornment-email">
+        <InputLabel error={isEmailError} htmlFor="adornment-email">
           <FormattedMessage id="signup_email" />
         </InputLabel>
         <Input
           name="email"
-          error={false}
+          error={isEmailError}
           id="adornment-email"
           type="text"
           value={props.email}
@@ -125,12 +133,12 @@ export const SignupPage: React.SFC<IProps> = props => {
       <FormControl
         className={classNames(props.classes.margin, props.classes.textField)}
       >
-        <InputLabel error={false} htmlFor="adornment-nickname">
+        <InputLabel error={isNicknameError} htmlFor="adornment-nickname">
           <FormattedMessage id="signup_nickname" />
         </InputLabel>
         <Input
           name="nickname"
-          error={false}
+          error={isNicknameError}
           id="adornment-nickname"
           type="text"
           value={props.nickname}
@@ -141,11 +149,22 @@ export const SignupPage: React.SFC<IProps> = props => {
         variant="contained"
         color="primary"
         className={props.classes.button}
-        disabled={false}
+        disabled={isPasswordError || isEmailError || isNicknameError}
         onClick={handleSignupOnClick}
       >
         <FormattedMessage id="signup_signup" />
       </Button>
+      <FormLabel>
+        {isPasswordError ? (
+          <FormattedMessage id="signup_errPassword" />
+        ) : isEmailError ? (
+          <FormattedMessage id="signup_errEmail" />
+        ) : isNicknameError ? (
+          <FormattedMessage id="signup_errNickname" />
+        ) : (
+          <div />
+        )}
+      </FormLabel>
     </div>
   );
 };

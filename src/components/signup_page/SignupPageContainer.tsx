@@ -8,6 +8,9 @@ const mapStateToProps = (state: ICombineReducersState) => ({
     passwordVisibility: state.password.passwordVisibility,
     email: state.email.email,
     nickname: state.nickname.nickname,
+    isPasswordError: state.password.isPasswordError,
+    isNicknameError: state.nickname.isNicknameError,
+    isEmailError: state.email.isEmailError,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
