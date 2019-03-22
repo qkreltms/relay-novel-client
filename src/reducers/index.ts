@@ -4,6 +4,7 @@ import { ILocaleState, localeReducer } from "./locale";
 import { AppbarReducer, IAppbarState } from "./menu";
 import { INicknameState, nicknameReducer } from "./nickname";
 import { IPasswordState, passwordReducer } from "./password";
+import { IOpenState, openReducer } from "./open";
 
 export interface ICombineReducersState {
     appbar: IAppbarState;
@@ -11,6 +12,7 @@ export interface ICombineReducersState {
     password: IPasswordState;
     nickname: INicknameState;
     email: IEmailState;
+    open: IOpenState;
 }
 
 export const rootReducer = combineReducers<ICombineReducersState>({
@@ -19,4 +21,5 @@ export const rootReducer = combineReducers<ICombineReducersState>({
     password: passwordReducer,
     nickname: nicknameReducer,
     email: emailReducer,
+    open: openReducer,
 });

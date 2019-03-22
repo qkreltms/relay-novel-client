@@ -2,8 +2,7 @@
 
 export default {
     title: "릴레이 소설",
-    appbar_profile: "프로필",
-    appbar_myinfo: "내 정보",
+    appbar_menu_myprofile: "프로필",
     appbar_signup: "회원가입",
     appbar_login: "로그인",
     signup_password: "비밀번호",
@@ -18,4 +17,9 @@ export default {
     signupsuccess_gohomepage: "홈페이지로 가기",
     notfound_gohomepage: "홈페이지로 가기",
     notfound_msg: "페이지를 찾을 수 없습니다. 404 에러", 
+    logindialog_title: "로그인",
+    logindialog_email: "이메일",
+    logindialog_password: "비밀번호",
+    logindialog_cancle: "취소",
+    logindialog_ok: "확인",
 };

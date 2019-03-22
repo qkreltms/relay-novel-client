@@ -2,8 +2,7 @@
 
 export default {
   title: "Relay Novel",
-  appbar_profile: "Profile",
-  appbar_myinfo: "MyInfo",
+  appbar_menu_myprofile: "Profile",
   appbar_signup: "Sign Up",
   appbar_login: "Log In",
   signup_password: "Password",
@@ -18,4 +17,9 @@ export default {
   signupsuccess_gohomepage: "Go Homepage",
   notfound_gohomepage: "Go Homepage",
   notfound_msg: "Page Not Found. 404 Error", 
+  logindialog_title: "Login",
+  logindialog_email: "Email",
+  logindialog_password: "Password",
+  logindialog_cancle: "Cancle",
+  logindialog_ok: "OK",
 };

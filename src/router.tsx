@@ -5,7 +5,6 @@ import ko from "react-intl/locale-data/ko";
 import { connect } from "react-redux";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import { AppbarContainer as Appbar } from "./components/header";
-import { LoginPageContainer as LoginPage } from "./components/login_page";
 import { MainPage } from "./components/main_page";
 import { SignupPageContainer as SignupPage } from "./components/signup_page";
 import locale from "./i18n";
@@ -29,7 +28,6 @@ const Router: React.SFC<IProps> = (props) => {
           <Switch>
             <Route exact path="/" component= { MainPage } />
             <Route exact path="/signup" component={ SignupPage } />
-            <Route exact path="/login" component={ LoginPage } />
             <Route exact path="/signup/success" component={ SignupSuccessPageContainer } />
             <Route component={ NotfoundPageContainer } />
           </Switch>
