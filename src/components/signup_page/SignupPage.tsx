@@ -12,6 +12,8 @@ import config from "../../config";
 import { FormLabel } from "@material-ui/core";
 import PasswordInput from "../common/PasswordInput";
 import DefaultInput from "../common/DefaultInput";
+import { withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -45,6 +47,10 @@ interface IProps extends WithStyles<typeof styles> {
   isNicknameError: boolean;
   isEmailError: boolean;
   isEmailDuplicated: boolean;
+  match: any;
+  location: any;
+  history: any;
+  classes: any;
 }
 
 export const SignupPage: React.SFC<IProps> = props => {
@@ -64,12 +70,12 @@ export const SignupPage: React.SFC<IProps> = props => {
     props.setNickname(event.target.value);
   };
 
-  const checkEmpty = ():boolean => {
+  const checkEmpty = (): boolean => {
     if (props.nickname.length <= 0) return true;
     if (props.password.length <= 0) return true;
     if (props.email.length <= 0) return true;
     return false;
-  }
+  };
 
   const handleSignupOnClick = () => {
     const body = {
@@ -80,18 +86,18 @@ export const SignupPage: React.SFC<IProps> = props => {
     axios
       .post(`${config.REACT_APP_SERVER_URL}/users/`, body)
       .then(res => {
-        console.log(res);
-        //회원가입 성공 화면이동 하기
+        return props.history.push("/signup/success");
       })
       .catch(err => {
-        console.log(err.response.data);
+        if (err.response) {
+          const message = err.response.data.message;
+          if (message.includes("User")) {
+            return props.setIsEmailDuplicated(true);
+          }
 
-        const message = err.response.data.message;
-        if (message.includes("User")) {
-          return props.setIsEmailDuplicated(true);
+          return props.setIsEmailDuplicated(false);
         }
-
-        return props.setIsEmailDuplicated(false);
+        console.log(err);
       });
   };
 
@@ -157,4 +163,11 @@ export const SignupPage: React.SFC<IProps> = props => {
   );
 };
 
-export default withStyles(styles)(SignupPage);
+(SignupPage as React.SFC<IProps>).propTypes = {
+  match: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
+} as any;
+
+export default withStyles(styles)(withRouter(SignupPage));

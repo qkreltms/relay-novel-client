@@ -14,4 +14,6 @@ export default {
   signup_errNickname: "Nickname's length is must be in 6~15",
   signup_errEmail: "Email's length is must be in 6~15",
   signup_duplicatedEmail: "Email is already in use.",
+  signupsuccess_success: "Sing Up Completed!",
+  signupsuccess_gohomepage: "Go to Homepage",
 };
