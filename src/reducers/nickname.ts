@@ -1,5 +1,4 @@
 import { INicknameAction, SET_NICKNAME } from "../actions";
-
 export interface INicknameState {
     nickname: string;
     isNicknameError: boolean;

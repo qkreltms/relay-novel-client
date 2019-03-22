@@ -13,4 +13,5 @@ export default {
     signup_errPassword: "비밀번호 길이는 6자 이상 또는 15자 이하입니다.",
     signup_errNickname: "닉네임 길이는 6자 이상 또는 15자 이하입니다.",
     signup_errEmail: "이메일 길이는 6자 이상 또는 15자 이하입니다. 이메일 형식이 맞는지 확인해 주세요.",
+    signup_duplicatedEmail: "이메일이 이미 존재합니다.",
 };

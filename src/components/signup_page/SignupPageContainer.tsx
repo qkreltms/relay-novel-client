@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { setPassword, setPasswordVisibility, setEmail, setNickname} from "../../actions";
+import { setPassword, setPasswordVisibility, setEmail, setNickname, DuplicatedEmail, setIsEmailDuplicated} from "../../actions";
 import { ICombineReducersState } from "../../reducers";
 import SignupPage from "./SignupPage";
 
@@ -11,6 +11,7 @@ const mapStateToProps = (state: ICombineReducersState) => ({
     isPasswordError: state.password.isPasswordError,
     isNicknameError: state.nickname.isNicknameError,
     isEmailError: state.email.isEmailError,
+    isEmailDuplicated: state.email.isEmailDuplicated,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -18,6 +19,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setPasswordVisibility: (passwordVisibility: boolean) => dispatch(setPasswordVisibility(passwordVisibility)),
     setEmail: (email: string) => dispatch(setEmail(email)),
     setNickname: (nickname: string) => dispatch(setNickname(nickname)),
+    DuplicatedEmail: () => dispatch(DuplicatedEmail()),
+    setIsEmailDuplicated: (isEmailDuplicated: boolean) => dispatch(setIsEmailDuplicated(isEmailDuplicated)),
 });
 
 export const SignupPageContainer = connect(
