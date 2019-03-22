@@ -11,6 +11,7 @@ import { SignupPageContainer as SignupPage } from "./components/signup_page";
 import locale from "./i18n";
 import { ICombineReducersState } from "./reducers";
 import { SignupSuccessPageContainer } from "./components/signup_page/signup_success_page";
+import { NotfoundPageContainer } from "./components/notfound_page";
 
 addLocaleData([...en, ...ko]);
 
@@ -30,6 +31,7 @@ const Router: React.SFC<IProps> = (props) => {
             <Route exact path="/signup" component={ SignupPage } />
             <Route exact path="/login" component={ LoginPage } />
             <Route exact path="/signup/success" component={ SignupSuccessPageContainer } />
+            <Route component={ NotfoundPageContainer } />
           </Switch>
           <footer />
         </div>

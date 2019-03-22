@@ -16,4 +16,6 @@ export default {
     signup_duplicatedEmail: "이메일이 이미 존재합니다.",
     signupsuccess_success: "회원가입 완료!",
     signupsuccess_gohomepage: "홈페이지로 가기",
+    notfound_gohomepage: "홈페이지로 가기",
+    notfound_msg: "페이지를 찾을 수 없습니다. 404 에러", 
 };

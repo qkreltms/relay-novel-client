@@ -24,31 +24,31 @@ const styles = (theme: Theme) =>
     }
   });
 
-const SignupSuccessPage: React.SFC<IProps> = props => {
+const NotfoundPage: React.SFC<IProps> = props => {
   const handleOnClick = () => {
     return props.history.push("/");
   };
 
   return (
     <div>
-      <FormattedMessage id="signupsuccess_success" />
+      <FormattedMessage id="notfound_msg" />
       <Button
         variant="contained"
         color="primary"
         className={props.classes.button}
         onClick={handleOnClick}
       >
-        <FormattedMessage id="signupsuccess_gohomepage" />
+        <FormattedMessage id="notfound_gohomepage" />
       </Button>
     </div>
   );
 };
 
-(SignupSuccessPage as React.SFC<IProps>).propTypes = {
+(NotfoundPage as React.SFC<IProps>).propTypes = {
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired
 } as any;
 
-export default withStyles(styles)(withRouter(SignupSuccessPage));
+export default withStyles(styles)(withRouter(NotfoundPage));

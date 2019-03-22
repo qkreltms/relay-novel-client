@@ -15,5 +15,7 @@ export default {
   signup_errEmail: "Email's length is must be in 6~15",
   signup_duplicatedEmail: "Email is already in use.",
   signupsuccess_success: "Sing Up Completed!",
-  signupsuccess_gohomepage: "Go to Homepage",
+  signupsuccess_gohomepage: "Go Homepage",
+  notfound_gohomepage: "Go Homepage",
+  notfound_msg: "Page Not Found. 404 Error", 
 };
