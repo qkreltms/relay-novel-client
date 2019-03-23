@@ -9,7 +9,7 @@ import { MainPage } from "./components/main_page";
 import { SignupPageContainer as SignupPage } from "./components/signup_page";
 import locale from "./i18n";
 import { ICombineReducersState } from "./reducers";
-import { SignupSuccessPageContainer } from "./components/signup_page/signup_success_page";
+import { SignupSuccessPageContainer } from "./components/signup_success_page";
 import { NotfoundPageContainer } from "./components/notfound_page";
 
 addLocaleData([...en, ...ko]);

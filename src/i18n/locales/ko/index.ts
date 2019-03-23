@@ -2,6 +2,7 @@
 
 export default {
     title: "릴레이 소설",
+    appbar_menu_logout: "로그아웃",
     appbar_menu_myprofile: "프로필",
     appbar_signup: "회원가입",
     appbar_login: "로그인",

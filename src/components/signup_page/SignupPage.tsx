@@ -77,7 +77,7 @@ export const SignupPage: React.SFC<IProps> = props => {
     return false;
   };
 
-  const handleSignupOnClick = () => {
+  const handleOnSignupClick = () => {
     const body = {
       email: props.email,
       nickname: props.nickname,
@@ -142,7 +142,7 @@ export const SignupPage: React.SFC<IProps> = props => {
           props.isNicknameError ||
           props.isPasswordError
         }
-        onClick={handleSignupOnClick}
+        onClick={handleOnSignupClick}
       >
         <FormattedMessage id="signup_signup" />
       </Button>

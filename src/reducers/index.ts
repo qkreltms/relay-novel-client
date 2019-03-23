@@ -5,6 +5,8 @@ import { AppbarReducer, IAppbarState } from "./menu";
 import { INicknameState, nicknameReducer } from "./nickname";
 import { IPasswordState, passwordReducer } from "./password";
 import { IOpenState, openReducer } from "./open";
+import { IUserState, userReducer } from "./user";
+import { loginReducer, ILoginState } from "./login";
 
 export interface ICombineReducersState {
     appbar: IAppbarState;
@@ -13,6 +15,8 @@ export interface ICombineReducersState {
     nickname: INicknameState;
     email: IEmailState;
     open: IOpenState;
+    user: IUserState;
+    login: ILoginState;
 }
 
 export const rootReducer = combineReducers<ICombineReducersState>({
@@ -22,4 +26,6 @@ export const rootReducer = combineReducers<ICombineReducersState>({
     nickname: nicknameReducer,
     email: emailReducer,
     open: openReducer,
+    user: userReducer,
+    login: loginReducer,
 });

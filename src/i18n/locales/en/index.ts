@@ -3,6 +3,7 @@
 export default {
   title: "Relay Novel",
   appbar_menu_myprofile: "Profile",
+  appbar_menu_logout: "Log Out",
   appbar_signup: "Sign Up",
   appbar_login: "Log In",
   signup_password: "Password",

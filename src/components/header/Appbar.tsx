@@ -12,6 +12,8 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 import { Link, withRouter } from "react-router-dom";
 import { LoginDialogContainer } from "../common/login_dialog";
+import axios from "axios";
+import config from "../../config";
 
 const styles = {
   grow: {
@@ -23,7 +25,6 @@ const styles = {
 };
 
 export interface IProps extends WithStyles<typeof styles> {
-  // isLoggedIn: boolean;
   anchorElement: HTMLElement;
   setHtmlElementOnMenu: (anchorElement: HTMLElement) => void;
   setLocale: (lang: string) => void;
@@ -33,6 +34,8 @@ export interface IProps extends WithStyles<typeof styles> {
   location: any;
   history: any;
   isOpen: boolean;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
 const Appbar: React.SFC<IProps> = props => {
@@ -71,7 +74,16 @@ const Appbar: React.SFC<IProps> = props => {
     props.setIsOpen(true);
   };
 
-  const isLoggedIn = false;
+  const handleMenuLogoutClick = () => {
+    props.setIsLoggedIn(false);
+    axios.get(`${config.REACT_APP_SERVER_URL}/auth/session`)
+    .then(res => {
+      // Todo: test
+    })
+    .catch(err => {
+
+    })
+  }
 
   return (
     <div className={classes.root}>
@@ -84,7 +96,7 @@ const Appbar: React.SFC<IProps> = props => {
             </Link>
           </Typography>
           {changeLanguageButtons}
-          {isLoggedIn ? (
+          {props.isLoggedIn ? (
             <div>
               <IconButton
                 aria-owns={isProfileClicked ? "menu-appbar" : undefined}
@@ -110,6 +122,9 @@ const Appbar: React.SFC<IProps> = props => {
               >
                 <MenuItem onClick={handleMenuMyProfileClick}>
                   <FormattedMessage id="appbar_menu_myprofile" />
+                </MenuItem>
+                <MenuItem onClick={handleMenuLogoutClick}>
+                  <FormattedMessage id="appbar_menu_logout" />
                 </MenuItem>
               </Menu>
             </div>
