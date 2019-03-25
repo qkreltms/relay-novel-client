@@ -10,9 +10,9 @@ export default {
   signup_email: "Email",
   signup_nickname: "Nickname",
   signup_signup: "Sign Up",
-  signup_errPassword: "Password's length is must be in 6~15",
-  signup_errNickname: "Nickname's length is must be in 6~15",
-  signup_errEmail: "Email's length is must be in 6~15",
+  signup_errPassword: "Password's length is must be in 6~15.",
+  signup_errNickname: "Nickname's length is must be in 6~15.",
+  signup_errEmail: "Email's length is must be in 6~15.",
   signup_duplicatedEmail: "Email is already in use.",
   signupsuccess_success: "Sing Up Completed!",
   signupsuccess_gohomepage: "Go Homepage",
@@ -23,4 +23,5 @@ export default {
   logindialog_password: "Password",
   logindialog_cancle: "Cancle",
   logindialog_ok: "OK",
+  logindialog_notexistsemail: "Email is not exists.",
 };

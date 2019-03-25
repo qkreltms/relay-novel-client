@@ -15,6 +15,7 @@ import { LoginDialogContainer } from "../common/login_dialog";
 import axios from "axios";
 import config from "../../config";
 import axiosConfig from "../../config/axios";
+import { User, newUser } from "../../models";
 
 const styles = {
   grow: {
@@ -37,6 +38,8 @@ export interface IProps extends WithStyles<typeof styles> {
   isOpen: boolean;
   isLoggedIn: boolean;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  user: User;
+  setUser: (user: User) => void;
 }
 
 const Appbar: React.SFC<IProps> = props => {
@@ -76,19 +79,21 @@ const Appbar: React.SFC<IProps> = props => {
   };
 
   const handleMenuLogoutClick = () => {
-    props.setIsLoggedIn(false);
-
-    axios.get(`${config.REACT_APP_SERVER_URL}/auth/session`, axiosConfig)
-    .then(res => {
-      if (res.data.status === "success") {
-        return console.log("로그아웃 성공")
-      }
-      console.log(res)
-    })
-    .catch(err => {
-      console.log(err.response)
-    })
-  }
+    axios
+      .get(`${config.REACT_APP_SERVER_URL}/auth/session`, axiosConfig)
+      .then(res => {
+        if (res.data.status === "success") {
+          console.log("로그아웃 성공");
+          props.setUser(newUser())
+          return props.setIsLoggedIn(false);
+        }
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err.response);
+        console.log("로그아웃 실패");
+      });
+  };
 
   return (
     <div className={classes.root}>

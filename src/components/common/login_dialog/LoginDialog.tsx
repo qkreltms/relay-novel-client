@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  FormLabel
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -30,17 +31,17 @@ interface IProps extends WithStyles<typeof styles> {
   setPassword: (password: string) => void;
   setPasswordVisibility: (passwordVisibility: boolean) => void;
   setEmail: (email: string) => void;
-  setIsEmailDuplicated: (isEmailDuplicated: boolean) => void;
-  DuplicatedEmail: () => void;
   passwordVisibility: boolean;
   password: string;
   email: string;
   isPasswordError: boolean;
   isEmailError: boolean;
-  isEmailDuplicated: boolean;
   setUser: (user: User) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (isLogin: boolean) => void;
+  duplicatedEmail: (email: string) => boolean;
+  setIsEmailDuplicated: (duplicated: boolean) => void;
+  isEmailDuplicated: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -56,8 +57,8 @@ const styles = (theme: Theme) =>
 const LoginDialog: React.SFC<IProps> = props => {
   const handleOnClose = () => {
     props.setIsOpen(false);
-    props.setPassword("")
-    props.setEmail("")
+    props.setPassword("");
+    props.setEmail("");
   };
 
   const handleOnLogin = () => {
@@ -72,23 +73,25 @@ const LoginDialog: React.SFC<IProps> = props => {
       email: props.email,
       password: props.password
     };
-    
-    axios.post(`${config.REACT_APP_SERVER_URL}/auth/session`,
-    body, axiosConfig)
+
+    axios
+      .post(`${config.REACT_APP_SERVER_URL}/auth/session`, body, axiosConfig)
       .then(res => {
         props.setIsOpen(false);
         props.setIsLoggedIn(true);
-        // props.setUser(res.data.message as User)
-        console.log("로그인 성공")
-        console.log(res)
+        props.setUser(res.data.message as User);
+        props.setPassword("");
+        props.setEmail("");
+        console.log("로그인 성공");
+        console.log(res);
       })
       .catch(err => {
-        console.log(err.response);
-      })
-      .finally(() => {
-        props.setPassword("")
-        props.setEmail("")
-      })
+        const res = err.response
+        if (res.data.message.includes("username")) {
+          props.setIsEmailDuplicated(true);
+        }
+        console.log(res);
+      });
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,7 +128,7 @@ const LoginDialog: React.SFC<IProps> = props => {
             formattedMessageId="signup_email"
             name="dialog_email"
           />
-            
+
           <PasswordInput
             classes={props.classes}
             isPasswordError={props.isPasswordError}
@@ -134,6 +137,17 @@ const LoginDialog: React.SFC<IProps> = props => {
             handlePasswordChange={handlePasswordChange}
             handlePasswordVisibility={handlePasswordVisibility}
           />
+          <FormLabel>
+            {props.isEmailDuplicated ? (
+              <FormattedMessage id="logindialog_notexistsemail" />
+            ) : props.isPasswordError ? (
+              <FormattedMessage id="signup_errPassword" />
+            ) : props.isEmailError ? (
+              <FormattedMessage id="signup_errEmail" />
+            ) : (
+              <div />
+            )}
+          </FormLabel>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleOnClose} color="primary">

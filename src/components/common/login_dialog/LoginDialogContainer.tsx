@@ -7,10 +7,10 @@ import {
   setPasswordVisibility,
   setEmail,
   setNickname,
-  DuplicatedEmail,
-  setIsEmailDuplicated,
   setIsLoggedIn,
-  setUser
+  setUser,
+  duplicatedEmail,
+  setIsEmailDuplicated
 } from "../../../actions";
 import { User } from "../../../models";
 
@@ -21,9 +21,9 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   email: state.email.email,
   isPasswordError: state.password.isPasswordError,
   isEmailError: state.email.isEmailError,
-  isEmailDuplicated: state.email.isEmailDuplicated,
   isLoggedIn: state.login.isLoggedIn,
-  user: state.user.user
+  user: state.user.user,
+  isEmailDuplicated: state.email.isEmailDuplicated
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -33,11 +33,10 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setPasswordVisibility(passwordVisibility)),
   setEmail: (email: string) => dispatch(setEmail(email)),
   setNickname: (nickname: string) => dispatch(setNickname(nickname)),
-  DuplicatedEmail: () => dispatch(DuplicatedEmail()),
-  setIsEmailDuplicated: (isEmailDuplicated: boolean) =>
-    dispatch(setIsEmailDuplicated(isEmailDuplicated)),
   setIsLoggedIn: (isLogin: boolean) => dispatch(setIsLoggedIn(isLogin)),
-  setUser: (user: User) => dispatch(setUser(user))
+  setUser: (user: User) => dispatch(setUser(user)),
+  duplicatedEmail: (email: string) => dispatch(duplicatedEmail(email)),
+  setIsEmailDuplicated: (isEmailDuplicated: boolean) => dispatch(setIsEmailDuplicated(isEmailDuplicated))
 });
 
 export const LoginDialogContainer = connect(

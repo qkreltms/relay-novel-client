@@ -18,7 +18,7 @@ export const newUser = () => {
         thumbnail: "",
         isAdmin: false,
         isBlocked: false,
-        type: "LOCAL",
+        type: "",
         updatedAt: new Date(),
         createdAt: new Date(),
     }

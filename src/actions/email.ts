@@ -23,16 +23,17 @@ export const setIsEmailDuplicated = (isEmailDuplicated: boolean) => {
     } as IEmailAction;
 }
 
-export const DuplicatedEmail = () => (dispatch: any):boolean => {
-    axios.get(`${config.REACT_APP_SERVER_URL}/users/email`)
+export const duplicatedEmail = (email: string) => (dispatch: any):boolean => {
+    axios.get(`${config.REACT_APP_SERVER_URL}/users/email?email=${email}`)
     .then(res => {
         if (res.data.message.length >= 1) {
-            return dispatch(setIsEmailDuplicated(true));
+            return true;
         }
+        return false
     })
     .catch(err => {
         console.log(err.response)
     })
-
-    return dispatch(setIsEmailDuplicated(false));
+    
+    return false
 }

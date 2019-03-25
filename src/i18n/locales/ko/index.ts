@@ -23,4 +23,5 @@ export default {
     logindialog_password: "비밀번호",
     logindialog_cancle: "취소",
     logindialog_ok: "확인",
+    logindialog_notexistsemail: "존재하지 않는 이메일입니다.",
 };

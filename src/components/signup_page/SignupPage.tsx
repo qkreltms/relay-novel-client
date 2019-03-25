@@ -37,7 +37,6 @@ interface IProps extends WithStyles<typeof styles> {
   setPasswordVisibility: (passwordVisibility: boolean) => void;
   setEmail: (email: string) => void;
   setIsEmailDuplicated: (isEmailDuplicated: boolean) => void;
-  DuplicatedEmail: () => void;
   setNickname: (nickname: string) => void;
   passwordVisibility: boolean;
   password: string;
