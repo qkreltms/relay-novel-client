@@ -14,6 +14,7 @@ import { Link, withRouter } from "react-router-dom";
 import { LoginDialogContainer } from "../common/login_dialog";
 import axios from "axios";
 import config from "../../config";
+import axiosConfig from "../../config/axios";
 
 const styles = {
   grow: {
@@ -76,12 +77,16 @@ const Appbar: React.SFC<IProps> = props => {
 
   const handleMenuLogoutClick = () => {
     props.setIsLoggedIn(false);
-    axios.get(`${config.REACT_APP_SERVER_URL}/auth/session`)
+
+    axios.get(`${config.REACT_APP_SERVER_URL}/auth/session`, axiosConfig)
     .then(res => {
-      // Todo: test
+      if (res.data.status === "success") {
+        return console.log("로그아웃 성공")
+      }
+      console.log(res)
     })
     .catch(err => {
-
+      console.log(err.response)
     })
   }
 

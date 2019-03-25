@@ -18,6 +18,7 @@ import PasswordInput from "../PasswordInput";
 import axios from "axios";
 import config from "../../../config";
 import { User } from "../../../models";
+import axiosConfig from "../../../config/axios";
 
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
@@ -53,34 +54,41 @@ const styles = (theme: Theme) =>
   });
 
 const LoginDialog: React.SFC<IProps> = props => {
-  const handleClose = () => {
+  const handleOnClose = () => {
     props.setIsOpen(false);
+    props.setPassword("")
+    props.setEmail("")
   };
 
   const handleOnLogin = () => {
-    // axios.defaults.withCredentials = true
-    const axiosconfig = {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+    if (props.email.length <= 0) {
+      return;
+    }
+    if (props.password.length <= 0) {
+      return;
+    }
 
     const body = {
       email: props.email,
       password: props.password
     };
+    
     axios.post(`${config.REACT_APP_SERVER_URL}/auth/session`,
-    body, axiosconfig)
+    body, axiosConfig)
       .then(res => {
         props.setIsOpen(false);
         props.setIsLoggedIn(true);
         // props.setUser(res.data.message as User)
+        console.log("로그인 성공")
         console.log(res)
       })
       .catch(err => {
-        console.log(err);
-      });
+        console.log(err.response);
+      })
+      .finally(() => {
+        props.setPassword("")
+        props.setEmail("")
+      })
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +107,7 @@ const LoginDialog: React.SFC<IProps> = props => {
     <div>
       <Dialog
         open={props.isOpen}
-        onClose={handleClose}
+        onClose={handleOnClose}
         aria-labelledby="login-dialog-slide-title"
         aria-describedby="login-dialog-slide-description"
         disableBackdropClick={true}
@@ -128,7 +136,7 @@ const LoginDialog: React.SFC<IProps> = props => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleOnClose} color="primary">
             <FormattedMessage id="logindialog_cancle" />
           </Button>
           <Button onClick={handleOnLogin} color="primary">

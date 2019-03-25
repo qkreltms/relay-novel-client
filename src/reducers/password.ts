@@ -36,6 +36,9 @@ export const passwordReducer = (state = createEmpty(), action: IPasswordAction) 
 };
 
 const validatePassword = (password: string):boolean => {
+    if (password.length <= 0 ) {
+        return true;
+    }
     if (password.length >= 6 && password.length <= 15) {
         return true;
     }

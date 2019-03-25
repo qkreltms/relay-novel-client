@@ -36,6 +36,10 @@ export const emailReducer = (state = createEmpty(), action: IEmailAction) => {
 };
 
 const validateEmail = (email: string):boolean => {
+    if (email.length <= 0) {
+        return true;
+    }
+
     if (emailRegex.test(email)) {
         return true;
     }
