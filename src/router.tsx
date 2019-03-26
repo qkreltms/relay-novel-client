@@ -5,7 +5,7 @@ import ko from "react-intl/locale-data/ko";
 import { connect } from "react-redux";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import { AppbarContainer as Appbar } from "./components/header";
-import { MainPage } from "./components/main_page";
+import { MainPageContainer as MainPage } from "./components/main_page";
 import { SignupPageContainer as SignupPage } from "./components/signup_page";
 import locale from "./i18n";
 import { ICombineReducersState } from "./reducers";

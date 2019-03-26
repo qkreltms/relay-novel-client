@@ -10,7 +10,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  FormLabel
+  FormLabel,
+  // Slide
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -86,7 +87,7 @@ const LoginDialog: React.SFC<IProps> = props => {
         console.log(res);
       })
       .catch(err => {
-        const res = err.response
+        const res = err.response;
         if (res.data.message.includes("username")) {
           props.setIsEmailDuplicated(true);
         }
@@ -106,10 +107,13 @@ const LoginDialog: React.SFC<IProps> = props => {
     props.setEmail(event.target.value);
   };
 
+  // const TransitionComponent = props => <Slide direction="up" {...props} />;
+
   return (
     <div>
       <Dialog
         open={props.isOpen}
+        // TransitionComponent={TransitionComponent}
         onClose={handleOnClose}
         aria-labelledby="login-dialog-slide-title"
         aria-describedby="login-dialog-slide-description"
