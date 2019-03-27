@@ -9,7 +9,6 @@ import {
   setNickname,
   setIsLoggedIn,
   setUser,
-  duplicatedEmail,
   setIsEmailDuplicated
 } from "../../../actions";
 import { User } from "../../../models";
@@ -35,7 +34,6 @@ const mapDispatchToProps = (dispatch: any) => ({
   setNickname: (nickname: string) => dispatch(setNickname(nickname)),
   setIsLoggedIn: (isLogin: boolean) => dispatch(setIsLoggedIn(isLogin)),
   setUser: (user: User) => dispatch(setUser(user)),
-  duplicatedEmail: (email: string) => dispatch(duplicatedEmail(email)),
   setIsEmailDuplicated: (isEmailDuplicated: boolean) => dispatch(setIsEmailDuplicated(isEmailDuplicated))
 });
 

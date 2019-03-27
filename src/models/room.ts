@@ -21,5 +21,5 @@ export const newRoom = () => {
         creatorId: 0,
         updatedAt: new Date(),
         createdAt: new Date(),
-    }
+    } as Room
 }

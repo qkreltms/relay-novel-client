@@ -21,5 +21,5 @@ export const newUser = () => {
         type: "",
         updatedAt: new Date(),
         createdAt: new Date(),
-    }
+    } as User
 }

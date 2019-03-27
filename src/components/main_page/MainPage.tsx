@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
+import { Room } from "../../models";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -17,7 +18,7 @@ const styles = (theme: Theme) =>
       width: "100%",
       backgroundColor: theme.palette.background.paper
     },
-    list : {},
+    list: {}
   });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -27,35 +28,47 @@ interface IProps extends WithStyles<typeof styles> {
   classes: any;
   selectedIndex;
   setSelectedIndex: (index: number) => void;
+  setRoom: (room: Room) => void;
+  rooms: Array<Room>;
+  fetchRooms: (skip: number, limit: number) => void;
 }
 
-const MainPage: React.SFC<IProps> = props => {
-  const { classes } = props;
+class MainPage extends React.Component<IProps> {
+  public constructor(props) {
+    super(props);
+  }
 
-  const handleListItemClick = (index: number) => () => {
-    props.setSelectedIndex(index);
-  };
+  public componentDidMount() {
+      this.props.fetchRooms(0, 30);
+  }
 
-  return (
-    <div className={classes.root}>
-      <List>
-        {[0, 1, 2, 3].map(value => (
-          <ListItem
-            key={value}
-            button
-            selected={props.selectedIndex === 0}
-            role={undefined}
-            onClick={handleListItemClick(0)}
-          >
-            <ListItemText primary={`Line item ${value + 1}`} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-};
+  public render() {
+    const { classes } = this.props;
+    const handleListItemClick = (index: number) => () => {
+      this.props.setSelectedIndex(index);
+    };
 
-(MainPage as React.SFC<IProps>).propTypes = {
+    return (
+      <div className={classes.root}>
+        <List>
+          {this.props.rooms.map((value, index) => (
+            <ListItem
+              key={index}
+              button
+              selected={this.props.selectedIndex === 0}
+              role={undefined}
+              onClick={handleListItemClick(0)}
+            >
+              <ListItemText primary={value.title} />
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    );
+  }
+}
+
+(MainPage as React.ComponentClass<IProps>).propTypes = {
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,

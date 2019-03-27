@@ -6,3 +6,4 @@ export * from "./nickname";
 export * from "./open";
 export * from "./login";
 export * from "./user";
+export * from "./room";
