@@ -18,7 +18,7 @@ export const newRoom = () => {
         tags: "",
         title: "",
         desc: "",
-        creatorId: newUser(),
+        creatorId: 0,
         updatedAt: new Date(),
         createdAt: new Date(),
     }
