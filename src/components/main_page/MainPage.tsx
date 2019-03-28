@@ -6,11 +6,13 @@ import {
   WithStyles,
   ListItem,
   ListItemText,
-  List
+  List,
+  ListItemSecondaryAction,
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import { Room } from "../../models";
+import { ThumbUp } from "@material-ui/icons";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -27,7 +29,6 @@ interface IProps extends WithStyles<typeof styles> {
   history: any;
   classes: any;
   selectedIndex;
-  setSelectedIndex: (index: number) => void;
   setRoom: (room: Room) => void;
   rooms: Array<Room>;
   fetchRooms: (skip: number, limit: number) => void;
@@ -39,27 +40,32 @@ class MainPage extends React.Component<IProps> {
   }
 
   public componentDidMount() {
-      this.props.fetchRooms(0, 30);
+    this.props.fetchRooms(0, 30);
   }
 
   public render() {
     const { classes } = this.props;
-    const handleListItemClick = (index: number) => () => {
-      this.props.setSelectedIndex(index);
+    
+    // 클릭시 방안으로 리다이렉트
+    const handleListItemClick = (roomId: number) => () => {
+      this.props.history.push(`/${roomId}`);
     };
 
     return (
       <div className={classes.root}>
         <List>
-          {this.props.rooms.map((value, index) => (
+          {this.props.rooms.map((room, index) => (
             <ListItem
               key={index}
               button
-              selected={this.props.selectedIndex === 0}
               role={undefined}
-              onClick={handleListItemClick(0)}
+              onClick={handleListItemClick(room.id)}
             >
-              <ListItemText primary={value.title} />
+              <ListItemText primary={room.title} />
+              <ListItemSecondaryAction>
+                  <ThumbUp />
+                  <ListItemText primary={"좋아요 개수"} />
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
