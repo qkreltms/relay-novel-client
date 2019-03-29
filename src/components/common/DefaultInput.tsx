@@ -18,13 +18,13 @@ const DefaultInput: React.SFC<IProps> = (props) => {
         <FormControl
         className={classNames(props.classes.margin, props.classes.textField)}
       >
-        <InputLabel error={props.isError} htmlFor={`adornment-${props.name}}`}>
+        <InputLabel error={props.isError} htmlFor={`adornment-${props.name}`}>
           <FormattedMessage id={props.formattedMessageId} />
         </InputLabel>
         <Input
           name={props.name}
           error={props.isError}
-          id={`adornment-${props.name}}`}
+          id={`adornment-${props.name}`}
           type="text"
           value={props.value}
           onChange={props.handleChange}

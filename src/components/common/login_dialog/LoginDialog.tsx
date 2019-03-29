@@ -87,6 +87,7 @@ const LoginDialog: React.SFC<IProps> = props => {
         console.log(res);
       })
       .catch(err => {
+        //패스워드 혹은 이메일 틀림
         const res = err.response;
         if (res.data.message.includes("username")) {
           props.setIsEmailDuplicated(true);

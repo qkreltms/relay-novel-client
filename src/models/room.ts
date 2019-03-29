@@ -1,5 +1,3 @@
-import { newUser } from "./user";
-
 export interface Room {
     id: number,
     writerLimit: number,

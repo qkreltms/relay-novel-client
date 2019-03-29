@@ -7,3 +7,4 @@ export * from "./open";
 export * from "./login";
 export * from "./user";
 export * from "./room";
+export * from "./likeDislike";
