@@ -7,14 +7,12 @@ import {
   ListItem,
   ListItemText,
   List,
-  ListItemSecondaryAction,
-  Button
+  ListItemSecondaryAction
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import { Room } from "../../models";
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
-import { FormattedMessage } from "react-intl";
 import CustomButton from "../common/CustomButton";
 
 const styles = (theme: Theme) =>
@@ -31,7 +29,7 @@ interface IProps extends WithStyles<typeof styles> {
   location: any;
   history: any;
   classes: any;
-  selectedIndex;
+  isLoggedIn: boolean;
   setRoom: (room: Room) => void;
   rooms: Array<Room>;
   fetchRooms: (skip: number, limit: number) => void;
@@ -48,12 +46,17 @@ class MainPage extends React.Component<IProps> {
 
   // 클릭시 방안으로 리다이렉트
   handleListItemClick = (roomId: number) => () => {
-    this.props.history.push(`/${roomId}`);
+    this.props.history.push(`/room/${roomId}`);
   };
 
   // 클릭시 방 만들기 페이지로 리다이렉트
   handleCreateRoomClick = () => {
-    this.props.history.push(`/room/create`);
+    if (this.props.isLoggedIn) {
+      this.props.history.push(`/create/room`);
+    } else {
+      // TODO: dialog 창으로 바꾸는거 생각해보기
+      alert(`로그인을 먼저 해주세요!`);
+    }
   };
 
   public render() {

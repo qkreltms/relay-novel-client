@@ -6,7 +6,8 @@ import { fetchLikeDislikes } from "../../actions";
 
 const mapStateToProps = (state: ICombineReducersState) => ({
   rooms: state.rooms.rooms,
-  likeDislikes: state.likeDislikes.likeDislikes
+  likeDislikes: state.likeDislikes.likeDislikes,
+  isLoggedIn: state.login.isLoggedIn,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

@@ -40,7 +40,7 @@ const RadioButtons: React.SFC<IProps> = props => {
           <FormControlLabel
             key={index}
             value={radioContent.value}
-            control={<Radio color="primary" />}
+            control={<Radio color="primary" checked={radioContent.value === props.value} />}
             label={radioContent.label}
             labelPlacement={radioContent.labelPlacement}
           />

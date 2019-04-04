@@ -63,7 +63,7 @@ export const SignupPage: React.SFC<IProps> = props => {
     props.setNickname(event.target.value);
   };
 
-  const checkEmpty = (): boolean => {
+  const isEmpty = (): boolean => {
     if (props.nickname.length <= 0) return true;
     if (props.password.length <= 0) return true;
     if (props.email.length <= 0) return true;
@@ -124,7 +124,7 @@ export const SignupPage: React.SFC<IProps> = props => {
         onClick={handleSignupClick}
         formattedMessageId="signup_btn"
         isDisable={
-          checkEmpty() ||
+          isEmpty() ||
           props.isEmailError ||
           props.isEmailDuplicated ||
           props.isEmailError ||

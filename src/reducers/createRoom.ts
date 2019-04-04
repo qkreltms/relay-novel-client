@@ -12,7 +12,7 @@ export interface ICreateRoomState {
 }
 
 const createEmpty = () => ({
-  writerLimit: "",
+  writerLimit: "100",
   title: "",
   desc: ""
 });

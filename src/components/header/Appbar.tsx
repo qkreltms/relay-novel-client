@@ -98,6 +98,9 @@ const Appbar: React.SFC<IProps> = props => {
       .catch(err => {
         console.log(err.response);
         console.log("로그아웃 실패");
+      })
+      .finally(() => {
+        props.setHtmlElementOnMenu(null);
       });
   };
 

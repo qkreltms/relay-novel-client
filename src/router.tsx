@@ -31,8 +31,8 @@ const Router: React.SFC<IProps> = props => {
             <Route exact path="/" component={MainPage} />
             <Route exact path="/signup" component={SignupPage} />
             <Route exact path="/signup/success" component={SignupSuccessPage} />
-            <Route exact path="/:id" component={NovelPage} />
-            <Route exact path="/room/create" component={CreateRoomPage} />
+            <Route exact path="/room/:id" component={NovelPage} />
+            <Route exact path="/create/room" component={CreateRoomPage} />
             <Route component={NotfoundPage} />
           </Switch>
           <footer />

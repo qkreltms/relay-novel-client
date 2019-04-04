@@ -1,23 +1,14 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
-import {
-  Button,
-  Theme,
-  createStyles,
-  WithStyles,
-  withStyles,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio
-} from "@material-ui/core";
+import { Theme, createStyles, WithStyles, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import CustomInput from "../common/CustomInput";
 import RadioButtons from "../common/RadioButtons";
 import { RadioContents, Directions } from "../../models";
 import CustomButton from "../common/CustomButton";
+import axios from "axios";
+import config from "../../config";
+import axiosConfig from "../../config/axios";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -35,9 +26,35 @@ interface IProps extends WithStyles<typeof styles> {
 const styles = (theme: Theme) => createStyles({});
 
 const CreateRoomPage: React.SFC<IProps> = props => {
+  const isEmpty = (): boolean => {
+    if (props.desc.length <= 0) return true;
+    if (props.title.length <= 0) return true;
+    if (props.writerLimit.length <= 0) return true;
+    return false;
+  };
+
   const handleCreateRoomClick = () => {
-    // TODO: 서버에 데이터 보내기
-    return props.history.push("/");
+    if (isEmpty()) return;
+
+    const body = {
+      writerLimit: props.writerLimit,
+      title: props.title,
+      desc: props.desc
+    };
+
+    return axios
+      .post(`${config.REACT_APP_SERVER_URL}/rooms`, body, axiosConfig)
+      .then(res => {
+        const data = res.data;
+        if (!data) return;
+        const roomId = data.message.insertId;
+        return props.history.push(`/room/${roomId}`);
+      })
+      .catch(err => {
+        // 방 못 만든것 예외처리
+        console.log(err.response);
+        alert(`Cannot create more room: ${err.response.data.message}`);
+      });
   };
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +97,6 @@ const CreateRoomPage: React.SFC<IProps> = props => {
   return (
     <div>
       <CustomInput
-        isError={false}
         value={props.title}
         handleChange={handleTitleChange}
         formattedMessageId="createroom_title"
@@ -88,7 +104,6 @@ const CreateRoomPage: React.SFC<IProps> = props => {
       />
 
       <CustomInput
-        isError={false}
         value={props.desc}
         handleChange={handleDescChange}
         formattedMessageId="createroom_desc"

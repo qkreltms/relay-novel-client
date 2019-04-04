@@ -1,5 +1,4 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
 import { Theme, createStyles, WithStyles, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";

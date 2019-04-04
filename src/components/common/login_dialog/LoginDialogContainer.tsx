@@ -20,7 +20,6 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   email: state.email.email,
   isPasswordError: state.password.isPasswordError,
   isEmailError: state.email.isEmailError,
-  isLoggedIn: state.login.isLoggedIn,
   user: state.user.user,
   isEmailDuplicated: state.email.isEmailDuplicated
 });

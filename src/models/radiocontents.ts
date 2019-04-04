@@ -8,13 +8,13 @@ export enum Directions {
 export interface RadioContents {
   value: string;
   label: string;
-  labelPlacement: Directions
+  labelPlacement: Directions;
 }
 
 export const newRadioContents = () => {
   return {
-      value: "",
+      value: "100",
       label: "",
-      labelPlacement: Directions[0]
+      labelPlacement: Directions[0],
   } as RadioContents;
 };

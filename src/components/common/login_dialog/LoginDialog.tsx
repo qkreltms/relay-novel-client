@@ -1,7 +1,6 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import {
-  Button,
   Theme,
   createStyles,
   WithStyles,
@@ -11,7 +10,6 @@ import {
   DialogContent,
   DialogActions,
   FormLabel
-  // Slide
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -39,7 +37,6 @@ interface IProps extends WithStyles<typeof styles> {
   isPasswordError: boolean;
   isEmailError: boolean;
   setUser: (user: User) => void;
-  isLoggedIn: boolean;
   setIsLoggedIn: (isLogin: boolean) => void;
   duplicatedEmail: (email: string) => boolean;
   setIsEmailDuplicated: (duplicated: boolean) => void;
@@ -109,13 +106,10 @@ const LoginDialog: React.SFC<IProps> = props => {
     props.setEmail(event.target.value);
   };
 
-  // const TransitionComponent = props => <Slide direction="up" {...props} />;
-
   return (
     <div>
       <Dialog
         open={props.isOpen}
-        // TransitionComponent={TransitionComponent}
         onClose={handleOnClose}
         aria-labelledby="login-dialog-slide-title"
         aria-describedby="login-dialog-slide-description"
