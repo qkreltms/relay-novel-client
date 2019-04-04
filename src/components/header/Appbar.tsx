@@ -1,6 +1,5 @@
 import { IconButton } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
@@ -16,6 +15,7 @@ import axios from "axios";
 import config from "../../config";
 import axiosConfig from "../../config/axios";
 import { User, newUser } from "../../models";
+import CustomButton from "../common/CustomButton";
 
 const styles = {
   grow: {
@@ -52,8 +52,14 @@ const Appbar: React.SFC<IProps> = props => {
   const isProfileClicked = Boolean(props.anchorElement); // anchorElement가 값이 있을 경우
   const changeLanguageButtons = (
     <div>
-      <Button onClick={() => setLocale("ko")}>한국어</Button>
-      <Button onClick={() => setLocale("en")}>English</Button>
+      <CustomButton
+        onClick={() => setLocale("ko")}
+        formattedMessageId="appbar_ko_btn"
+      />
+      <CustomButton
+        onClick={() => setLocale("en")}
+        formattedMessageId="appbar_en_btn"
+      />
     </div>
   );
 
@@ -84,7 +90,7 @@ const Appbar: React.SFC<IProps> = props => {
       .then(res => {
         if (res.data.status === "success") {
           console.log("로그아웃 성공");
-          props.setUser(newUser())
+          props.setUser(newUser());
           return props.setIsLoggedIn(false);
         }
         console.log(res);
@@ -140,12 +146,14 @@ const Appbar: React.SFC<IProps> = props => {
             </div>
           ) : (
             <div>
-              <Button onClick={handleSignupClick}>
-                <FormattedMessage id="appbar_signup" />
-              </Button>
-              <Button onClick={handleLoginClick}>
-                <FormattedMessage id="appbar_login" />
-              </Button>
+              <CustomButton
+                onClick={handleSignupClick}
+                formattedMessageId="appbar_signup_btn"
+              />
+              <CustomButton
+                onClick={handleLoginClick}
+                formattedMessageId="appbar_login_btn"
+              />
             </div>
           )}
         </Toolbar>

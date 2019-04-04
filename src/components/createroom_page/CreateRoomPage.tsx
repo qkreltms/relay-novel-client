@@ -14,9 +14,10 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
-import DefaultInput from "../common/DefaultInput";
+import CustomInput from "../common/CustomInput";
 import RadioButtons from "../common/RadioButtons";
 import { RadioContents, Directions } from "../../models";
+import CustomButton from "../common/CustomButton";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -34,7 +35,8 @@ interface IProps extends WithStyles<typeof styles> {
 const styles = (theme: Theme) => createStyles({});
 
 const CreateRoomPage: React.SFC<IProps> = props => {
-  const handleOnClick = () => {
+  const handleCreateRoomClick = () => {
+    // TODO: 서버에 데이터 보내기
     return props.history.push("/");
   };
 
@@ -77,7 +79,7 @@ const CreateRoomPage: React.SFC<IProps> = props => {
 
   return (
     <div>
-      <DefaultInput
+      <CustomInput
         isError={false}
         value={props.title}
         handleChange={handleTitleChange}
@@ -85,7 +87,7 @@ const CreateRoomPage: React.SFC<IProps> = props => {
         name="title"
       />
 
-      <DefaultInput
+      <CustomInput
         isError={false}
         value={props.desc}
         handleChange={handleDescChange}
@@ -98,6 +100,11 @@ const CreateRoomPage: React.SFC<IProps> = props => {
         handleValueChange={handleWriterLimitChange}
         radioContents={radioContents}
         formattedMessageId="createroom_writerlimit"
+      />
+
+      <CustomButton
+        onClick={handleCreateRoomClick}
+        formattedMessageId="createroom_btn"
       />
     </div>
   );

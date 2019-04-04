@@ -1,7 +1,6 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import {
-  Button,
   Theme,
   createStyles,
   WithStyles,
@@ -9,6 +8,7 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
+import CustomButton from "../common/CustomButton";
 
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
@@ -17,29 +17,20 @@ interface IProps extends WithStyles<typeof styles> {
   history: any;
 }
 
-const styles = (theme: Theme) =>
-  createStyles({
-    button: {
-      margin: theme.spacing.unit
-    }
-  });
+const styles = (theme: Theme) => createStyles({});
 
 const NotfoundPage: React.SFC<IProps> = props => {
-  const handleOnClick = () => {
+  const handleGoHomePageClick = () => {
     return props.history.push("/");
   };
 
   return (
     <div>
       <FormattedMessage id="notfound_msg" />
-      <Button
-        variant="contained"
-        color="primary"
-        className={props.classes.button}
-        onClick={handleOnClick}
-      >
-        <FormattedMessage id="notfound_gohomepage" />
-      </Button>
+      <CustomButton
+        onClick={handleGoHomePageClick}
+        formattedMessageId="notfound_btn"
+      />
     </div>
   );
 };

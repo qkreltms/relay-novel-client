@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import { Room } from "../../models";
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
 import { FormattedMessage } from "react-intl";
+import CustomButton from "../common/CustomButton";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -60,14 +61,10 @@ class MainPage extends React.Component<IProps> {
 
     return (
       <div className={classes.root}>
-        <Button
+        <CustomButton
           onClick={this.handleCreateRoomClick}
-          variant="contained"
-          color="primary"
-          className={classes.button}
-        >
-          <FormattedMessage id="mainpage_createroom" />
-        </Button>
+          formattedMessageId="mainpage_btn"
+        />
         <List>
           {this.props.rooms.map((room, index) => (
             <ListItem

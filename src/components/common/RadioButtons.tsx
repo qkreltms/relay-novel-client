@@ -14,6 +14,7 @@ import { RadioContents } from "../../models";
 import PropTypes from "prop-types";
 
 interface IProps {
+  classes: any;
   value: string;
   handleValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   radioContents: Array<RadioContents>;

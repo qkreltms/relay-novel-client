@@ -15,12 +15,13 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
-import DefaultInput from "../DefaultInput";
+import CustomInput from "../CustomInput";
 import PasswordInput from "../PasswordInput";
 import axios from "axios";
 import config from "../../../config";
 import { User } from "../../../models";
 import axiosConfig from "../../../config/axios";
+import CustomButton from "../CustomButton";
 
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
@@ -125,7 +126,7 @@ const LoginDialog: React.SFC<IProps> = props => {
           <FormattedMessage id="logindialog_title" />
         </DialogTitle>
         <DialogContent>
-          <DefaultInput
+          <CustomInput
             isError={props.isEmailError}
             value={props.email}
             handleChange={handleEmailChange}
@@ -153,12 +154,14 @@ const LoginDialog: React.SFC<IProps> = props => {
           </FormLabel>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleOnClose} color="primary">
-            <FormattedMessage id="logindialog_cancle" />
-          </Button>
-          <Button onClick={handleOnLogin} color="primary">
-            <FormattedMessage id="logindialog_ok" />
-          </Button>
+          <CustomButton
+            onClick={handleOnClose}
+            formattedMessageId="logindialog_cancle_btn"
+          />
+          <CustomButton
+            onClick={handleOnLogin}
+            formattedMessageId="logindialog_ok_btn"
+          />
         </DialogActions>
       </Dialog>
     </div>

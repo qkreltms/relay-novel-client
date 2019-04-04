@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 
 interface IProps {
   classes: any;
-  isError: boolean;
+  isError?: boolean;
   value: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   formattedMessageId: string;
@@ -30,7 +30,7 @@ const styles = (theme: Theme) =>
     }
   });
 
-const DefaultInput: React.SFC<IProps> = props => {
+const CustomInput: React.SFC<IProps> = props => {
   return (
     <FormControl
       className={classNames(props.classes.margin, props.classes.textField)}
@@ -50,8 +50,8 @@ const DefaultInput: React.SFC<IProps> = props => {
   );
 };
 
-(DefaultInput as React.SFC<IProps>).propTypes = {
+(CustomInput as React.SFC<IProps>).propTypes = {
   classes: PropTypes.object.isRequired
 } as any;
 
-export default withStyles(styles)(DefaultInput);
+export default withStyles(styles)(CustomInput);

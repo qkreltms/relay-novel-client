@@ -6,20 +6,17 @@ import {
 } from "@material-ui/core/styles";
 import React from "react";
 import { FormattedMessage } from "react-intl";
-import Button from "@material-ui/core/Button";
 import axios from "axios";
 import config from "../../config";
 import { FormLabel } from "@material-ui/core";
 import PasswordInput from "../common/PasswordInput";
-import DefaultInput from "../common/DefaultInput";
+import CustomInput from "../common/CustomInput";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import CustomButton from "../common/CustomButton";
 
 const styles = (theme: Theme) =>
   createStyles({
-    button: {
-      margin: theme.spacing.unit
-    },
     margin: {
       margin: theme.spacing.unit
     },
@@ -73,7 +70,7 @@ export const SignupPage: React.SFC<IProps> = props => {
     return false;
   };
 
-  const handleOnSignupClick = () => {
+  const handleSignupClick = () => {
     const body = {
       email: props.email,
       nickname: props.nickname,
@@ -99,7 +96,7 @@ export const SignupPage: React.SFC<IProps> = props => {
 
   return (
     <div>
-      <DefaultInput
+      <CustomInput
         isError={props.isEmailError}
         value={props.email}
         handleChange={handleEmailChange}
@@ -107,7 +104,7 @@ export const SignupPage: React.SFC<IProps> = props => {
         name="email"
       />
 
-      <DefaultInput
+      <CustomInput
         isError={props.isNicknameError}
         value={props.nickname}
         handleChange={handleNicknameChange}
@@ -123,11 +120,10 @@ export const SignupPage: React.SFC<IProps> = props => {
         handlePasswordVisibility={handlePasswordVisibility}
       />
 
-      <Button
-        variant="contained"
-        color="primary"
-        className={props.classes.button}
-        disabled={
+      <CustomButton
+        onClick={handleSignupClick}
+        formattedMessageId="signup_btn"
+        isDisable={
           checkEmpty() ||
           props.isEmailError ||
           props.isEmailDuplicated ||
@@ -135,10 +131,7 @@ export const SignupPage: React.SFC<IProps> = props => {
           props.isNicknameError ||
           props.isPasswordError
         }
-        onClick={handleOnSignupClick}
-      >
-        <FormattedMessage id="signup_signup" />
-      </Button>
+      />
       <FormLabel>
         {props.isEmailDuplicated ? (
           <FormattedMessage id="signup_duplicatedEmail" />

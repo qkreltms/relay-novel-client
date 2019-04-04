@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 
 interface IProps {
   classes: any;
-  isPasswordError: boolean;
+  isPasswordError?: boolean;
   passwordVisibility: boolean;
   password: string;
   handlePasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
