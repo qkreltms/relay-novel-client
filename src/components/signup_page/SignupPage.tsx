@@ -26,9 +26,6 @@ const styles = (theme: Theme) =>
     root: {
       display: "flex",
       flexWrap: "wrap"
-    },
-    textField: {
-      flexBasis: 200
     }
   });
 
@@ -103,7 +100,6 @@ export const SignupPage: React.SFC<IProps> = props => {
   return (
     <div>
       <DefaultInput
-        classes={props.classes}
         isError={props.isEmailError}
         value={props.email}
         handleChange={handleEmailChange}
@@ -112,7 +108,6 @@ export const SignupPage: React.SFC<IProps> = props => {
       />
 
       <DefaultInput
-        classes={props.classes}
         isError={props.isNicknameError}
         value={props.nickname}
         handleChange={handleNicknameChange}
@@ -121,7 +116,6 @@ export const SignupPage: React.SFC<IProps> = props => {
       />
 
       <PasswordInput
-        classes={props.classes}
         isPasswordError={props.isPasswordError}
         passwordVisibility={props.passwordVisibility}
         password={props.password}

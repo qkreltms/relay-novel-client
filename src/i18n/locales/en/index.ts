@@ -24,4 +24,8 @@ export default {
   logindialog_cancle: "Cancle",
   logindialog_ok: "OK",
   logindialog_notexistsemail: "Email is not exists.",
+  mainpage_createroom: "Create my relay novel",
+  createroom_title: "Title",
+  createroom_desc: "Description",
+  createroom_writerlimit: "Writer Limit"
 };

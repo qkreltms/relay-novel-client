@@ -1,23 +1,27 @@
 export interface Room {
-    id: number,
-    writerLimit: number,
-    tags: string,
-    title: string,
-    desc: string,
-    creatorId: number,
-    updatedAt: Date,
-    createdAt: Date,
+  id: number;
+  writerLimit: number;
+  tags: string;
+  title: string;
+  desc: string;
+  creatorId: number;
+  updatedAt: Date;
+  createdAt: Date;
+  like: number;
+  dislike: number;
 }
 
 export const newRoom = () => {
-    return {
-        id: 0,
-        writerLimit: 100,
-        tags: "",
-        title: "",
-        desc: "",
-        creatorId: 0,
-        updatedAt: new Date(),
-        createdAt: new Date(),
-    } as Room
-}
+  return {
+    id: 0,
+    writerLimit: 100,
+    tags: "",
+    title: "",
+    desc: "",
+    creatorId: 0,
+    updatedAt: new Date(),
+    createdAt: new Date(),
+    like: 0,
+    dislike: 0
+  } as Room;
+};

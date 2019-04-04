@@ -9,27 +9,44 @@ export interface ILikeDislikeAction {
   likeDislikes: Array<LikeDislike>;
 }
 
-const handleLikeDislikeCompleted = (likeDislikes: Array<LikeDislike>, type: string) => {
+const handleLikeDislikeCompleted = (
+  likeDislikes: Array<LikeDislike>,
+  type: string
+) => {
   return {
     likeDislikes,
     type
   } as ILikeDislikeAction;
 };
 
-export const fetchLikeDislikes = (roomName: string, skip: number, limit: number) => (dispatch: any) => {
+export const fetchLikeDislikes = (
+  roomName: string,
+  skip: number,
+  limit: number
+) => (dispatch: any) => {
   axios
-    .get(`${config.REACT_APP_SERVER_URL}/rooms/likeDislike?room=${roomName}&skip=${skip}&limit=${limit}`)
+    .get(
+      `${
+        config.REACT_APP_SERVER_URL
+      }/rooms/likeDislike?room=${roomName}&skip=${skip}&limit=${limit}`
+    )
     .then(res => {
-      console.log(roomName, "likeDislike 데이터 받아옴")
-      console.log(res.data)
-      const likeDislikes: Array<LikeDislike> = res.data.message as Array<LikeDislike>;
+      console.log(roomName, "likeDislike 데이터 받아옴");
+      console.log(res.data);
+      const likeDislikes: Array<LikeDislike> = res.data.message as Array<
+        LikeDislike
+      >;
 
-      return dispatch(handleLikeDislikeCompleted(likeDislikes, FETCH_LIKEDISLIKE));
+      return dispatch(
+        handleLikeDislikeCompleted(likeDislikes, FETCH_LIKEDISLIKE)
+      );
     })
     .catch(err => {
       console.log(err.response);
-      const likeDislikes = new Array<LikeDislike>(newLikeDislike())
+      const likeDislikes = new Array<LikeDislike>(newLikeDislike());
 
-      return dispatch(handleLikeDislikeCompleted(likeDislikes, FETCH_LIKEDISLIKE));
+      return dispatch(
+        handleLikeDislikeCompleted(likeDislikes, FETCH_LIKEDISLIKE)
+      );
     });
 };

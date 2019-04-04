@@ -34,7 +34,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   setNickname: (nickname: string) => dispatch(setNickname(nickname)),
   setIsLoggedIn: (isLogin: boolean) => dispatch(setIsLoggedIn(isLogin)),
   setUser: (user: User) => dispatch(setUser(user)),
-  setIsEmailDuplicated: (isEmailDuplicated: boolean) => dispatch(setIsEmailDuplicated(isEmailDuplicated))
+  setIsEmailDuplicated: (isEmailDuplicated: boolean) =>
+    dispatch(setIsEmailDuplicated(isEmailDuplicated))
 });
 
 export const LoginDialogContainer = connect(

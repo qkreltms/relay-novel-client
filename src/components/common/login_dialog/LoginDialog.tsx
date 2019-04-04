@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  FormLabel,
+  FormLabel
   // Slide
 } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -126,7 +126,6 @@ const LoginDialog: React.SFC<IProps> = props => {
         </DialogTitle>
         <DialogContent>
           <DefaultInput
-            classes={props.classes}
             isError={props.isEmailError}
             value={props.email}
             handleChange={handleEmailChange}
@@ -135,7 +134,6 @@ const LoginDialog: React.SFC<IProps> = props => {
           />
 
           <PasswordInput
-            classes={props.classes}
             isPasswordError={props.isPasswordError}
             passwordVisibility={props.passwordVisibility}
             password={props.password}

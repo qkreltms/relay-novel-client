@@ -14,9 +14,6 @@ interface IProps extends WithStyles<typeof styles> {
 const styles = (theme: Theme) => createStyles({});
 
 const NovelPage: React.SFC<IProps> = props => {
-  console.log(props);
-  console.log(props.match);
-
   return <div>소설 페이지</div>;
 };
 

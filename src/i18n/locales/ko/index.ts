@@ -24,4 +24,8 @@ export default {
     logindialog_cancle: "취소",
     logindialog_ok: "확인",
     logindialog_notexistsemail: "존재하지 않는 이메일입니다.",
+    mainpage_createroom: "내 릴레이소설 만들기",
+    createroom_title: "제목",
+    createroom_desc: "설명",
+    createroom_writerlimit: "소설가 수 제한"
 };

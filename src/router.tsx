@@ -12,6 +12,7 @@ import { ICombineReducersState } from "./reducers";
 import { SignupSuccessPageContainer as SignupSuccessPage } from "./components/signup_success_page";
 import { NotfoundPageContainer as NotfoundPage } from "./components/notfound_page";
 import { NovelPageContainer as NovelPage } from "./components/novel_page";
+import { CreateRoomPageContainer as CreateRoomPage } from "./components/createroom_page";
 
 addLocaleData([...en, ...ko]);
 
@@ -20,18 +21,19 @@ interface IProps {
   setLocale: (lang: string) => void;
 }
 
-const Router: React.SFC<IProps> = (props) => {
+const Router: React.SFC<IProps> = props => {
   return (
     <IntlProvider locale={props.lang} messages={locale[props.lang]}>
       <HashRouter>
         <div>
           <Appbar />
           <Switch>
-            <Route exact path="/" component= { MainPage } />
-            <Route exact path="/signup" component={ SignupPage } />
-            <Route exact path="/signup/success" component={ SignupSuccessPage } />
-            <Route exact path="/:id" component={ NovelPage } />
-            <Route component={ NotfoundPage } />
+            <Route exact path="/" component={MainPage} />
+            <Route exact path="/signup" component={SignupPage} />
+            <Route exact path="/signup/success" component={SignupSuccessPage} />
+            <Route exact path="/:id" component={NovelPage} />
+            <Route exact path="/room/create" component={CreateRoomPage} />
+            <Route component={NotfoundPage} />
           </Switch>
           <footer />
         </div>
@@ -41,9 +43,7 @@ const Router: React.SFC<IProps> = (props) => {
 };
 
 const mapStateToProps = (state: ICombineReducersState) => ({
-  lang: state.locale.lang,
+  lang: state.locale.lang
 });
 
-export default connect(
-  mapStateToProps,
-)(Router);
+export default connect(mapStateToProps)(Router);

@@ -8,11 +8,13 @@ import {
   ListItemText,
   List,
   ListItemSecondaryAction,
+  Button
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import { Room } from "../../models";
-import { ThumbUp } from "@material-ui/icons";
+import { ThumbUp, ThumbDown } from "@material-ui/icons";
+import { FormattedMessage } from "react-intl";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -43,28 +45,43 @@ class MainPage extends React.Component<IProps> {
     this.props.fetchRooms(0, 30);
   }
 
+  // 클릭시 방안으로 리다이렉트
+  handleListItemClick = (roomId: number) => () => {
+    this.props.history.push(`/${roomId}`);
+  };
+
+  // 클릭시 방 만들기 페이지로 리다이렉트
+  handleCreateRoomClick = () => {
+    this.props.history.push(`/room/create`);
+  };
+
   public render() {
     const { classes } = this.props;
-    
-    // 클릭시 방안으로 리다이렉트
-    const handleListItemClick = (roomId: number) => () => {
-      this.props.history.push(`/${roomId}`);
-    };
 
     return (
       <div className={classes.root}>
+        <Button
+          onClick={this.handleCreateRoomClick}
+          variant="contained"
+          color="primary"
+          className={classes.button}
+        >
+          <FormattedMessage id="mainpage_createroom" />
+        </Button>
         <List>
           {this.props.rooms.map((room, index) => (
             <ListItem
               key={index}
               button
               role={undefined}
-              onClick={handleListItemClick(room.id)}
+              onClick={this.handleListItemClick(room.id)}
             >
               <ListItemText primary={room.title} />
               <ListItemSecondaryAction>
-                  <ThumbUp />
-                  <ListItemText primary={"좋아요 개수"} />
+                <ThumbUp />
+                <ListItemText primary={room.like} />
+                <ThumbDown />
+                <ListItemText primary={room.dislike} />
               </ListItemSecondaryAction>
             </ListItem>
           ))}
