@@ -74,7 +74,7 @@ const LoginDialog: React.SFC<IProps> = props => {
     };
 
     axios
-      .post(`${config.REACT_APP_SERVER_URL}/auth/session`, body, axiosConfig)
+      .post(`${config.REACT_APP_SERVER_URL}/api/auth/session`, body, axiosConfig)
       .then(res => {
         props.setIsOpen(false);
         props.setIsLoggedIn(true);

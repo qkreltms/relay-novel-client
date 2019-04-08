@@ -77,7 +77,7 @@ export const SignupPage: React.SFC<IProps> = props => {
       password: props.password
     };
     axios
-      .post(`${config.REACT_APP_SERVER_URL}/users/`, body)
+      .post(`${config.REACT_APP_SERVER_URL}/api/users/`, body)
       .then(res => {
         return props.history.push("/signup/success");
       })

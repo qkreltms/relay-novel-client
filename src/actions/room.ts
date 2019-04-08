@@ -18,7 +18,7 @@ const handleRoomCompleted = (rooms: Array<Room>, type: string) => {
 
 export const fetchRooms = (skip: number, limit: number) => (dispatch: any) => {
   axios
-    .get(`${config.REACT_APP_SERVER_URL}/rooms?skip=${skip}&limit=${limit}`)
+    .get(`${config.REACT_APP_SERVER_URL}/api/rooms?skip=${skip}&limit=${limit}`)
     .then(res => {
       console.log("room 데이터 받아옴");
       console.log(res.data);

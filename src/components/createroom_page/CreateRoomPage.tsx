@@ -9,6 +9,7 @@ import CustomButton from "../common/CustomButton";
 import axios from "axios";
 import config from "../../config";
 import axiosConfig from "../../config/axios";
+import io from "socket.io-client";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -25,107 +26,126 @@ interface IProps extends WithStyles<typeof styles> {
 
 const styles = (theme: Theme) => createStyles({});
 
-const CreateRoomPage: React.SFC<IProps> = props => {
-  const isEmpty = (): boolean => {
-    if (props.desc.length <= 0) return true;
-    if (props.title.length <= 0) return true;
-    if (props.writerLimit.length <= 0) return true;
+class CreateRoomPage extends React.Component<IProps> {
+  radioContents: Array<RadioContents>;
+
+  constructor(props) {
+    super(props);
+
+    this.radioContents = [
+      {
+        value: "10",
+        label: "10",
+        labelPlacement: Directions.Start
+      },
+      {
+        value: "20",
+        label: "20",
+        labelPlacement: Directions.Start
+      },
+      {
+        value: "50",
+        label: "50",
+        labelPlacement: Directions.Start
+      },
+      {
+        value: "100",
+        label: "100",
+        labelPlacement: Directions.Start
+      }
+    ] as Array<RadioContents>;
+  }
+
+  private isEmpty = (): boolean => {
+    if (this.props.desc.length <= 0) return true;
+    if (this.props.title.length <= 0) return true;
+    if (this.props.writerLimit.length <= 0) return true;
     return false;
   };
 
-  const handleCreateRoomClick = () => {
-    if (isEmpty()) return;
+  private notifySocket = roomId => {
+    const socket = io("/rooms");
+    socket.emit("create", {
+      roomId
+    });
+  };
+
+  private handleCreateRoomClick = () => {
+    if (this.isEmpty()) return;
 
     const body = {
-      writerLimit: props.writerLimit,
-      title: props.title,
-      desc: props.desc
+      writerLimit: this.props.writerLimit,
+      title: this.props.title,
+      desc: this.props.desc
     };
 
     return axios
-      .post(`${config.REACT_APP_SERVER_URL}/rooms`, body, axiosConfig)
+      .post(`${config.REACT_APP_SERVER_URL}/api/rooms`, body, axiosConfig)
       .then(res => {
         const data = res.data;
         if (!data) return;
         const roomId = data.message.insertId;
-        return props.history.push(`/room/${roomId}`);
+
+        this.notifySocket(roomId);
+
+        return this.props.history.push(`/room/${roomId}`);
       })
       .catch(err => {
         // 방 못 만든것 예외처리
-        console.log(err.response);
+        console.log(err);
+        if (!err.response) return;
         alert(`Cannot create more room: ${err.response.data.message}`);
       });
   };
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setTitle(event.target.value);
+  private handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.setTitle(event.target.value);
   };
 
-  const handleDescChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setDesc(event.target.value);
+  private handleDescChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.setDesc(event.target.value);
   };
 
-  const handleWriterLimitChange = (
+  private handleWriterLimitChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    props.setWriterLimit(event.target.value);
+    this.props.setWriterLimit(event.target.value);
   };
 
-  const radioContents: Array<RadioContents> = [
-    {
-      value: "10",
-      label: "10",
-      labelPlacement: Directions.Start
-    },
-    {
-      value: "20",
-      label: "20",
-      labelPlacement: Directions.Start
-    },
-    {
-      value: "50",
-      label: "50",
-      labelPlacement: Directions.Start
-    },
-    {
-      value: "100",
-      label: "100",
-      labelPlacement: Directions.Start
-    }
-  ];
+  public render() {
+    return (
+      <div>
+        <CustomInput
+          value={this.props.title}
+          handleChange={this.handleTitleChange}
+          formattedMessageId="createroom_title"
+          name="title"
+        />
 
-  return (
-    <div>
-      <CustomInput
-        value={props.title}
-        handleChange={handleTitleChange}
-        formattedMessageId="createroom_title"
-        name="title"
-      />
+        <CustomInput
+          value={this.props.desc}
+          handleChange={this.handleDescChange}
+          formattedMessageId="createroom_desc"
+          name="desc"
+        />
 
-      <CustomInput
-        value={props.desc}
-        handleChange={handleDescChange}
-        formattedMessageId="createroom_desc"
-        name="desc"
-      />
+        <RadioButtons
+          value={this.props.writerLimit}
+          handleValueChange={this.handleWriterLimitChange}
+          radioContents={this.radioContents}
+          formattedMessageId="createroom_writerlimit"
+        />
 
-      <RadioButtons
-        value={props.writerLimit}
-        handleValueChange={handleWriterLimitChange}
-        radioContents={radioContents}
-        formattedMessageId="createroom_writerlimit"
-      />
+        <CustomButton
+          onClick={this.handleCreateRoomClick}
+          formattedMessageId="createroom_btn"
+        />
+      </div>
+    );
+  }
+}
 
-      <CustomButton
-        onClick={handleCreateRoomClick}
-        formattedMessageId="createroom_btn"
-      />
-    </div>
-  );
-};
-
-(CreateRoomPage as React.SFC<IProps>).propTypes = {
+(CreateRoomPage as React.ComponentClass<IProps>).propTypes = {
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
