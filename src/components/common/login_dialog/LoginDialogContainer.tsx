@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { ICombineReducersState } from "../../../reducers";
 import LoginDialog from "./LoginDialog";
 import {
-  setIsOpen,
+  setIsDialogOpen,
   setPassword,
   setPasswordVisibility,
   setEmail,
@@ -14,18 +14,18 @@ import {
 import { User } from "../../../models";
 
 const mapStateToProps = (state: ICombineReducersState) => ({
-  isOpen: state.open.isOpen,
-  password: state.password.password,
-  passwordVisibility: state.password.passwordVisibility,
-  email: state.email.email,
-  isPasswordError: state.password.isPasswordError,
-  isEmailError: state.email.isEmailError,
-  user: state.user.user,
-  isEmailDuplicated: state.email.isEmailDuplicated
+  isDialogOpen: state.open.isDialogOpen,
+  password: state.auth.password,
+  passwordVisibility: state.auth.passwordVisibility,
+  email: state.auth.email,
+  isPasswordError: state.auth.isPasswordError,
+  isEmailError: state.auth.isEmailError,
+  user: state.auth.user,
+  isEmailDuplicated: state.auth.isEmailDuplicated
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  setIsOpen: (isOpen: boolean) => dispatch(setIsOpen(isOpen)),
+  setIsDialogOpen: (isOpen: boolean) => dispatch(setIsDialogOpen(isOpen)),
   setPassword: (password: string) => dispatch(setPassword(password)),
   setPasswordVisibility: (passwordVisibility: boolean) =>
     dispatch(setPasswordVisibility(passwordVisibility)),

@@ -16,11 +16,12 @@ import PropTypes from "prop-types";
 
 interface IProps {
   classes: any;
-  isPasswordError?: boolean;
-  passwordVisibility: boolean;
-  password: string;
-  handlePasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handlePasswordVisibility: () => void;
+  isError?: boolean;
+  isVisible: boolean;
+  value: string;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleVisibility: () => void;
+  name: string;
 }
 
 const styles = (theme: Theme) =>
@@ -38,23 +39,23 @@ const PasswordForm: React.SFC<IProps> = props => {
     <FormControl
       className={classNames(props.classes.margin, props.classes.textField)}
     >
-      <InputLabel error={props.isPasswordError} htmlFor="adornment-password">
+      <InputLabel error={props.isError} htmlFor={`adornment-${name}`}>
         <FormattedMessage id="signup_password" />
       </InputLabel>
       <Input
-        name="password"
-        error={props.isPasswordError}
-        id="adornment-password"
-        type={props.passwordVisibility ? "text" : "password"}
-        value={props.password}
-        onChange={props.handlePasswordChange}
+        name={props.name}
+        error={props.isError}
+        id={`adornment-${name}`}
+        type={props.isVisible ? "text" : "password"}
+        value={props.value}
+        onChange={props.handleChange}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
               aria-label="Toggle password visibility"
-              onClick={props.handlePasswordVisibility}
+              onClick={props.handleVisibility}
             >
-              {props.passwordVisibility ? <Visibility /> : <VisibilityOff />}
+              {props.isVisible ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>
         }

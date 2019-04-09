@@ -9,7 +9,7 @@ import { FormattedMessage } from "react-intl";
 import axios from "axios";
 import config from "../../config";
 import { FormLabel } from "@material-ui/core";
-import PasswordInput from "../common/PasswordInput";
+import CustomPasswordInput from "../common/CustomPasswordInput";
 import CustomInput from "../common/CustomInput";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -32,6 +32,7 @@ interface IProps extends WithStyles<typeof styles> {
   setEmail: (email: string) => void;
   setIsEmailDuplicated: (isEmailDuplicated: boolean) => void;
   setNickname: (nickname: string) => void;
+  isDialogOpen: boolean;
   passwordVisibility: boolean;
   password: string;
   email: string;
@@ -46,110 +47,134 @@ interface IProps extends WithStyles<typeof styles> {
   classes: any;
 }
 
-export const SignupPage: React.SFC<IProps> = props => {
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setPassword(event.target.value);
+class SignupPage extends React.Component<IProps> {
+  public componentDidMount() {
+    this.initProps();
+  }
+
+  public componentWillUnmount() {
+    this.initProps();
+  }
+
+  private initProps = () => {
+    this.props.setEmail("");
+    this.props.setIsEmailDuplicated(false);
+    this.props.setNickname("");
+    this.props.setPassword("");
+    this.props.setPasswordVisibility(false);
+  };
+  
+  private handlePasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    this.props.setPassword(event.target.value);
   };
 
-  const handlePasswordVisibility = () => {
-    props.setPasswordVisibility(!props.passwordVisibility);
+  private handlePasswordVisibility = () => {
+    this.props.setPasswordVisibility(!this.props.passwordVisibility);
   };
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setEmail(event.target.value);
+  private handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.setEmail(event.target.value);
   };
 
-  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setNickname(event.target.value);
+  private handleNicknameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    this.props.setNickname(event.target.value);
   };
 
-  const isEmpty = (): boolean => {
-    if (props.nickname.length <= 0) return true;
-    if (props.password.length <= 0) return true;
-    if (props.email.length <= 0) return true;
+  private isEmpty = (): boolean => {
+    if (this.props.nickname.length <= 0) return true;
+    if (this.props.password.length <= 0) return true;
+    if (this.props.email.length <= 0) return true;
     return false;
   };
 
-  const handleSignupClick = () => {
+  private handleSignupClick = () => {
     const body = {
-      email: props.email,
-      nickname: props.nickname,
-      password: props.password
+      email: this.props.email,
+      nickname: this.props.nickname,
+      password: this.props.password
     };
     axios
-      .post(`${config.REACT_APP_SERVER_URL}/api/users/`, body)
+      .post(`${config.REACT_APP_SERVER_URL}/api/auth/local`, body)
       .then(res => {
-        return props.history.push("/signup/success");
+        return this.props.history.push("/signup/success");
       })
       .catch(err => {
+        console.log(err.response);
         if (err.response) {
           const message = err.response.data.message;
-          if (message.includes("User")) {
-            return props.setIsEmailDuplicated(true);
+          if (typeof message === "string" && message.includes("User")) {
+            return this.props.setIsEmailDuplicated(true);
           }
 
-          return props.setIsEmailDuplicated(false);
+          return this.props.setIsEmailDuplicated(false);
         }
         console.log(err);
       });
   };
 
-  return (
-    <div>
-      <CustomInput
-        isError={props.isEmailError}
-        value={props.email}
-        handleChange={handleEmailChange}
-        formattedMessageId="signup_email"
-        name="email"
-      />
+  public render() {
+    return (
+      <div>
+        <CustomInput
+          isError={this.props.isDialogOpen ? false : this.props.isEmailError}
+          value={this.props.isDialogOpen ? "" : this.props.email}
+          handleChange={this.handleEmailChange}
+          formattedMessageId="signup_email"
+          name="email"
+        />
 
-      <CustomInput
-        isError={props.isNicknameError}
-        value={props.nickname}
-        handleChange={handleNicknameChange}
-        formattedMessageId="signup_nickname"
-        name="nickname"
-      />
+        <CustomInput
+          isError={this.props.isDialogOpen ? false : this.props.isNicknameError}
+          value={this.props.isDialogOpen ? "" : this.props.nickname}
+          handleChange={this.handleNicknameChange}
+          formattedMessageId="signup_nickname"
+          name="nickname"
+        />
 
-      <PasswordInput
-        isPasswordError={props.isPasswordError}
-        passwordVisibility={props.passwordVisibility}
-        password={props.password}
-        handlePasswordChange={handlePasswordChange}
-        handlePasswordVisibility={handlePasswordVisibility}
-      />
+        <CustomPasswordInput
+          name="signup_password_input"
+          isError={this.props.isDialogOpen ? false : this.props.isPasswordError}
+          isVisible={this.props.passwordVisibility}
+          value={this.props.isDialogOpen ? "" : this.props.password}
+          handleChange={this.handlePasswordChange}
+          handleVisibility={this.handlePasswordVisibility}
+        />
 
-      <CustomButton
-        onClick={handleSignupClick}
-        formattedMessageId="signup_btn"
-        isDisable={
-          isEmpty() ||
-          props.isEmailError ||
-          props.isEmailDuplicated ||
-          props.isEmailError ||
-          props.isNicknameError ||
-          props.isPasswordError
-        }
-      />
-      <FormLabel>
-        {props.isEmailDuplicated ? (
-          <FormattedMessage id="signup_duplicatedEmail" />
-        ) : props.isPasswordError ? (
-          <FormattedMessage id="signup_errPassword" />
-        ) : props.isEmailError ? (
-          <FormattedMessage id="signup_errEmail" />
-        ) : props.isNicknameError ? (
-          <FormattedMessage id="signup_errNickname" />
-        ) : (
-          <div />
-        )}
-      </FormLabel>
-    </div>
-  );
-};
+        <CustomButton
+          onClick={this.handleSignupClick}
+          formattedMessageId="signup_btn"
+          isDisable={
+            this.isEmpty() ||
+            this.props.isEmailError ||
+            this.props.isEmailDuplicated ||
+            this.props.isEmailError ||
+            this.props.isNicknameError ||
+            this.props.isPasswordError
+          }
+        />
+        <FormLabel>
+          {this.props.isEmailDuplicated ? (
+            <FormattedMessage id="signup_duplicatedEmail" />
+          ) : this.props.isPasswordError ? (
+            <FormattedMessage id="signup_errPassword" />
+          ) : this.props.isEmailError ? (
+            <FormattedMessage id="signup_errEmail" />
+          ) : this.props.isNicknameError ? (
+            <FormattedMessage id="signup_errNickname" />
+          ) : (
+            <div />
+          )}
+        </FormLabel>
+      </div>
+    );
+  }
+}
 
-(SignupPage as React.SFC<IProps>).propTypes = {
+(SignupPage as React.ComponentClass<IProps>).propTypes = {
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,

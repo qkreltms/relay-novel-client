@@ -1,18 +1,18 @@
 import { IOpenAction, SET_OPEN } from "../actions";
 
 export interface IOpenState {
-  isOpen: boolean;
+  isDialogOpen: boolean;
 }
 
 const createEmpty = () => ({
-  isOpen: false
+  isDialogOpen: false
 });
 
 export const openReducer = (state = createEmpty(), action: IOpenAction) => {
   switch (action.type) {
     case SET_OPEN: {
       return {
-        isOpen: action.isOpen
+        isDialogOpen: action.isDialogOpen
       } as IOpenState;
     }
 

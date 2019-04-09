@@ -3,7 +3,7 @@ import { Theme, createStyles, WithStyles, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import CustomInput from "../common/CustomInput";
-import RadioButtons from "../common/RadioButtons";
+import CustomRadioButtons from "../common/CustomRadioButtons";
 import { RadioContents, Directions } from "../../models";
 import CustomButton from "../common/CustomButton";
 import axios from "axios";
@@ -57,6 +57,20 @@ class CreateRoomPage extends React.Component<IProps> {
     ] as Array<RadioContents>;
 
     this.socket = io(`${config.REACT_APP_SOCKET_URL}/mainpage`);
+  }
+
+  public componentDidMount() {
+    this.initProps()
+  }
+ 
+  public componentWillUnmount() {
+    this.initProps()
+  }
+
+  private initProps = () => {
+    this.props.setDesc("")
+    this.props.setTitle("")
+    this.props.setWriterLimit("100")
   }
 
   private isEmpty = (): boolean => {
@@ -132,7 +146,7 @@ class CreateRoomPage extends React.Component<IProps> {
           name="desc"
         />
 
-        <RadioButtons
+        <CustomRadioButtons
           value={this.props.writerLimit}
           handleValueChange={this.handleWriterLimitChange}
           radioContents={this.radioContents}

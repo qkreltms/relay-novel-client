@@ -1,13 +1,13 @@
 export const SET_OPEN = "SET_OPEN";
 
 export interface IOpenAction {
-  isOpen: boolean;
+  isDialogOpen: boolean;
   type: string;
 }
 
-export const setIsOpen = (isOpen: boolean) => {
+export const setIsDialogOpen = (isDialogOpen: boolean) => {
   return {
-    isOpen,
+    isDialogOpen,
     type: SET_OPEN
   } as IOpenAction;
 };

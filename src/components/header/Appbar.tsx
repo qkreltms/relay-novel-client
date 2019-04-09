@@ -30,12 +30,12 @@ export interface IProps extends WithStyles<typeof styles> {
   anchorElement: HTMLElement;
   setHtmlElementOnMenu: (anchorElement: HTMLElement) => void;
   setLocale: (lang: string) => void;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsDialogOpen: (isDialogOpen: boolean) => void;
   classes: any;
   match: any;
   location: any;
   history: any;
-  isOpen: boolean;
+  isDialogOpen: boolean;
   isLoggedIn: boolean;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
   user: User;
@@ -81,23 +81,21 @@ const Appbar: React.SFC<IProps> = props => {
   };
 
   const handleLoginClick = () => {
-    props.setIsOpen(true);
+    props.setIsDialogOpen(true);
   };
 
   const handleMenuLogoutClick = () => {
     axios
-      .get(`${config.REACT_APP_SERVER_URL}/auth/session`, axiosConfig)
+      .get(`${config.REACT_APP_SERVER_URL}/api/auth/session`, axiosConfig)
       .then(res => {
         if (res.data.status === "success") {
-          console.log("로그아웃 성공");
+          console.log("로그아웃 성공", res);
           props.setUser(newUser());
           return props.setIsLoggedIn(false);
         }
-        console.log(res);
       })
       .catch(err => {
-        console.log(err.response);
-        console.log("로그아웃 실패");
+        console.log("로그아웃 실패", err.response);
       })
       .finally(() => {
         props.setHtmlElementOnMenu(null);
@@ -106,7 +104,7 @@ const Appbar: React.SFC<IProps> = props => {
 
   return (
     <div className={classes.root}>
-      {props.isOpen ? <LoginDialogContainer /> : <div />}
+      {props.isDialogOpen ? <LoginDialogContainer /> : <div />}
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>

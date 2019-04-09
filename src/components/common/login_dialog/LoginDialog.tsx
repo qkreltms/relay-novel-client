@@ -14,7 +14,7 @@ import {
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import CustomInput from "../CustomInput";
-import PasswordInput from "../PasswordInput";
+import CustomPasswordInput from "../CustomPasswordInput";
 import axios from "axios";
 import config from "../../../config";
 import { User } from "../../../models";
@@ -26,8 +26,8 @@ interface IProps extends WithStyles<typeof styles> {
   match: any;
   location: any;
   history: any;
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  isDialogOpen: boolean;
+  setIsDialogOpen: (isDialogOpen: boolean) => void;
   setPassword: (password: string) => void;
   setPasswordVisibility: (passwordVisibility: boolean) => void;
   setEmail: (email: string) => void;
@@ -53,34 +53,49 @@ const styles = (theme: Theme) =>
     }
   });
 
-const LoginDialog: React.SFC<IProps> = props => {
-  const handleOnClose = () => {
-    props.setIsOpen(false);
-    props.setPassword("");
-    props.setEmail("");
+class LoginDialog extends React.Component<IProps> {
+  public componentDidMount() {
+    this.initProps();
+  }
+
+  public componentWillUnmount() {
+    this.initProps();
+  }
+
+  private initProps = () => {
+    this.props.setEmail("");
+    this.props.setIsEmailDuplicated(false);
+    this.props.setPassword("");
+    this.props.setPasswordVisibility(false);
   };
 
-  const handleOnLogin = () => {
-    if (props.email.length <= 0) {
-      return;
-    }
-    if (props.password.length <= 0) {
-      return;
-    }
+  private handleOnClose = () => {
+    this.props.setIsDialogOpen(false);
+    this.props.setPassword("");
+    this.props.setEmail("");
+  };
+
+  private handleOnLogin = () => {
+    if (this.props.email.length <= 0) return;
+    if (this.props.password.length <= 0) return;
 
     const body = {
-      email: props.email,
-      password: props.password
+      email: this.props.email,
+      password: this.props.password
     };
 
     axios
-      .post(`${config.REACT_APP_SERVER_URL}/api/auth/session`, body, axiosConfig)
+      .post(
+        `${config.REACT_APP_SERVER_URL}/api/auth/session`,
+        body,
+        axiosConfig
+      )
       .then(res => {
-        props.setIsOpen(false);
-        props.setIsLoggedIn(true);
-        props.setUser(res.data.message as User);
-        props.setPassword("");
-        props.setEmail("");
+        this.props.setIsDialogOpen(false);
+        this.props.setIsLoggedIn(true);
+        this.props.setUser(res.data.message as User);
+        this.props.setPassword("");
+        this.props.setEmail("");
         console.log("로그인 성공");
         console.log(res);
       })
@@ -88,81 +103,85 @@ const LoginDialog: React.SFC<IProps> = props => {
         //패스워드 혹은 이메일 틀림
         const res = err.response;
         if (res.data.message.includes("username")) {
-          props.setIsEmailDuplicated(true);
+          this.props.setIsEmailDuplicated(true);
         }
         console.log(res);
       });
   };
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setPassword(event.target.value);
+  private handlePasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    this.props.setPassword(event.target.value);
   };
 
-  const handlePasswordVisibility = () => {
-    props.setPasswordVisibility(!props.passwordVisibility);
+  private handlePasswordVisibility = () => {
+    this.props.setPasswordVisibility(!this.props.passwordVisibility);
   };
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setEmail(event.target.value);
+  private handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.setEmail(event.target.value);
   };
+  public render() {
+    return (
+      <div>
+        <Dialog
+          open={this.props.isDialogOpen}
+          onClose={this.handleOnClose}
+          aria-labelledby="login-dialog-slide-title"
+          aria-describedby="login-dialog-slide-description"
+          disableBackdropClick={true}
+          keepMounted
+        >
+          <DialogTitle id="login-dialog-slide-title">
+            <FormattedMessage id="logindialog_title" />
+          </DialogTitle>
+          <DialogContent>
+            <CustomInput
+              isError={this.props.isEmailError}
+              value={this.props.email}
+              handleChange={this.handleEmailChange}
+              formattedMessageId="signup_email"
+              name="dialog_email"
+            />
 
-  return (
-    <div>
-      <Dialog
-        open={props.isOpen}
-        onClose={handleOnClose}
-        aria-labelledby="login-dialog-slide-title"
-        aria-describedby="login-dialog-slide-description"
-        disableBackdropClick={true}
-        keepMounted
-      >
-        <DialogTitle id="login-dialog-slide-title">
-          <FormattedMessage id="logindialog_title" />
-        </DialogTitle>
-        <DialogContent>
-          <CustomInput
-            isError={props.isEmailError}
-            value={props.email}
-            handleChange={handleEmailChange}
-            formattedMessageId="signup_email"
-            name="dialog_email"
-          />
+            <CustomPasswordInput
+              name="login_dialog_password_input"
+              isError={this.props.isPasswordError}
+              isVisible={this.props.passwordVisibility}
+              value={this.props.password}
+              handleChange={this.handlePasswordChange}
+              handleVisibility={this.handlePasswordVisibility}
+            />
+            <FormLabel>
+              {this.props.isEmailDuplicated ? (
+                <FormattedMessage id="logindialog_notexistsemail" />
+              ) : this.props.isPasswordError ? (
+                <FormattedMessage id="signup_errPassword" />
+              ) : this.props.isEmailError ? (
+                <FormattedMessage id="signup_errEmail" />
+              ) : (
+                <div />
+              )}
+            </FormLabel>
+          </DialogContent>
+          <DialogActions>
+            <CustomButton
+              onClick={this.handleOnClose}
+              formattedMessageId="logindialog_cancle_btn"
+            />
+            <CustomButton
+              onClick={this.handleOnLogin}
+              formattedMessageId="logindialog_ok_btn"
+            />
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
+}
 
-          <PasswordInput
-            isPasswordError={props.isPasswordError}
-            passwordVisibility={props.passwordVisibility}
-            password={props.password}
-            handlePasswordChange={handlePasswordChange}
-            handlePasswordVisibility={handlePasswordVisibility}
-          />
-          <FormLabel>
-            {props.isEmailDuplicated ? (
-              <FormattedMessage id="logindialog_notexistsemail" />
-            ) : props.isPasswordError ? (
-              <FormattedMessage id="signup_errPassword" />
-            ) : props.isEmailError ? (
-              <FormattedMessage id="signup_errEmail" />
-            ) : (
-              <div />
-            )}
-          </FormLabel>
-        </DialogContent>
-        <DialogActions>
-          <CustomButton
-            onClick={handleOnClose}
-            formattedMessageId="logindialog_cancle_btn"
-          />
-          <CustomButton
-            onClick={handleOnLogin}
-            formattedMessageId="logindialog_ok_btn"
-          />
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-};
-
-(LoginDialog as React.SFC<IProps>).propTypes = {
+(LoginDialog as React.ComponentClass<IProps>).propTypes = {
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,

@@ -10,14 +10,15 @@ import { ICombineReducersState } from "../../reducers";
 import SignupPage from "./SignupPage";
 
 const mapStateToProps = (state: ICombineReducersState) => ({
-  password: state.password.password,
-  passwordVisibility: state.password.passwordVisibility,
-  email: state.email.email,
-  nickname: state.nickname.nickname,
-  isPasswordError: state.password.isPasswordError,
-  isNicknameError: state.nickname.isNicknameError,
-  isEmailError: state.email.isEmailError,
-  isEmailDuplicated: state.email.isEmailDuplicated
+  password: state.auth.password,
+  passwordVisibility: state.auth.passwordVisibility,
+  email: state.auth.email,
+  nickname: state.auth.nickname,
+  isPasswordError: state.auth.isPasswordError,
+  isEmailError: state.auth.isEmailError,
+  isEmailDuplicated: state.auth.isEmailDuplicated,
+  isDialogOpen: state.open.isDialogOpen,
+  isNicknameError: state.auth.isNicknameError
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
