@@ -11,11 +11,13 @@ import {
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
-import { Room } from "../../models";
+import { Room, newRoom } from "../../models";
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
 import CustomButton from "../common/CustomButton";
 import config from "../../config";
 import io from "socket.io-client";
+import axios from "axios";
+import axiosConfig from "../../config/axios";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -32,14 +34,17 @@ interface IProps extends WithStyles<typeof styles> {
   history: any;
   classes: any;
   isLoggedIn: boolean;
-  setRoom: (room: Room) => void;
+  setRooms: (rooms: Array<Room>) => void;
   rooms: Array<Room>;
   fetchRooms: (skip: number, limit: number) => void;
 }
 
 class MainPage extends React.Component<IProps> {
+  private socket: any;
+
   public constructor(props) {
     super(props);
+    this.socket = io(`${config.REACT_APP_SOCKET_URL}/mainpage`);
   }
 
   public componentDidMount() {
@@ -52,18 +57,41 @@ class MainPage extends React.Component<IProps> {
   }
 
   initSocket = () => {
-    const socket = io(`${config.REACT_APP_SOCKET_URL}/room`);
+    const socket = this.socket;
     socket.emit("join", {});
-    socket.on("message", data => {
-      // TODO: db에서 select 해오기
+    socket.on("message", roomId => {
+      console.log(`소켓 message 값 받음:`, JSON.stringify(roomId));
+      this.getARoom(roomId);
     });
-    console.log(`${socket} 소켓 연결됨`);
+    console.log(`소켓 연결됨`);
+  };
+
+  getARoom = roomId => {
+    // 소켓에서 roomId가 잘 전달 됬는지 확인
+    if (!roomId) {
+      console.log("roomId가 undefined 값이 들어옴 ",roomId)
+      return;
+    }
+
+    return axios
+      .get(`${config.REACT_APP_SERVER_URL}/api/rooms?roomId=${roomId}`, axiosConfig)
+      .then(res => {
+        if (!res.data) return;
+
+        const room = res.data.message;
+        this.props.setRooms([room[0], ...this.props.rooms] as Array<Room>);
+      })
+      .catch(err => {
+        // 방 못 가져온 것 예외처리
+        console.log(err);
+        if (!err.response) return;
+      });
   };
 
   exitSocket = () => {
-    const socket = io(`${config.REACT_APP_SOCKET_URL}/room`);
+    const socket = this.socket;
     socket.emit("leave", {});
-    console.log(`${socket} 소켓 해제됨`);
+    console.log(`소켓 해제됨`);
   };
 
   // 클릭시 방안으로 리다이렉트

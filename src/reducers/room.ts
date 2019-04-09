@@ -1,4 +1,4 @@
-import { FETCH_ROOMS, IRoomAction } from "../actions";
+import { FETCH_ROOMS, SET_ROOMS, IRoomAction } from "../actions";
 import { Room, newRoom } from "../models";
 
 export interface IRoomState {
@@ -12,6 +12,12 @@ const createEmpty = () => ({
 export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
   switch (action.type) {
     case FETCH_ROOMS: {
+      return {
+        rooms: action.rooms
+      } as IRoomState;
+    }
+    
+    case SET_ROOMS: {
       return {
         rooms: action.rooms
       } as IRoomState;

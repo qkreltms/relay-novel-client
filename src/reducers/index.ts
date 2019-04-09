@@ -10,6 +10,7 @@ import { loginReducer, ILoginState } from "./login";
 import { roomReducer, IRoomState } from "./room";
 import { likeDislikeReducer, ILikeDislikeState } from "./likeDislike";
 import { ICreateRoomState, createRoomReducer } from "./createRoom";
+import { ISocketState, socketReducer } from "./socket";
 
 export interface ICombineReducersState {
   appbar: IAppbarState;
@@ -23,6 +24,7 @@ export interface ICombineReducersState {
   rooms: IRoomState;
   likeDislikes: ILikeDislikeState;
   createRoom: ICreateRoomState;
+  socket: ISocketState;
 }
 
 export const rootReducer = combineReducers<ICombineReducersState>({
@@ -36,5 +38,6 @@ export const rootReducer = combineReducers<ICombineReducersState>({
   login: loginReducer,
   rooms: roomReducer,
   likeDislikes: likeDislikeReducer,
-  createRoom: createRoomReducer
+  createRoom: createRoomReducer,
+  socket: socketReducer
 });

@@ -27,7 +27,8 @@ interface IProps extends WithStyles<typeof styles> {
 const styles = (theme: Theme) => createStyles({});
 
 class CreateRoomPage extends React.Component<IProps> {
-  radioContents: Array<RadioContents>;
+  private radioContents: Array<RadioContents>;
+  private socket: any;
 
   constructor(props) {
     super(props);
@@ -54,6 +55,8 @@ class CreateRoomPage extends React.Component<IProps> {
         labelPlacement: Directions.Start
       }
     ] as Array<RadioContents>;
+
+    this.socket = io(`${config.REACT_APP_SOCKET_URL}/mainpage`);
   }
 
   private isEmpty = (): boolean => {
@@ -64,7 +67,7 @@ class CreateRoomPage extends React.Component<IProps> {
   };
 
   private notifySocket = roomId => {
-    const socket = io(`${config.REACT_APP_SOCKET_URL}/room`);
+    const socket = this.socket;
     socket.emit("create", {
       roomId
     });
