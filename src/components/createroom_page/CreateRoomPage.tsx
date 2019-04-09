@@ -64,7 +64,7 @@ class CreateRoomPage extends React.Component<IProps> {
   };
 
   private notifySocket = roomId => {
-    const socket = io("/rooms");
+    const socket = io(`${config.REACT_APP_SOCKET_URL}/room`);
     socket.emit("create", {
       roomId
     });

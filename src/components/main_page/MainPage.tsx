@@ -14,6 +14,8 @@ import PropTypes from "prop-types";
 import { Room } from "../../models";
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
 import CustomButton from "../common/CustomButton";
+import config from "../../config";
+import io from "socket.io-client";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -42,7 +44,27 @@ class MainPage extends React.Component<IProps> {
 
   public componentDidMount() {
     this.props.fetchRooms(0, 30);
+    this.initSocket();
   }
+
+  public componentWillUnmount() {
+    this.exitSocket();
+  }
+
+  initSocket = () => {
+    const socket = io(`${config.REACT_APP_SOCKET_URL}/room`);
+    socket.emit("join", {});
+    socket.on("message", data => {
+      // TODO: db에서 select 해오기
+    });
+    console.log(`${socket} 소켓 연결됨`);
+  };
+
+  exitSocket = () => {
+    const socket = io(`${config.REACT_APP_SOCKET_URL}/room`);
+    socket.emit("leave", {});
+    console.log(`${socket} 소켓 해제됨`);
+  };
 
   // 클릭시 방안으로 리다이렉트
   handleListItemClick = (roomId: number) => () => {
