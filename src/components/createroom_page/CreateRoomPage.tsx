@@ -9,7 +9,7 @@ import CustomButton from "../common/CustomButton";
 import axios from "axios";
 import config from "../../config";
 import axiosConfig from "../../config/axios";
-import io from "socket.io-client";
+import socket from "../../config/socketio";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -56,7 +56,7 @@ class CreateRoomPage extends React.Component<IProps> {
       }
     ] as Array<RadioContents>;
 
-    this.socket = io(`${config.REACT_APP_SOCKET_URL}/mainpage`);
+    this.socket = socket
   }
 
   public componentDidMount() {
@@ -81,7 +81,6 @@ class CreateRoomPage extends React.Component<IProps> {
   };
 
   private notifySocket = roomId => {
-    const socket = this.socket;
     socket.emit("create", {
       roomId
     });

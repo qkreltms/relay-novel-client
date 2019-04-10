@@ -39,8 +39,11 @@ interface IProps extends WithStyles<typeof styles> {
   setUser: (user: User) => void;
   setIsLoggedIn: (isLogin: boolean) => void;
   duplicatedEmail: (email: string) => boolean;
-  setIsEmailDuplicated: (duplicated: boolean) => void;
-  isEmailDuplicated: boolean;
+  setIsIncorrectEmail: (isIncorrectEmail: boolean) => void;
+  isIncorrectEmail: boolean;
+  isIncorrectPassword: boolean;
+  setIsIncorrectPassword: (isIncorrectPassword: boolean) => void;
+  initAuth: () => void;
 }
 
 const styles = (theme: Theme) =>
@@ -54,25 +57,12 @@ const styles = (theme: Theme) =>
   });
 
 class LoginDialog extends React.Component<IProps> {
-  public componentDidMount() {
-    this.initProps();
-  }
-
   public componentWillUnmount() {
-    this.initProps();
+    this.props.initAuth();
   }
-
-  private initProps = () => {
-    this.props.setEmail("");
-    this.props.setIsEmailDuplicated(false);
-    this.props.setPassword("");
-    this.props.setPasswordVisibility(false);
-  };
 
   private handleOnClose = () => {
     this.props.setIsDialogOpen(false);
-    this.props.setPassword("");
-    this.props.setEmail("");
   };
 
   private handleOnLogin = () => {
@@ -94,18 +84,16 @@ class LoginDialog extends React.Component<IProps> {
         this.props.setIsDialogOpen(false);
         this.props.setIsLoggedIn(true);
         this.props.setUser(res.data.message as User);
-        this.props.setPassword("");
-        this.props.setEmail("");
         console.log("로그인 성공");
         console.log(res);
       })
       .catch(err => {
         //패스워드 혹은 이메일 틀림
         const res = err.response;
-        if (res.data.message.includes("username")) {
-          this.props.setIsEmailDuplicated(true);
-        }
         console.log(res);
+        if (!res) return;
+        if (res.data.message.includes("username")) this.props.setIsIncorrectEmail(true);
+        if (res.data.message.includes("password")) this.props.setIsIncorrectPassword(true);
       });
   };
 
@@ -154,12 +142,14 @@ class LoginDialog extends React.Component<IProps> {
               handleVisibility={this.handlePasswordVisibility}
             />
             <FormLabel>
-              {this.props.isEmailDuplicated ? (
-                <FormattedMessage id="logindialog_notexistsemail" />
+              { this.props.isIncorrectPassword ? (
+                <FormattedMessage id="logindialog_incorrect_password"/>
+              ) : this.props.isIncorrectEmail ? (
+                <FormattedMessage id="logindialog_notexists_email" />
               ) : this.props.isPasswordError ? (
-                <FormattedMessage id="signup_errPassword" />
+                <FormattedMessage id="signup_err_password" />
               ) : this.props.isEmailError ? (
-                <FormattedMessage id="signup_errEmail" />
+                <FormattedMessage id="signup_err_email" />
               ) : (
                 <div />
               )}

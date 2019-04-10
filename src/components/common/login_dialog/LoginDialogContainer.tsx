@@ -9,7 +9,9 @@ import {
   setNickname,
   setIsLoggedIn,
   setUser,
-  setIsEmailDuplicated
+  setIsIncorrectEmail,
+  setIsIncorrectPassword,
+  initAuth
 } from "../../../actions";
 import { User } from "../../../models";
 
@@ -21,7 +23,8 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   isPasswordError: state.auth.isPasswordError,
   isEmailError: state.auth.isEmailError,
   user: state.auth.user,
-  isEmailDuplicated: state.auth.isEmailDuplicated
+  isIncorrectEmail: state.auth.isIncorrectEmail,
+  isIncorrectPassword: state.auth.isIncorrectPassword
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -33,8 +36,11 @@ const mapDispatchToProps = (dispatch: any) => ({
   setNickname: (nickname: string) => dispatch(setNickname(nickname)),
   setIsLoggedIn: (isLogin: boolean) => dispatch(setIsLoggedIn(isLogin)),
   setUser: (user: User) => dispatch(setUser(user)),
-  setIsEmailDuplicated: (isEmailDuplicated: boolean) =>
-    dispatch(setIsEmailDuplicated(isEmailDuplicated))
+  setIsIncorrectEmail: (isIncorrectEmail: boolean) =>
+    dispatch(setIsIncorrectEmail(isIncorrectEmail)),
+  setIsIncorrectPassword: (isIncorrectPassword: boolean) =>
+    dispatch(setIsIncorrectPassword(isIncorrectPassword)),
+  initAuth: () => dispatch(initAuth())
 });
 
 export const LoginDialogContainer = connect(

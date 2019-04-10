@@ -11,11 +11,11 @@ import {
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
-import { Room, newRoom } from "../../models";
+import { Room } from "../../models";
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
 import CustomButton from "../common/CustomButton";
 import config from "../../config";
-import io from "socket.io-client";
+import socket from "../../config/socketio";
 import axios from "axios";
 import axiosConfig from "../../config/axios";
 
@@ -44,7 +44,7 @@ class MainPage extends React.Component<IProps> {
 
   public constructor(props) {
     super(props);
-    this.socket = io(`${config.REACT_APP_SOCKET_URL}/mainpage`);
+    this.socket = socket;
   }
 
   public componentDidMount() {
@@ -63,18 +63,20 @@ class MainPage extends React.Component<IProps> {
       console.log(`소켓 message 값 받음:`, JSON.stringify(roomId));
       this.getARoom(roomId);
     });
-    console.log(`소켓 연결됨`);
   };
 
   getARoom = roomId => {
     // 소켓에서 roomId가 잘 전달 됬는지 확인
     if (!roomId) {
-      console.log("roomId가 undefined 값이 들어옴 ",roomId)
+      console.log("roomId가 undefined 값이 들어옴 ", roomId);
       return;
     }
 
     return axios
-      .get(`${config.REACT_APP_SERVER_URL}/api/rooms?roomId=${roomId}`, axiosConfig)
+      .get(
+        `${config.REACT_APP_SERVER_URL}/api/rooms?roomId=${roomId}`,
+        axiosConfig
+      )
       .then(res => {
         if (!res.data) return;
 

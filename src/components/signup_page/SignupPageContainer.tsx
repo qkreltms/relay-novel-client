@@ -4,7 +4,8 @@ import {
   setPasswordVisibility,
   setEmail,
   setNickname,
-  setIsEmailDuplicated
+  setIsIncorrectEmail,
+  initAuth
 } from "../../actions";
 import { ICombineReducersState } from "../../reducers";
 import SignupPage from "./SignupPage";
@@ -16,7 +17,7 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   nickname: state.auth.nickname,
   isPasswordError: state.auth.isPasswordError,
   isEmailError: state.auth.isEmailError,
-  isEmailDuplicated: state.auth.isEmailDuplicated,
+  isIncorrectEmail: state.auth.isIncorrectEmail,
   isDialogOpen: state.open.isDialogOpen,
   isNicknameError: state.auth.isNicknameError
 });
@@ -27,8 +28,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setPasswordVisibility(passwordVisibility)),
   setEmail: (email: string) => dispatch(setEmail(email)),
   setNickname: (nickname: string) => dispatch(setNickname(nickname)),
-  setIsEmailDuplicated: (isEmailDuplicated: boolean) =>
-    dispatch(setIsEmailDuplicated(isEmailDuplicated))
+  setIsIncorrectEmail: (isIncorrectEmail: boolean) =>
+    dispatch(setIsIncorrectEmail(isIncorrectEmail)),
+  initAuth: () => dispatch(initAuth())
 });
 
 export const SignupPageContainer = connect(

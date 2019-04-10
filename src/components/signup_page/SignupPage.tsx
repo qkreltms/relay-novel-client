@@ -27,10 +27,11 @@ const styles = (theme: Theme) =>
   });
 
 interface IProps extends WithStyles<typeof styles> {
+  initAuth: () => void;
   setPassword: (password: string) => void;
   setPasswordVisibility: (passwordVisibility: boolean) => void;
   setEmail: (email: string) => void;
-  setIsEmailDuplicated: (isEmailDuplicated: boolean) => void;
+  setIsIncorrectEmail: (isIncorrectEmail: boolean) => void;
   setNickname: (nickname: string) => void;
   isDialogOpen: boolean;
   passwordVisibility: boolean;
@@ -40,7 +41,7 @@ interface IProps extends WithStyles<typeof styles> {
   isPasswordError: boolean;
   isNicknameError: boolean;
   isEmailError: boolean;
-  isEmailDuplicated: boolean;
+  isIncorrectEmail: boolean;
   match: any;
   location: any;
   history: any;
@@ -48,22 +49,10 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 class SignupPage extends React.Component<IProps> {
-  public componentDidMount() {
-    this.initProps();
-  }
-
   public componentWillUnmount() {
-    this.initProps();
+    this.props.initAuth();
   }
 
-  private initProps = () => {
-    this.props.setEmail("");
-    this.props.setIsEmailDuplicated(false);
-    this.props.setNickname("");
-    this.props.setPassword("");
-    this.props.setPasswordVisibility(false);
-  };
-  
   private handlePasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -107,10 +96,10 @@ class SignupPage extends React.Component<IProps> {
         if (err.response) {
           const message = err.response.data.message;
           if (typeof message === "string" && message.includes("User")) {
-            return this.props.setIsEmailDuplicated(true);
+            return this.props.setIsIncorrectEmail(true);
           }
 
-          return this.props.setIsEmailDuplicated(false);
+          return this.props.setIsIncorrectEmail(false);
         }
         console.log(err);
       });
@@ -150,21 +139,23 @@ class SignupPage extends React.Component<IProps> {
           isDisable={
             this.isEmpty() ||
             this.props.isEmailError ||
-            this.props.isEmailDuplicated ||
+            this.props.isIncorrectEmail ||
             this.props.isEmailError ||
             this.props.isNicknameError ||
             this.props.isPasswordError
           }
         />
         <FormLabel>
-          {this.props.isEmailDuplicated ? (
-            <FormattedMessage id="signup_duplicatedEmail" />
+          {this.props.isDialogOpen ? (
+            <div />
+          ) : this.props.isIncorrectEmail ? (
+            <FormattedMessage id="signup_duplicated_email" />
           ) : this.props.isPasswordError ? (
-            <FormattedMessage id="signup_errPassword" />
+            <FormattedMessage id="signup_err_password" />
           ) : this.props.isEmailError ? (
-            <FormattedMessage id="signup_errEmail" />
+            <FormattedMessage id="signup_err_email" />
           ) : this.props.isNicknameError ? (
-            <FormattedMessage id="signup_errNickname" />
+            <FormattedMessage id="signup_err_nickname" />
           ) : (
             <div />
           )}

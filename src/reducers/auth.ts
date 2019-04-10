@@ -1,19 +1,22 @@
 import {
   IAuthAction,
   SET_EMAIL,
-  SET_IS_EMAIL_DUPLICATED,
+  SET_IS_INCORRECT_EMAIL,
+  SET_IS_INCORRECT_PASSWORD,
   SET_IS_LOGGED_IN,
   SET_PASSWORD,
   SHOW_PASSWORD,
   SET_NICKNAME,
-  SET_USER
+  SET_USER,
+  INIT_AUTH
 } from "../actions";
 import { User, newUser } from "../models";
 
 export interface IAuthState {
   email: string;
   isEmailError: boolean;
-  isEmailDuplicated: boolean;
+  isIncorrectEmail: boolean;
+  isIncorrectPassword: boolean;
   isLoggedIn: boolean;
   password: string;
   passwordVisibility: boolean;
@@ -26,7 +29,8 @@ export interface IAuthState {
 const createEmpty = () => ({
   email: "",
   isEmailError: false,
-  isEmailDuplicated: false,
+  isIncorrectEmail: false,
+  isIncorrectPassword: false,
   isLoggedIn: false,
   password: "",
   passwordVisibility: false,
@@ -40,19 +44,30 @@ const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-
 
 export const authReducer = (state = createEmpty(), action: IAuthAction) => {
   switch (action.type) {
+    case INIT_AUTH: {
+      return createEmpty();
+    }
+
     case SET_EMAIL: {
       return {
         ...state,
         email: action.email,
         isEmailError: isEmail(action.email),
-        isEmailDuplicated: false
+        isIncorrectEmail: false
       } as IAuthState;
     }
 
-    case SET_IS_EMAIL_DUPLICATED: {
+    case SET_IS_INCORRECT_EMAIL: {
       return {
         ...state,
-        isEmailDuplicated: action.isEmailDuplicated
+        isIncorrectEmail: action.isIncorrectEmail
+      } as IAuthState;
+    }
+
+    case SET_IS_INCORRECT_PASSWORD: {
+      return {
+        ...state,
+        isIncorrectPassword: action.isIncorrectPassword
       } as IAuthState;
     }
 
@@ -67,7 +82,8 @@ export const authReducer = (state = createEmpty(), action: IAuthAction) => {
       return {
         ...state,
         password: action.password,
-        isPasswordError: isPassword(action.password)
+        isPasswordError: isPassword(action.password),
+        isIncorrectPassword: false
       } as IAuthState;
     }
 

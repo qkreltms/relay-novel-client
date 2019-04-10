@@ -1,23 +1,31 @@
 import { User } from "../models";
 
 export const SET_EMAIL = "SET_EMAIL";
-export const SET_IS_EMAIL_DUPLICATED = "SET_IS_EMAIL_DUPLICATED";
+export const SET_IS_INCORRECT_EMAIL = "SET_IS_INCORRECT_EMAIL";
 export const SET_PASSWORD = "SET_PASSWORD";
 export const SET_IS_LOGGED_IN = "SET_IS_LOGGED_IN";
 export const SHOW_PASSWORD = "SHOW_PASSWORD";
 export const SET_NICKNAME = "SET_NICKNAME";
 export const SET_USER = "SET_USER";
-
+export const SET_IS_INCORRECT_PASSWORD = "SET_IS_INCORRECT_PASSWORD";
+export const INIT_AUTH = "INIT_AUTH";
 export interface IAuthAction {
   type: string;
   isLoggedIn: boolean;
   email: string;
-  isEmailDuplicated: boolean;
+  isIncorrectEmail: boolean;
+  isIncorrectPassword: boolean;
   password: string;
   passwordVisibility: boolean;
   nickname: string;
   user: User;
 }
+
+export const initAuth = () => {
+  return {
+    type: INIT_AUTH
+  } as IAuthAction;
+};
 
 export const setUser = (user: User) => {
   return {
@@ -33,10 +41,17 @@ export const setEmail = (email: string) => {
   } as IAuthAction;
 };
 
-export const setIsEmailDuplicated = (isEmailDuplicated: boolean) => {
+export const setIsIncorrectEmail = (isIncorrectEmail: boolean) => {
   return {
-    isEmailDuplicated,
-    type: SET_IS_EMAIL_DUPLICATED
+    isIncorrectEmail,
+    type: SET_IS_INCORRECT_EMAIL
+  } as IAuthAction;
+};
+
+export const setIsIncorrectPassword = (isIncorrectPassword: boolean) => {
+  return {
+    isIncorrectPassword,
+    type: SET_IS_INCORRECT_PASSWORD
   } as IAuthAction;
 };
 
