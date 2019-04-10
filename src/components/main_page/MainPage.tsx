@@ -22,8 +22,8 @@ import axiosConfig from "../../config/axios";
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      width: "100%",
-      backgroundColor: theme.palette.background.paper
+      backgroundColor: theme.palette.background.paper,
+      flexGrow: 1,
     },
     list: {}
   });

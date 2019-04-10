@@ -25,7 +25,7 @@ const Router: React.SFC<IProps> = props => {
   return (
     <IntlProvider locale={props.lang} messages={locale[props.lang]}>
       <HashRouter>
-        <div>
+        <div id="App">
           <Appbar />
           <Switch>
             <Route exact path="/" component={MainPage} />
