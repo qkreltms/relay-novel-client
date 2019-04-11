@@ -7,7 +7,6 @@ export interface Novel {
   dislike: number;
   updatedAt: Date;
   createdAt: Date;
-  isDeleted: boolean;
 }
 
 export const newNovel = () => ({
@@ -19,5 +18,4 @@ export const newNovel = () => ({
   dislike: 0,
   updatedAt: new Date(),
   createdAt: new Date(),
-  isDeleted: false
 });
