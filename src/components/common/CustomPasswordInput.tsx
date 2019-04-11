@@ -34,7 +34,7 @@ const styles = (theme: Theme) =>
     }
   });
 
-const PasswordForm: React.SFC<IProps> = props => {
+const CustomPasswordInput: React.SFC<IProps> = props => {
   return (
     <FormControl
       className={classNames(props.classes.margin, props.classes.textField)}
@@ -64,8 +64,8 @@ const PasswordForm: React.SFC<IProps> = props => {
   );
 };
 
-(PasswordForm as React.SFC<IProps>).propTypes = {
+(CustomPasswordInput as React.SFC<IProps>).propTypes = {
   classes: PropTypes.object.isRequired
 } as any;
 
-export default withStyles(styles)(PasswordForm);
+export default withStyles(styles)(CustomPasswordInput);

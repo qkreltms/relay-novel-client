@@ -93,15 +93,11 @@ class SignupPage extends React.Component<IProps> {
       })
       .catch(err => {
         console.log(err.response);
-        if (err.response) {
-          const message = err.response.data.message;
-          if (typeof message === "string" && message.includes("User")) {
-            return this.props.setIsIncorrectEmail(true);
-          }
+        if (!err.response) return;
 
-          return this.props.setIsIncorrectEmail(false);
-        }
-        console.log(err);
+        const message = err.response.data.message;
+        if (typeof message === "string" && message.includes("User")) return this.props.setIsIncorrectEmail(true);
+        else return this.props.setIsIncorrectEmail(false);
       });
   };
 

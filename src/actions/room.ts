@@ -10,7 +10,7 @@ export interface IRoomAction {
   rooms: Array<Room>;
 }
 
-const handleRoomCompleted = (rooms: Array<Room>, type: string) => {
+const handleRoomFetchCompleted = (rooms: Array<Room>, type: string) => {
   return {
     rooms,
     type
@@ -22,9 +22,11 @@ export const setRooms = (rooms: Array<Room>) => {
     rooms,
     type: SET_ROOMS
   } as IRoomAction;
-}
+};
 
-export const fetchRooms = (skip: number, limit: number) => (dispatch: any) => {
+export const fetchRooms = (skip: number = 0, limit: number = 30) => (
+  dispatch: any
+) => {
   axios
     .get(`${config.REACT_APP_SERVER_URL}/api/rooms?skip=${skip}&limit=${limit}`)
     .then(res => {
@@ -32,12 +34,12 @@ export const fetchRooms = (skip: number, limit: number) => (dispatch: any) => {
       console.log("room 데이터", res.data);
       const rooms: Array<Room> = res.data.message as Array<Room>;
 
-      return dispatch(handleRoomCompleted(rooms, FETCH_ROOMS));
+      return dispatch(handleRoomFetchCompleted(rooms, FETCH_ROOMS));
     })
     .catch(err => {
       console.log(err.response);
-      const rooms = new Array<Room>(newRoom());
+      const rooms: Array<Room> = new Array<Room>(newRoom());
 
-      return dispatch(handleRoomCompleted(rooms, FETCH_ROOMS));
+      return dispatch(handleRoomFetchCompleted(rooms, FETCH_ROOMS));
     });
 };
