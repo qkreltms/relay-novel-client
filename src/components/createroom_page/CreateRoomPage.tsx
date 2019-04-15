@@ -9,7 +9,7 @@ import CustomButton from "../common/CustomButton";
 import axios from "axios";
 import config from "../../config";
 import axiosConfig from "../../config/axios";
-import socket from "../../config/socketio";
+import socket, {mainPage} from "../../socket";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -28,11 +28,11 @@ const styles = (theme: Theme) => createStyles({});
 
 class CreateRoomPage extends React.Component<IProps> {
   private radioContents: Array<RadioContents>;
-  private socket: any;
+  private socket: any = null;
 
   constructor(props) {
     super(props);
-
+    this.socket = socket(mainPage);
     this.radioContents = [
       {
         value: "10",
@@ -55,8 +55,6 @@ class CreateRoomPage extends React.Component<IProps> {
         labelPlacement: Directions.Start
       }
     ] as Array<RadioContents>;
-
-    this.socket = socket
   }
 
   public componentDidMount() {
@@ -80,8 +78,8 @@ class CreateRoomPage extends React.Component<IProps> {
     return false;
   };
 
-  private notifySocket = roomId => {
-    socket.emit("create", {
+  private sendEventToSocket = (roomId: string) => {
+    this.socket.emit("create", {
       roomId
     });
   };
@@ -100,9 +98,9 @@ class CreateRoomPage extends React.Component<IProps> {
       .then(res => {
         const data = res.data;
         if (!data) return;
-        const roomId = data.message.insertId;
+        const roomId: string = data.message.insertId;
 
-        this.notifySocket(roomId);
+        this.sendEventToSocket(roomId);
 
         return this.props.history.push(`/room/${roomId}`);
       })

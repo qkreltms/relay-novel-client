@@ -32,4 +32,6 @@ export default {
   createroom_desc: "Description",
   createroom_writerlimit: "Writer Limit",
   createroom_btn: "Create Room",
+  novelpage_input: "Input",
+  novelpage_btn: "Submit",
 };

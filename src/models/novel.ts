@@ -9,9 +9,9 @@ export interface Novel {
   createdAt: Date;
 }
 
-export const newNovel = () => ({
+export const newNovel = (text: string = "") => ({
   id: 0,
-  text: "",
+  text,
   roomId: 0,
   userId: 0,
   like: 0,

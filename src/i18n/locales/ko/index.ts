@@ -32,4 +32,6 @@ export default {
     createroom_desc: "설명",
     createroom_writerlimit: "소설가 수 제한",
     createroom_btn: "방 만들기",
+    novelpage_input: "입력",
+    novelpage_btn: "글쓰기",
 };

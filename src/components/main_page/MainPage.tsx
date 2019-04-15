@@ -15,7 +15,7 @@ import { Room } from "../../models";
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
 import CustomButton from "../common/CustomButton";
 import config from "../../config";
-import socket from "../../config/socketio";
+import socket, {mainPage} from "../../socket";
 import axios from "axios";
 import axiosConfig from "../../config/axios";
 
@@ -40,11 +40,11 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 class MainPage extends React.Component<IProps> {
-  private socket: any;
+  private socket: any = null;
 
   public constructor(props) {
     super(props);
-    this.socket = socket;
+    this.socket = socket(mainPage);
   }
 
   public componentDidMount() {
@@ -57,12 +57,16 @@ class MainPage extends React.Component<IProps> {
   }
 
   initSocket = () => {
-    const socket = this.socket;
-    socket.emit("join", {});
-    socket.on("message", roomId => {
+    this.socket.emit("join", {});
+    this.socket.on("message", roomId => {
       console.log(`소켓 message 값 받음:`, JSON.stringify(roomId));
       this.getARoom(roomId);
     });
+  };
+
+  exitSocket = () => {
+    this.socket.emit("leave", {});
+    console.log(`소켓 해제됨`);
   };
 
   getARoom = roomId => {
@@ -90,12 +94,6 @@ class MainPage extends React.Component<IProps> {
       });
   };
 
-  exitSocket = () => {
-    const socket = this.socket;
-    socket.emit("leave", {});
-    console.log(`소켓 해제됨`);
-  };
-
   // 클릭시 방안으로 리다이렉트
   handleListItemClick = (roomId: number) => () => {
     this.props.history.push(`/room/${roomId}`);
@@ -106,7 +104,6 @@ class MainPage extends React.Component<IProps> {
     if (this.props.isLoggedIn) {
       this.props.history.push(`/create/room`);
     } else {
-      // TODO: dialog 창으로 바꾸는거 생각해보기
       alert(`로그인을 먼저 해주세요!`);
     }
   };
@@ -123,6 +120,7 @@ class MainPage extends React.Component<IProps> {
         <List>
           {this.props.rooms.map((room, index) => (
             <ListItem
+              alignItems="flex-start"
               key={index}
               button
               role={undefined}
@@ -130,10 +128,10 @@ class MainPage extends React.Component<IProps> {
             >
               <ListItemText primary={room.title} />
               <ListItemSecondaryAction>
-                <ThumbUp />
-                <ListItemText primary={room.like} />
-                <ThumbDown />
-                <ListItemText primary={room.dislike} />
+                <ThumbUp fontSize="small" />
+                <span>{room.like}</span>
+                <ThumbDown fontSize="small" />
+                <span>{room.dislike}</span>
               </ListItemSecondaryAction>
             </ListItem>
           ))}

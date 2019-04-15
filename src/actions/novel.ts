@@ -1,23 +1,33 @@
 export const SET_NOVEL = "SET_NOVEL";
 export const FETCH_NOVELS = "FETCH_NOVELS";
+export const PUSH_NOVEL = "PUSH_NOVEL";
+
 import { Novel, newNovel } from "../models";
 import axios from "axios";
 import config from "../config";
+import axiosConfig from "../config/axios";
 
 export interface INovelAction {
-  novel: string;
+  novel: Novel;
   novels: Array<Novel>;
   type: string;
 }
 
-export const setNovel = (novel: string) => {
+export const setNovel = (novel: Novel) => {
   return {
     novel,
     type: SET_NOVEL
   } as INovelAction;
 };
 
-export const handleNovelFetchCompleted = (
+export const pushNovel = (novel: Novel) => {
+  return {
+    novel,
+    type: PUSH_NOVEL
+  } as INovelAction;
+};
+
+export const handleNovelCallCompleted = (
   novels: Array<Novel>,
   type: string
 ) => {
@@ -30,7 +40,7 @@ export const handleNovelFetchCompleted = (
 export const fetchNovels = (
   skip: number = 0,
   limit: number = 30,
-  roomId: number = 0
+  roomId: string = "0"
 ) => (dispatch: any) => {
   axios
     .get(
@@ -43,12 +53,12 @@ export const fetchNovels = (
       console.log("novel 데이터", res.data);
       const novels: Array<Novel> = res.data.message as Array<Novel>;
 
-      return dispatch(handleNovelFetchCompleted(novels, FETCH_NOVELS));
+      return dispatch(handleNovelCallCompleted(novels, FETCH_NOVELS));
     })
     .catch(err => {
       console.log(err.response);
       const novels: Array<Novel> = new Array<Novel>(newNovel());
 
-      return dispatch(handleNovelFetchCompleted(novels, FETCH_NOVELS));
+      return dispatch(handleNovelCallCompleted(novels, FETCH_NOVELS));
     });
 };

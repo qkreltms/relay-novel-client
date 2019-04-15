@@ -18,6 +18,7 @@ interface IProps {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   formattedMessageId: string;
   name: string;
+  multiline?: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -39,6 +40,7 @@ const CustomInput: React.SFC<IProps> = props => {
         <FormattedMessage id={props.formattedMessageId} />
       </InputLabel>
       <Input
+        multiline={props.multiline || false}
         name={props.name}
         error={props.isError}
         id={`adornment-${props.name}`}
