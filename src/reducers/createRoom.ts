@@ -24,23 +24,20 @@ export const createRoomReducer = (
   switch (action.type) {
     case SET_DESC: {
       return {
-        desc: action.desc,
-        title: state.title,
-        writerLimit: state.writerLimit
+        ...state,
+        desc: action.desc
       } as ICreateRoomState;
     }
     case SET_TITLE: {
       return {
-        title: action.title,
-        desc: state.desc,
-        writerLimit: state.writerLimit
+        ...state,
+        title: action.title
       } as ICreateRoomState;
     }
     case SET_WRITER_LIMIT: {
       return {
-        writerLimit: action.writerLimit,
-        desc: state.desc,
-        title: state.title
+        ...state,
+        writerLimit: action.writerLimit
       } as ICreateRoomState;
     }
 

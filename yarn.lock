@@ -6426,6 +6426,13 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+material-ui-flat-pagination@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/material-ui-flat-pagination/-/material-ui-flat-pagination-3.2.0.tgz#4db75c70ef740dc0621452d39d1e1469d15527ea"
+  integrity sha512-ARxXVCYOYWTU5dXsz0OoNaBZ8bBMB2nCA4shpigB6yanIaoKIDoYB5/23hqzUJMysFgFNcbvkHRzacCQIZ4qpw==
+  dependencies:
+    classnames "^2.2.6"
+
 math-random@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"

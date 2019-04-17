@@ -6,7 +6,7 @@ export const socketConfig = {
   forceNew: true // 소켓 재사용 여부
 };
 
-export default (room: string): SocketIOClient.Socket => {
+export default (room: string, errHandler): SocketIOClient.Socket => {
   const socket = io(`${config.REACT_APP_SOCKET_URL}/${room}`, socketConfig);
 
   socket.on("connect", () => {
@@ -46,8 +46,9 @@ export default (room: string): SocketIOClient.Socket => {
     console.log("디스커넥트", reason);
   });
 
-  socket.on("error", err => {
+  socket.on("error", (err: Error) => {
     console.log("소켓 에러 발생", err);
+    errHandler(err);
   });
 
   return socket;

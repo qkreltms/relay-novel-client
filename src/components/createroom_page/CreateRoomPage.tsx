@@ -32,7 +32,10 @@ class CreateRoomPage extends React.Component<IProps> {
 
   constructor(props) {
     super(props);
-    this.socket = socket(mainPage);
+    this.socket = socket(mainPage, (err: Error) => {
+      alert("서버 에러가 발생했습니다. F5를 눌러 새로고침해주세요. 에러메시지:" + err);
+    });
+
     this.radioContents = [
       {
         value: "10",
@@ -66,6 +69,7 @@ class CreateRoomPage extends React.Component<IProps> {
   }
 
   private initProps = () => {
+    // TODO : redux에서 처리하기
     this.props.setDesc("")
     this.props.setTitle("")
     this.props.setWriterLimit("100")

@@ -85,10 +85,11 @@ class LoginDialog extends React.Component<IProps> {
         this.props.setIsLoggedIn(true);
         this.props.setUser(res.data.message as User);
         console.log("로그인 성공");
-        console.log(res);
+        // TODO: 유저정보가 persist되면 리로드로 바꾸기
+        return this.props.history.push("/");
       })
       .catch(err => {
-        //패스워드 혹은 이메일 틀림
+        //패스워드 혹은 이메일 틀릴때 예외처리
         const res = err.response;
         console.log(res);
         if (!res) return;

@@ -15,7 +15,7 @@ import { Room } from "../../models";
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
 import CustomButton from "../common/CustomButton";
 import config from "../../config";
-import socket, {mainPage} from "../../socket";
+import socket, { mainPage } from "../../socket";
 import axios from "axios";
 import axiosConfig from "../../config/axios";
 
@@ -23,7 +23,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.paper,
-      flexGrow: 1,
+      flexGrow: 1
     },
     list: {}
   });
@@ -37,6 +37,9 @@ interface IProps extends WithStyles<typeof styles> {
   setRooms: (rooms: Array<Room>) => void;
   rooms: Array<Room>;
   fetchRooms: (skip: number, limit: number) => void;
+  fetchRoomTotal: () => void;
+  setRoomTotal: (total: number) => void;
+  total: number;
 }
 
 class MainPage extends React.Component<IProps> {
@@ -44,11 +47,18 @@ class MainPage extends React.Component<IProps> {
 
   public constructor(props) {
     super(props);
-    this.socket = socket(mainPage);
+
+    this.socket = socket(mainPage, (err: Error) => {
+      alert(
+        "서버 에러가 발생했습니다. F5를 눌러 새로고침 해주세요. 에러메시지:" +
+          err
+      );
+    });
   }
 
   public componentDidMount() {
     this.props.fetchRooms(0, 30);
+    this.props.fetchRoomTotal();
     this.initSocket();
   }
 
@@ -86,6 +96,7 @@ class MainPage extends React.Component<IProps> {
 
         const room = res.data.message;
         this.props.setRooms([room[0], ...this.props.rooms] as Array<Room>);
+        this.props.setRoomTotal(this.props.total + 1);
       })
       .catch(err => {
         // 방 못 가져온 것 예외처리

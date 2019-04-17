@@ -18,7 +18,6 @@ interface IProps {
   handleThumbUpClick?: () => void;
   handleThumbDownClick?: () => void;
   novels: Array<Novel>;
-  isSecondListVisible?: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -40,40 +39,76 @@ const styles = (theme: Theme) =>
     }
   });
 
-const CustomList: React.SFC<IProps> = props => {
-  const { classes } = props;
-  const isSecondListVisible = props.isSecondListVisible || false;
+interface IState {
+  selectedIndex: number;
+}
 
-  return (
-    <List disablePadding>
-      {props.novels.map((novel, index) => (
-        <div key={index}>
-          <ListItem alignItems="flex-start">
-            <ListItemText 
-              primary={<p className={classes.sentence}>{novel.text}</p>}
-            />
-          </ListItem>
-          {isSecondListVisible ? (
-            <div className={classes.sentenceActionButtons}>
-              <Button>
-                <ThumbUp fontSize="small" />
-              </Button>
-              <span>{novel.like}</span>
-              <Button>
-                <ThumbDown fontSize="small" />
-              </Button>
-              <span>{novel.dislike}</span>
-            </div>
-          ) : (
-            <div />
-          )}
-        </div>
-      ))}
-    </List>
-  );
-};
+class CustomList extends React.Component<IProps, IState> {
+  private classes;
 
-(CustomList as React.SFC<IProps>).propTypes = {
+  constructor(props) {
+    super(props);
+    this.classes = props.classes;
+    this.state = {
+      selectedIndex: -1
+    };
+  }
+
+  private handleMouseEnter = (index: number) => (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    this.setState({
+      selectedIndex: index
+    });
+  };
+
+  private handleMouseLeave = () => {
+    this.setState({
+      selectedIndex: -1
+    });
+  };
+
+  private isSecondListVisible = (index: number) => {
+    if (this.state.selectedIndex === index) return true;
+    return false;
+  };
+
+  public render() {
+    return (
+      <List disablePadding>
+        {this.props.novels.map((novel, index) => (
+          <div
+            key={index}
+            onMouseEnter={this.handleMouseEnter(index)}
+            onMouseLeave={this.handleMouseLeave}
+          >
+            <ListItem alignItems="flex-start">
+              <ListItemText
+                primary={<p className={this.classes.sentence}>{novel.text}</p>}
+              />
+            </ListItem>
+            {this.isSecondListVisible(index) ? (
+              <div className={this.classes.sentenceActionButtons}>
+                <Button>
+                  <ThumbUp fontSize="small" />
+                </Button>
+                <span>{novel.like}</span>
+                <Button>
+                  <ThumbDown fontSize="small" />
+                </Button>
+                <span>{novel.dislike}</span>
+              </div>
+            ) : (
+              <div />
+            )}
+          </div>
+        ))}
+      </List>
+    );
+  }
+}
+
+(CustomList as React.ComponentClass<IProps, IState>).propTypes = {
   classes: PropTypes.object.isRequired
 } as any;
 

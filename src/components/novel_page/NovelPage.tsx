@@ -5,12 +5,11 @@ import {
   WithStyles,
   withStyles,
   Grid,
-  Paper,
-  Button
+  Paper
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
-import { Novel, newNovel } from "../../models";
+import { Novel, newNovel, User } from "../../models";
 import CustomNovelList from "../common/CustomNovelList";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
@@ -18,6 +17,8 @@ import socket, { novelPage } from "../../socket";
 import axios from "axios";
 import axiosConfig from "../../config/axios";
 import config from "../../config";
+import CustomPagination from "../common/CustomPagination";
+
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
   match: any;
@@ -28,6 +29,15 @@ interface IProps extends WithStyles<typeof styles> {
   fetchNovels: (skip: number, limit: number, roomId: string) => void;
   setNovel: (novel: Novel) => void;
   pushNovel: (novel: Novel) => void;
+  offset: number;
+  setOffset: (offset: number) => void;
+  fetchTotal: (roomId: string) => void;
+  total: number;
+  setTotal: (total: number) => void;
+  isLoggedIn: boolean;
+  user: User;
+  isWriteable: boolean;
+  fetchIsWriteable: (userId: number, roomId: string) => void;
 }
 
 const styles = (theme: Theme) =>
@@ -44,14 +54,20 @@ const styles = (theme: Theme) =>
 class NovelPage extends React.Component<IProps> {
   private roomId: string = "0";
   private socket: any = null;
+  private paginationBtnLimit = 5;
 
   constructor(props) {
     super(props);
     this.roomId = this.props.location.pathname.split("/")[2];
-    this.socket = socket(novelPage);
+    this.socket = socket(novelPage, (err: Error) => {
+      this.initSocket();
+    });
   }
+
   public componentDidMount() {
-    this.props.fetchNovels(0, 30, this.roomId);
+    this.props.fetchNovels(0, this.paginationBtnLimit, this.roomId);
+    this.props.fetchTotal(this.roomId);
+    this.props.fetchIsWriteable(this.props.user.id, this.roomId);
     this.initSocket();
   }
 
@@ -73,9 +89,19 @@ class NovelPage extends React.Component<IProps> {
     console.log(`소켓 해제됨`);
   };
 
-  private getASectence = (roomId: string, sentenceId: string, skip: number = 0, limit: number = 30) => {
+  private handlePaginationBtnClick = offset => {
+    const skip = offset * this.paginationBtnLimit;
+    const limit = this.paginationBtnLimit;
+    this.props.setOffset(offset);
+    this.props.fetchNovels(skip, limit, this.roomId);
+  };
+
+  private getASectence = (roomId: string, sentenceId: string) => {
     if (!roomId || !sentenceId) {
-      console.log("undefined 값이 들어옴 ", `${roomId} ${sentenceId}`);
+      console.log(
+        "roomId, sentenceId가 undefined 값이 들어옴 ",
+        `${roomId} ${sentenceId}`
+      );
       return;
     }
 
@@ -86,16 +112,17 @@ class NovelPage extends React.Component<IProps> {
 
     return axios
       .get(
-        `${config.REACT_APP_SERVER_URL}/api/sentences?roomId=${roomId}&sentenceId=${sentenceId}&skip=${skip}&limit=${limit}`,
+        `${
+          config.REACT_APP_SERVER_URL
+        }/api/sentences?roomId=${roomId}&sentenceId=${sentenceId}&skip=${0}&limit=${1}`,
         axiosConfig
       )
       .then(res => {
         if (!res.data) return;
 
-        // 상대방이 소켓으로 보내온 데이터 적용함
-        console.log(res.data);
+        // 상대방이 소켓으로 보내온 데이터 적용하고 total 값을 + 1 함
         this.props.pushNovel(newNovel(res.data.message[0].text));
-        
+        this.props.setTotal(this.props.total + 1);
       })
       .catch(err => {
         // 소설 못 가져온 것 예외처리
@@ -113,7 +140,6 @@ class NovelPage extends React.Component<IProps> {
       .post(`${config.REACT_APP_SERVER_URL}/api/sentences`, body, axiosConfig)
       .then(res => {
         if (!res.data) return 0;
-        console.log("작성한 novel 데이터: " + text, res.data);
 
         return callback(res.data.message.insertId);
       })
@@ -123,15 +149,20 @@ class NovelPage extends React.Component<IProps> {
       });
   };
 
-  private handleSendButtonClick = () => {
-    this.props.pushNovel(this.props.novel);
+  private handleSubmitButtonClick = () => {
+    if (!this.props.isWriteable) {
+      alert("글쓰기에 참가하지 않았습니다.");
+      return;
+    }
+
     this.postNovel(this.props.novel.text, this.roomId)(sentenceId => {
       this.sendEventToSocket(this.roomId, sentenceId);
     });
-    this.props.setNovel(newNovel(""));
   };
 
   private sendEventToSocket = (roomId: string, sentenceId: number) => {
+    this.props.setNovel(newNovel(""));
+
     this.socket.emit("create", {
       roomId,
       sentenceId
@@ -144,6 +175,32 @@ class NovelPage extends React.Component<IProps> {
     this.props.setNovel(newNovel(event.target.value));
   };
 
+  private handleJoinToWrite = () => {
+    if (!this.props.isLoggedIn) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    const body = {
+      roomId: this.roomId,
+      userId: this.props.user.id
+    };
+    axios
+      .post(`${config.REACT_APP_SERVER_URL}/api/rooms/join`, body, axiosConfig)
+      .then(res => {})
+      .catch(err => {
+        console.log(err.response);
+        if (!err.response) return;
+        if (err.response.status === 409) {
+          alert("이미 글쓰기에 참가했습니다.");
+        }
+        if (err.response.status === 500) {
+          alert("서버에러 발생. 잠시후 다시 시도해주세요.");
+        }
+        // 방 참가인원 한계치 다다랐을 때의 예외처리
+      });
+  };
+
   public render() {
     const { classes } = this.props;
 
@@ -154,8 +211,15 @@ class NovelPage extends React.Component<IProps> {
             <Grid xs={3} item />
             <Grid xs={9} item>
               {/* TODO: limit 넘을시 disable 됨 */}
-              <Button>글쓰기 참가</Button>
-              <Button>구독</Button>
+              {this.props.isWriteable ? ( //TODO: || limit가 꽉차지 않으면
+                <div />
+              ) : (
+                <CustomButton
+                  isDisable={false}
+                  onClick={this.handleJoinToWrite}
+                  formattedMessageId="novelpage_join_btn"
+                />
+              )}
             </Grid>
           </Grid>
           <Grid container>
@@ -166,21 +230,36 @@ class NovelPage extends React.Component<IProps> {
             {/* 소설 글 */}
             <Grid xs={6} item>
               <CustomNovelList novels={this.props.novels} />
-              <CustomInput
-                name="novel"
-                formattedMessageId="novelpage_input"
-                value={this.props.novel.text}
-                handleChange={this.handleInputValueChange}
-                multiline
-              />
-              <CustomButton
-                onClick={this.handleSendButtonClick}
-                formattedMessageId="novelpage_btn"
-              />
+              {this.props.isWriteable ? (
+                <div>
+                  <CustomInput
+                    name="novel"
+                    formattedMessageId="novelpage_input"
+                    value={this.props.novel.text}
+                    handleChange={this.handleInputValueChange}
+                    multiline
+                  />
+                  <CustomButton
+                    onClick={this.handleSubmitButtonClick}
+                    formattedMessageId="novelpage_btn"
+                  />
+                </div>
+              ) : (
+                <div />
+              )}
             </Grid>
             {/* 접속한 유저 표시 */}
             <Grid xs={3} item>
               <Paper className={classes.paper}>접속한 유저 넣을 부분</Paper>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid xs={12} item>
+              <CustomPagination
+                handleClickEvent={this.handlePaginationBtnClick}
+                offset={this.props.offset}
+                total={Math.ceil(this.props.total / this.paginationBtnLimit)}
+              />
             </Grid>
           </Grid>
         </Grid>

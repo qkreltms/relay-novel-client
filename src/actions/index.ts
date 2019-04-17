@@ -5,3 +5,4 @@ export * from "./room";
 export * from "./createRoom";
 export * from "./auth";
 export * from "./novel";
+export * from "./pagination";

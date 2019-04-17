@@ -34,4 +34,5 @@ export default {
     createroom_btn: "방 만들기",
     novelpage_input: "입력",
     novelpage_btn: "글쓰기",
+    novelpage_join_btn: "글쓰기 참가하기",
 };

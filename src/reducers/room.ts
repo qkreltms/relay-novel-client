@@ -1,26 +1,30 @@
-import { FETCH_ROOMS, SET_ROOMS, IRoomAction } from "../actions";
+import { SET_ROOMS, IRoomAction, SET_IS_WRITEABLE } from "../actions";
 import { Room, newRoom } from "../models";
 
 export interface IRoomState {
   rooms: Array<Room>;
+  isWriteable: boolean;
 }
 
 const createEmpty = () => ({
-  rooms: new Array<Room>(newRoom())
+  rooms: new Array<Room>(newRoom()),
+  isWriteable: false
 });
 
 export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
-  switch (action.type) {
-    case FETCH_ROOMS: {
+  switch (action.type) {    
+    case SET_ROOMS: {
       return {
+        ...state,
         rooms: action.rooms
       } as IRoomState;
     }
-    
-    case SET_ROOMS: {
+
+    case SET_IS_WRITEABLE: {
       return {
-        rooms: action.rooms
-      } as IRoomState;
+        ...state,
+        isWriteable: action.isWriteable
+      }
     }
 
     default:

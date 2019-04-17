@@ -1,15 +1,16 @@
 export const SET_NOVEL = "SET_NOVEL";
 export const FETCH_NOVELS = "FETCH_NOVELS";
 export const PUSH_NOVEL = "PUSH_NOVEL";
+export const SET_ROOM_TOTAL = "SET_ROOM_TOTAL";
 
 import { Novel, newNovel } from "../models";
 import axios from "axios";
 import config from "../config";
-import axiosConfig from "../config/axios";
 
 export interface INovelAction {
   novel: Novel;
   novels: Array<Novel>;
+  total: number;
   type: string;
 }
 
@@ -34,8 +35,35 @@ export const handleNovelCallCompleted = (
   return {
     novels,
     type
-  };
+  } as INovelAction;
 };
+
+export const setRoomTotal = (total: number) => {
+  return {
+    total,
+    type: SET_ROOM_TOTAL
+  } as INovelAction;
+};
+
+export const fetchRoomTotal = () => (dispatch: any) => {
+  axios
+    .get(
+      `${
+        config.REACT_APP_SERVER_URL
+      }/api/rooms/total`
+    )
+    .then(res => {
+      if (!res.data) return;
+      const total: number = res.data.message[0].total;
+
+      return dispatch(setRoomTotal(total));
+    })
+    .catch(err => {
+      console.log(err.response);
+
+      return dispatch(setRoomTotal(0));
+    });
+}
 
 export const fetchNovels = (
   skip: number = 0,
@@ -50,7 +78,6 @@ export const fetchNovels = (
     )
     .then(res => {
       if (!res.data) return;
-      console.log("novel 데이터", res.data);
       const novels: Array<Novel> = res.data.message as Array<Novel>;
 
       return dispatch(handleNovelCallCompleted(novels, FETCH_NOVELS));

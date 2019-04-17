@@ -4,7 +4,6 @@ export interface Room {
   tags: string;
   title: string;
   desc: string;
-  creatorId: number;
   updatedAt: Date;
   createdAt: Date;
   like: number;
@@ -18,7 +17,6 @@ export const newRoom = () => {
     tags: "",
     title: "",
     desc: "",
-    creatorId: 0,
     updatedAt: new Date(),
     createdAt: new Date(),
     like: 0,

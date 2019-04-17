@@ -1,14 +1,16 @@
-import { INovelAction, SET_NOVEL, PUSH_NOVEL, FETCH_NOVELS } from "../actions";
+import { INovelAction, SET_NOVEL, PUSH_NOVEL, FETCH_NOVELS, SET_ROOM_TOTAL } from "../actions";
 import { Novel, newNovel } from "../models";
 
 export interface INovelState {
   novel: Novel;
   novels: Array<Novel>;
+  total: number;
 }
 
 const createEmpty = () => ({
   novel: newNovel(),
-  novels: Array<Novel>(newNovel())
+  novels: Array<Novel>(newNovel()),
+  total: 0
 });
 
 export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
@@ -32,6 +34,13 @@ export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
         ...state,
         novels: action.novels
       } as INovelState;
+    }
+
+    case SET_ROOM_TOTAL: {
+      return {
+        ...state,
+        total: action.total
+      }
     }
 
     default:

@@ -89,9 +89,9 @@ const Appbar: React.SFC<IProps> = props => {
       .get(`${config.REACT_APP_SERVER_URL}/api/auth/session`, axiosConfig)
       .then(res => {
         if (res.data.status === "success") {
-          console.log("로그아웃 성공", res);
           props.setUser(newUser());
-          return props.setIsLoggedIn(false);
+          props.setIsLoggedIn(false);
+          return location.reload();
         }
       })
       .catch(err => {

@@ -34,4 +34,5 @@ export default {
   createroom_btn: "Create Room",
   novelpage_input: "Input",
   novelpage_btn: "Submit",
+  novelpage_join_btn: "Join to write"
 };
