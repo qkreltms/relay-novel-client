@@ -38,6 +38,7 @@ interface IProps extends WithStyles<typeof styles> {
   user: User;
   isWriteable: boolean;
   fetchIsWriteable: (userId: number, roomId: string) => void;
+  setIsWriteable: (writeable: boolean) => void;
 }
 
 const styles = (theme: Theme) =>
@@ -73,6 +74,7 @@ class NovelPage extends React.Component<IProps> {
 
   public componentWillUnmount() {
     this.exitSocket();
+    this.props.setIsWriteable(false);
     // TOOD: state 초기화 액션
   }
 
@@ -131,7 +133,9 @@ class NovelPage extends React.Component<IProps> {
       });
   };
 
-  private postNovel = (text: string = "", roomId: string = "0") => callback => {
+  private postNovel = (text: string = "", roomId: string) => callback => {
+    if (!roomId) return console.log("roomId가 undefined 값이 들어옴", roomId);
+
     const body = {
       text,
       roomId
@@ -154,13 +158,15 @@ class NovelPage extends React.Component<IProps> {
       alert("글쓰기에 참가하지 않았습니다.");
       return;
     }
-
+    
     this.postNovel(this.props.novel.text, this.roomId)(sentenceId => {
       this.sendEventToSocket(this.roomId, sentenceId);
     });
   };
 
   private sendEventToSocket = (roomId: string, sentenceId: number) => {
+    if(!roomId) return console.log("roomId가 undefined", roomId);
+
     this.props.setNovel(newNovel(""));
 
     this.socket.emit("create", {
@@ -175,11 +181,18 @@ class NovelPage extends React.Component<IProps> {
     this.props.setNovel(newNovel(event.target.value));
   };
 
+  // 방 참가하기 버튼 기능 
   private handleJoinToWrite = () => {
+    const roomId: string = this.roomId;
+    const userId: number = this.props.user.id;
+
     if (!this.props.isLoggedIn) {
       alert("로그인이 필요합니다.");
       return;
     }
+
+    if (!roomId) return console.log("roomId가 undefined", roomId);
+    if (!userId) return console.log("userId가 undefined", userId);
 
     const body = {
       roomId: this.roomId,
@@ -187,7 +200,12 @@ class NovelPage extends React.Component<IProps> {
     };
     axios
       .post(`${config.REACT_APP_SERVER_URL}/api/rooms/join`, body, axiosConfig)
-      .then(res => {})
+      .then(res => {
+        // 방 참가가 성공하면 re-render함 
+        this.props.setIsWriteable(true);
+        alert("참가했습니다.");
+        this.forceUpdate();
+      })
       .catch(err => {
         console.log(err.response);
         if (!err.response) return;

@@ -44,11 +44,12 @@ export const fetchRooms = (skip: number = 0, limit: number = 30) => (
     });
 };
 
-export const fetchIsWriteable = (userId: number, roomId: string) => (
+export const fetchIsWriteable = (userId: number = 0, roomId: string) => (
   dispatch: any
 ) => {
   // 유저id값이 초기값이 들어오면 바로 리턴
   if (userId === 0) return;
+  if (!roomId) return console.log("roomId가 undefined", roomId);
 
   axios
     .get(
@@ -58,8 +59,8 @@ export const fetchIsWriteable = (userId: number, roomId: string) => (
     )
     .then(res => {
       if (!res.data) return;
-      const isWriteable: boolean = res.data.message[0].writeable;
-      if (!isWriteable) return;
+      const isWriteable: boolean = res.data.message[0].writeable || false;
+
       return dispatch(setIsWriteable(isWriteable));
     })
     .catch(err => {

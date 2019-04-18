@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { ICombineReducersState } from "../../reducers";
 import NovelPage from "./NovelPage";
-import { setNovel, fetchNovels, pushNovel, setOffset, fetchNovelTotal, setNovelTotal, fetchIsWriteable } from "../../actions";
+import { setNovel, fetchNovels, pushNovel, setOffset, fetchNovelTotal, setNovelTotal, fetchIsWriteable, setIsWriteable } from "../../actions";
 import { Novel } from "../../models";
 
 const mapStateToProps = (state: ICombineReducersState) => ({
@@ -22,7 +22,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   setOffset: (offset: number) => dispatch(setOffset(offset)),
   fetchTotal: (roomId: string) => dispatch(fetchNovelTotal(roomId)),
   setTotal: (total: number) => dispatch(setNovelTotal(total)),
-  fetchIsWriteable: (userId: number, roomId: string) => dispatch(fetchIsWriteable(userId, roomId))
+  fetchIsWriteable: (userId: number, roomId: string) => dispatch(fetchIsWriteable(userId, roomId)),
+  setIsWriteable: (writeable: boolean) => dispatch(setIsWriteable(writeable))
 });
 
 export const NovelPageContainer = connect(
