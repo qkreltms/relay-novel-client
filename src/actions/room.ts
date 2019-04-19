@@ -1,7 +1,9 @@
 import { Room, newRoom } from "../models";
 import config from "../config";
 import axios from "axios";
+import axiosConfig from "../config/axios";
 
+export const SET_ROOM_TOTAL = "SET_ROOM_TOTAL";
 export const SET_ROOMS = "SET_ROOMS";
 export const SET_IS_WRITEABLE = "SET_IS_WRITEABLE";
 
@@ -9,6 +11,7 @@ export interface IRoomAction {
   type: string;
   rooms: Array<Room>;
   isWriteable: boolean;
+  total: number;
 }
 export const setRooms = (rooms: Array<Room>) => {
   return {
@@ -44,28 +47,54 @@ export const fetchRooms = (skip: number = 0, limit: number = 30) => (
     });
 };
 
-export const fetchIsWriteable = (userId: number = 0, roomId: string) => (
+export const fetchIsWriteable = (roomId: string) => (
   dispatch: any
 ) => {
-  // 유저id값이 초기값이 들어오면 바로 리턴
-  if (userId === 0) return;
   if (!roomId) return console.log("roomId가 undefined", roomId);
 
   axios
     .get(
       `${
         config.REACT_APP_SERVER_URL
-      }/api/rooms/writeable?roomId=${roomId}&userId=${userId}`
+      }/api/rooms/writeable?roomId=${roomId}`,
+      axiosConfig
     )
     .then(res => {
       if (!res.data) return;
-      const isWriteable: boolean = res.data.message[0].writeable || false;
-
+      const isWriteable: boolean = res.data.message[0].writeable
+      if (!isWriteable) return;
       return dispatch(setIsWriteable(isWriteable));
     })
     .catch(err => {
       console.log(err);
-      // TODO: 중복처리
+      // TODO: 참가하지 않았을 때의 예외 처리
       return dispatch(setIsWriteable(false));
     });
 };
+
+export const setRoomTotal = (total: number) => {
+  return {
+    total,
+    type: SET_ROOM_TOTAL
+  } as IRoomAction;
+};
+
+export const fetchRoomTotal = () => (dispatch: any) => {
+  axios
+    .get(
+      `${
+        config.REACT_APP_SERVER_URL
+      }/api/rooms/total`
+    )
+    .then(res => {
+      if (!res.data) return;
+      const total: number = res.data.message[0].total;
+
+      return dispatch(setRoomTotal(total));
+    })
+    .catch(err => {
+      console.log(err.response);
+
+      return dispatch(setRoomTotal(0));
+    });
+}

@@ -1,13 +1,11 @@
-import { IPaginationAction, SET_OFFSET, SET_NOVEL_TOTAL } from "../actions";
+import { IPaginationAction, SET_OFFSET } from "../actions";
 
 export interface IPaginationState {
   offset: number;
-  total: number;
 }
 
 const createEmpty = () => ({
-  offset: 0,
-  total: 0
+  offset: 0
 });
 
 export const paginationReducer = (
@@ -19,13 +17,6 @@ export const paginationReducer = (
       return {
         ...state,
         offset: action.offset
-      } as IPaginationState;
-    }
-
-    case SET_NOVEL_TOTAL: {
-      return {
-        ...state,
-        total: action.total
       } as IPaginationState;
     }
 

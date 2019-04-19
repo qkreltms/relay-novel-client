@@ -7,7 +7,7 @@ import { Room } from "../../models";
 const mapStateToProps = (state: ICombineReducersState) => ({
   rooms: state.rooms.rooms,
   isLoggedIn: state.auth.isLoggedIn,
-  total: state.novel.total
+  total: state.rooms.total
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

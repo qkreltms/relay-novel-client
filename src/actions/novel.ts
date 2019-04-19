@@ -1,7 +1,8 @@
 export const SET_NOVEL = "SET_NOVEL";
 export const FETCH_NOVELS = "FETCH_NOVELS";
 export const PUSH_NOVEL = "PUSH_NOVEL";
-export const SET_ROOM_TOTAL = "SET_ROOM_TOTAL";
+export const SET_NOVEL_TOTAL = "SET_NOVEL_TOTAL";
+export const FETCH_NOVEL_TOTAL = "FETCH_NOVEL_TOTAL";
 
 import { Novel, newNovel } from "../models";
 import axios from "axios";
@@ -38,32 +39,38 @@ export const handleNovelCallCompleted = (
   } as INovelAction;
 };
 
-export const setRoomTotal = (total: number) => {
+
+export const setNovelTotal = (total: number) => {
   return {
     total,
-    type: SET_ROOM_TOTAL
+    type: SET_NOVEL_TOTAL
   } as INovelAction;
 };
 
-export const fetchRoomTotal = () => (dispatch: any) => {
+export const fetchNovelTotalCompleted = (total: number) => {
+  return {
+    total,
+    type: FETCH_NOVEL_TOTAL
+  }
+}
+
+export const fetchNovelTotal = (roomId: string) => (dispatch: any) => {
   axios
     .get(
       `${
         config.REACT_APP_SERVER_URL
-      }/api/rooms/total`
+      }/api/sentences/total?roomId=${roomId}`
     )
     .then(res => {
       if (!res.data) return;
       const total: number = res.data.message[0].total;
-
-      return dispatch(setRoomTotal(total));
+      return dispatch(fetchNovelTotalCompleted(total));
     })
     .catch(err => {
       console.log(err.response);
-
-      return dispatch(setRoomTotal(0));
+      return dispatch(fetchNovelTotalCompleted(0));
     });
-}
+};
 
 export const fetchNovels = (
   skip: number = 0,

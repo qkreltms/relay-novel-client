@@ -5,7 +5,7 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import Pagination from "material-ui-flat-pagination";
 
 const theme = createMuiTheme();
-// TODO: SFC로 바꾸기
+
 interface IProps extends WithStyles<typeof styles> {
   offset: number;
   total?: number;
@@ -14,29 +14,24 @@ interface IProps extends WithStyles<typeof styles> {
 
 const styles = (theme: Theme) => createStyles({});
 
-class CustomPagination extends React.Component<IProps> {
-  handleClick(offset) {
-    console.log(offset);
-    this.props.handleClickEvent(offset);
-  }
+const CustomPagination: React.SFC<IProps> = props => {
+  const handleClick = offset => {
+    props.handleClickEvent(offset);
+  };
 
-  public render() {
-    console.log(this.props)
-    return (
-      <MuiThemeProvider theme={theme}>
-        
-        <Pagination
-          limit={1}
-          offset={this.props.offset}
-          total={this.props.total || 10} // 표시될 최대 숫자
-          onClick={(e, offset) => this.handleClick(offset)}
-        />
-      </MuiThemeProvider>
-    );
-  }
-}
+  return (
+    <MuiThemeProvider theme={theme}>
+      <Pagination
+        limit={1}
+        offset={props.offset}
+        total={props.total || 1} // 표시될 최대 숫자
+        onClick={(e, offset) => handleClick(offset)}
+      />
+    </MuiThemeProvider>
+  );
+};
 
-(CustomPagination as React.ComponentClass<IProps>).propTypes = {
+(CustomPagination as React.SFC<IProps>).propTypes = {
   classes: PropTypes.object.isRequired
 } as any;
 

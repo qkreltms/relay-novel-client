@@ -37,7 +37,7 @@ interface IProps extends WithStyles<typeof styles> {
   isLoggedIn: boolean;
   user: User;
   isWriteable: boolean;
-  fetchIsWriteable: (userId: number, roomId: string) => void;
+  fetchIsWriteable: (roomId: string) => void;
   setIsWriteable: (writeable: boolean) => void;
 }
 
@@ -55,7 +55,8 @@ const styles = (theme: Theme) =>
 class NovelPage extends React.Component<IProps> {
   private roomId: string = "0";
   private socket: any = null;
-  private paginationBtnLimit = 5;
+  private paginationBtnLimit: number = 5;
+  private total: number = 0;
 
   constructor(props) {
     super(props);
@@ -68,14 +69,20 @@ class NovelPage extends React.Component<IProps> {
   public componentDidMount() {
     this.props.fetchNovels(0, this.paginationBtnLimit, this.roomId);
     this.props.fetchTotal(this.roomId);
-    this.props.fetchIsWriteable(this.props.user.id, this.roomId);
     this.initSocket();
+    if (this.props.isLoggedIn === false) {
+      this.props.setIsWriteable(false);
+    } else {
+      this.props.fetchIsWriteable(this.roomId);
+    }
+    this.props.setOffset(0);
+    
   }
 
   public componentWillUnmount() {
     this.exitSocket();
     this.props.setIsWriteable(false);
-    // TOOD: state 초기화 액션
+    // TODO: state 초기화 액션
   }
 
   private initSocket = () => {
@@ -144,7 +151,6 @@ class NovelPage extends React.Component<IProps> {
       .post(`${config.REACT_APP_SERVER_URL}/api/sentences`, body, axiosConfig)
       .then(res => {
         if (!res.data) return 0;
-
         return callback(res.data.message.insertId);
       })
       .catch(err => {
@@ -153,21 +159,22 @@ class NovelPage extends React.Component<IProps> {
       });
   };
 
+  // 글쓰기 버튼 클릭
   private handleSubmitButtonClick = () => {
+    // TODO: 연속 클릭 방지하기
     if (!this.props.isWriteable) {
       alert("글쓰기에 참가하지 않았습니다.");
       return;
     }
-    
+
     this.postNovel(this.props.novel.text, this.roomId)(sentenceId => {
       this.sendEventToSocket(this.roomId, sentenceId);
     });
+    this.props.setNovel(newNovel(""));
   };
 
   private sendEventToSocket = (roomId: string, sentenceId: number) => {
-    if(!roomId) return console.log("roomId가 undefined", roomId);
-
-    this.props.setNovel(newNovel(""));
+    if (!roomId) return console.log("roomId가 undefined", roomId);
 
     this.socket.emit("create", {
       roomId,
@@ -181,10 +188,9 @@ class NovelPage extends React.Component<IProps> {
     this.props.setNovel(newNovel(event.target.value));
   };
 
-  // 방 참가하기 버튼 기능 
+  // 방 참가하기 버튼 기능
   private handleJoinToWrite = () => {
     const roomId: string = this.roomId;
-    const userId: number = this.props.user.id;
 
     if (!this.props.isLoggedIn) {
       alert("로그인이 필요합니다.");
@@ -192,16 +198,13 @@ class NovelPage extends React.Component<IProps> {
     }
 
     if (!roomId) return console.log("roomId가 undefined", roomId);
-    if (!userId) return console.log("userId가 undefined", userId);
 
-    const body = {
-      roomId: this.roomId,
-      userId: this.props.user.id
-    };
+    const body = { roomId: this.roomId };
+
     axios
       .post(`${config.REACT_APP_SERVER_URL}/api/rooms/join`, body, axiosConfig)
       .then(res => {
-        // 방 참가가 성공하면 re-render함 
+        // 방 참가가 성공하면 re-render함
         this.props.setIsWriteable(true);
         alert("참가했습니다.");
         this.forceUpdate();
@@ -219,9 +222,18 @@ class NovelPage extends React.Component<IProps> {
       });
   };
 
+  private isLastPage = () => {
+    if (this.total === this.props.offset + 1) return true;
+    return false; 
+  }
+  
+  public shouldComponentUpdate(nextProps) {
+    this.total = Math.ceil(nextProps.total / this.paginationBtnLimit);
+    return true;
+  }
+
   public render() {
     const { classes } = this.props;
-
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
@@ -248,7 +260,7 @@ class NovelPage extends React.Component<IProps> {
             {/* 소설 글 */}
             <Grid xs={6} item>
               <CustomNovelList novels={this.props.novels} />
-              {this.props.isWriteable ? (
+              {this.props.isWriteable && this.isLastPage() && this.props.novels.length <= this.paginationBtnLimit ? (
                 <div>
                   <CustomInput
                     name="novel"
@@ -276,7 +288,7 @@ class NovelPage extends React.Component<IProps> {
               <CustomPagination
                 handleClickEvent={this.handlePaginationBtnClick}
                 offset={this.props.offset}
-                total={Math.ceil(this.props.total / this.paginationBtnLimit)}
+                total={this.total}
               />
             </Grid>
           </Grid>
