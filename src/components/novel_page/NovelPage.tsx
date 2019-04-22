@@ -31,14 +31,18 @@ interface IProps extends WithStyles<typeof styles> {
   pushNovel: (novel: Novel) => void;
   offset: number;
   setOffset: (offset: number) => void;
-  fetchTotal: (roomId: string) => void;
-  total: number;
-  setTotal: (total: number) => void;
+  fetchNovelTotal: (roomId: string) => void;
+  novelTotal: number;
+  setNovelTotal: (novelTotal: number) => void;
   isLoggedIn: boolean;
   user: User;
   isWriteable: boolean;
   fetchIsWriteable: (roomId: string) => void;
   setIsWriteable: (writeable: boolean) => void;
+  slot: number;
+  fetchRoomAvailableSlot: (roomId: string) => void;
+  limit: number;
+  fetchRoomSpaceLimitaion: (roomId: string) => void;
 }
 
 const styles = (theme: Theme) =>
@@ -56,7 +60,7 @@ class NovelPage extends React.Component<IProps> {
   private roomId: string = "0";
   private socket: any = null;
   private paginationBtnLimit: number = 5;
-  private total: number = 0;
+  private novelTotal: number = 0;
 
   constructor(props) {
     super(props);
@@ -67,8 +71,10 @@ class NovelPage extends React.Component<IProps> {
   }
 
   public componentDidMount() {
+    this.props.fetchRoomAvailableSlot(this.roomId);
     this.props.fetchNovels(0, this.paginationBtnLimit, this.roomId);
-    this.props.fetchTotal(this.roomId);
+    this.props.fetchNovelTotal(this.roomId);
+    this.props.fetchRoomSpaceLimitaion(this.roomId);
     this.initSocket();
     if (this.props.isLoggedIn === false) {
       this.props.setIsWriteable(false);
@@ -82,6 +88,11 @@ class NovelPage extends React.Component<IProps> {
   public componentWillUnmount() {
     this.exitSocket();
     this.props.setIsWriteable(false);
+    // 슬롯값 초기화
+    // 소설 내용 삭제
+    // limit 초기화
+    // novel total 값 초기화
+    this.props.setOffset(0);
     // TODO: state 초기화 액션
   }
 
@@ -129,9 +140,9 @@ class NovelPage extends React.Component<IProps> {
       .then(res => {
         if (!res.data) return;
 
-        // 상대방이 소켓으로 보내온 데이터 적용하고 total 값을 + 1 함
+        // 상대방이 소켓으로 보내온 데이터 적용하고 novelTotal 값을 + 1 함
         this.props.pushNovel(newNovel(res.data.message[0].text));
-        this.props.setTotal(this.props.total + 1);
+        this.props.setNovelTotal(this.props.novelTotal + 1);
       })
       .catch(err => {
         // 소설 못 가져온 것 예외처리
@@ -161,7 +172,8 @@ class NovelPage extends React.Component<IProps> {
 
   // 글쓰기 버튼 클릭
   private handleSubmitButtonClick = () => {
-    // TODO: 연속 클릭 방지하기
+    if (this.props.novel.text === "") return;
+    // TODO: 글 길이에 따라서도 return 하기
     if (!this.props.isWriteable) {
       alert("글쓰기에 참가하지 않았습니다.");
       return;
@@ -212,23 +224,33 @@ class NovelPage extends React.Component<IProps> {
       .catch(err => {
         console.log(err.response);
         if (!err.response) return;
-        if (err.response.status === 409) {
-          alert("이미 글쓰기에 참가했습니다.");
+        switch (err.response.status) {
+          case 409: {
+            if (err.response.data.message.code === "ER_SIGNAL_EXCEPTION") {
+              return alert("방이 꽉 찾습니다.");
+            }
+            alert("이미 글쓰기에 참가했습니다.");
+            break;
+          }
+
+          case 500: {
+            alert("서버에러 발생. 잠시후 다시 시도해주세요.");
+            break;
+          }
+
+          default: break;
         }
-        if (err.response.status === 500) {
-          alert("서버에러 발생. 잠시후 다시 시도해주세요.");
-        }
-        // 방 참가인원 한계치 다다랐을 때의 예외처리
       });
   };
 
   private isLastPage = () => {
-    if (this.total === this.props.offset + 1) return true;
+    if (this.novelTotal === 0) return true;
+    if (this.novelTotal === this.props.offset + 1) return true;
     return false; 
   }
   
   public shouldComponentUpdate(nextProps) {
-    this.total = Math.ceil(nextProps.total / this.paginationBtnLimit);
+    this.novelTotal = Math.ceil(nextProps.novelTotal / this.paginationBtnLimit);
     return true;
   }
 
@@ -240,9 +262,9 @@ class NovelPage extends React.Component<IProps> {
           <Grid container alignItems="stretch" direction="row">
             <Grid xs={3} item />
             <Grid xs={9} item>
-              {/* TODO: limit 넘을시 disable 됨 */}
-              {this.props.isWriteable ? ( //TODO: || limit가 꽉차지 않으면
-                <div />
+            <div>
+              {this.props.isWriteable || this.props.slot < 0 ? ( 
+                <span />
               ) : (
                 <CustomButton
                   isDisable={false}
@@ -250,6 +272,8 @@ class NovelPage extends React.Component<IProps> {
                   formattedMessageId="novelpage_join_btn"
                 />
               )}
+              <span>{ this.props.limit - this.props.slot } / {this.props.limit}</span>
+              </div>
             </Grid>
           </Grid>
           <Grid container>
@@ -260,7 +284,7 @@ class NovelPage extends React.Component<IProps> {
             {/* 소설 글 */}
             <Grid xs={6} item>
               <CustomNovelList novels={this.props.novels} />
-              {this.props.isWriteable && this.isLastPage() && this.props.novels.length <= this.paginationBtnLimit ? (
+              {this.props.isWriteable && this.props.novels.length <= this.paginationBtnLimit && this.isLastPage() ? (
                 <div>
                   <CustomInput
                     name="novel"
@@ -288,7 +312,7 @@ class NovelPage extends React.Component<IProps> {
               <CustomPagination
                 handleClickEvent={this.handlePaginationBtnClick}
                 offset={this.props.offset}
-                total={this.total}
+                total={this.novelTotal}
               />
             </Grid>
           </Grid>

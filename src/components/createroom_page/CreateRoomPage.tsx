@@ -22,6 +22,7 @@ interface IProps extends WithStyles<typeof styles> {
   match: any;
   location: any;
   history: any;
+  isLoggedIn: boolean;
 }
 
 const styles = (theme: Theme) => createStyles({});
@@ -37,6 +38,11 @@ class CreateRoomPage extends React.Component<IProps> {
     });
 
     this.radioContents = [
+      {
+        value: "1",
+        label: "1",
+        labelPlacement: Directions.Start
+      },
       {
         value: "10",
         label: "10",
@@ -90,7 +96,11 @@ class CreateRoomPage extends React.Component<IProps> {
 
   private handleCreateRoomClick = () => {
     if (this.isEmpty()) return;
-
+    if (!this.props.isLoggedIn) {
+      alert("로그인을 해주세요.");
+      return;
+    }
+    console.log(this.props.writerLimit)
     const body = {
       writerLimit: this.props.writerLimit,
       title: this.props.title,

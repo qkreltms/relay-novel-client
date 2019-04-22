@@ -6,7 +6,8 @@ import { setDesc, setWriterLimit, setTitle } from "../../actions";
 const mapStateToProps = (state: ICombineReducersState) => ({
   writerLimit: state.createRoom.writerLimit,
   title: state.createRoom.title,
-  desc: state.createRoom.desc
+  desc: state.createRoom.desc,
+  isLoggedIn: state.auth.isLoggedIn
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

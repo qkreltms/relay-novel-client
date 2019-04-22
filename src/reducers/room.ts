@@ -1,16 +1,20 @@
-import { SET_ROOMS, IRoomAction, SET_IS_WRITEABLE, SET_ROOM_TOTAL } from "../actions";
+import { SET_ROOMS, IRoomAction, SET_ROOM_AVAILABLE_SLOT, SET_IS_WRITEABLE, SET_ROOM_TOTAL, SET_ROOM_SPACE_LIMITATION } from "../actions";
 import { Room, newRoom } from "../models";
 
 export interface IRoomState {
   rooms: Array<Room>;
   isWriteable: boolean;
   total: number;
+  slot: number;
+  limit: number;
 }
 
 const createEmpty = () => ({
   rooms: new Array<Room>(newRoom()),
   isWriteable: false,
-  total: 0
+  total: 0,
+  slot: 0,
+  limit: 0
 });
 
 export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
@@ -36,6 +40,19 @@ export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
       } as IRoomState;
     }
 
+    case SET_ROOM_AVAILABLE_SLOT: {
+      return {
+        ...state,
+        slot: action.slot
+      } as IRoomState;
+    }
+
+    case SET_ROOM_SPACE_LIMITATION: {
+      return {
+        ...state,
+        limit: action.limit
+      } as IRoomState;
+    }
     default:
       return state;
   }
