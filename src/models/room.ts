@@ -10,16 +10,16 @@ export interface Room {
   dislike: number;
 }
 
-export const newRoom = () => {
+export const newRoom = (room: Room = {} as Room) => {
   return {
-    id: 0,
-    writerLimit: 100,
-    tags: "",
-    title: "",
-    desc: "",
-    updatedAt: new Date(),
-    createdAt: new Date(),
-    like: 0,
-    dislike: 0
+    id: room.id || 0,
+    writerLimit: room.writerLimit || 100,
+    tags: room.tags || "",
+    title: room.title || "",
+    desc: room.desc || "",
+    updatedAt: room.updatedAt || null,
+    createdAt: room.createdAt || new Date(),
+    like: room.like || 0,
+    dislike: room.dislike || 0
   } as Room;
 };

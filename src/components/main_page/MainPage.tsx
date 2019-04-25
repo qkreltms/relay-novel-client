@@ -76,6 +76,7 @@ class MainPage extends React.Component<IProps> {
 
   exitSocket = () => {
     this.socket.emit("leave", {});
+    this.socket.close();
     console.log(`소켓 해제됨`);
   };
 
@@ -107,6 +108,7 @@ class MainPage extends React.Component<IProps> {
 
   // 클릭시 방안으로 리다이렉트
   handleListItemClick = (roomId: number) => () => {
+    this.socket.emit("joinChannal", {roomId});
     this.props.history.push(`/room/${roomId}`);
   };
 
@@ -114,6 +116,7 @@ class MainPage extends React.Component<IProps> {
   handleCreateRoomClick = () => {
     if (this.props.isLoggedIn) {
       this.props.history.push(`/create/room`);
+      
     } else {
       alert(`로그인을 먼저 해주세요!`);
     }

@@ -3,10 +3,12 @@ import {
   createStyles,
   Theme,
   withStyles,
-  Button,
   ListItem,
   ListItemText,
-  List
+  List,
+  RadioGroup,
+  FormControlLabel,
+  Radio
 } from "@material-ui/core";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -15,8 +17,7 @@ import { Novel } from "../../models";
 
 interface IProps {
   classes: any;
-  handleThumbUpClick?: () => void;
-  handleThumbDownClick?: () => void;
+  handleLikeDislikeBtnClick: (type: "LIKE" | "DISLIKE", sentenceId: number) => any;
   novels: Array<Novel>;
 }
 
@@ -74,6 +75,8 @@ class CustomList extends React.Component<IProps, IState> {
   };
 
   public render() {
+    console.log(this.props.novels)
+
     return (
       <List disablePadding>
         {this.props.novels.map((novel, index) => (
@@ -89,14 +92,33 @@ class CustomList extends React.Component<IProps, IState> {
             </ListItem>
             {this.isSecondListVisible(index) ? (
               <div className={this.classes.sentenceActionButtons}>
-                <Button>
-                  <ThumbUp fontSize="small" />
-                </Button>
-                <span>{novel.like}</span>
-                <Button>
-                  <ThumbDown fontSize="small" />
-                </Button>
-                <span>{novel.dislike}</span>
+                <RadioGroup aria-label="position" name="position" row>
+                  <FormControlLabel
+                    control={
+                      <Radio
+                        onClick={this.props.handleLikeDislikeBtnClick("LIKE", novel.id)}
+                        checked={novel.isLike === 1}
+                        checkedIcon={<ThumbUp />}
+                        icon={<ThumbUp />}
+                      />
+                    }
+                    label={novel.like}
+                    labelPlacement="bottom"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Radio
+                        onClick={this.props.handleLikeDislikeBtnClick("DISLIKE", novel.id)}
+                        checked={novel.isLike === 0}
+                        checkedIcon={<ThumbDown />}
+                        icon={<ThumbDown />}
+                      />
+                    }
+                    label={novel.dislike}
+                    labelPlacement="bottom"
+                    value="dislike"
+                  />
+                </RadioGroup>
               </div>
             ) : (
               <div />

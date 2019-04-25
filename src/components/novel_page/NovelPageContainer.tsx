@@ -19,7 +19,7 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   novel: state.novel.novel,
   novels: state.novel.novels,
   offset: state.pagination.offset,
-  novelTotal: state.novel.total,
+  totalNumOfNovel: state.novel.total,
   isLoggedIn: state.auth.isLoggedIn,
   user: state.auth.user,
   isWriteable: state.rooms.isWriteable,
@@ -29,8 +29,8 @@ const mapStateToProps = (state: ICombineReducersState) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   setNovel: (novel: Novel) => dispatch(setNovel(novel)),
-  fetchNovels: (skip: number, limit: number, roomId: string) =>
-    dispatch(fetchNovels(skip, limit, roomId)),
+  fetchNovels: (skip: number, limit: number, roomId: string, userId?: number) =>
+    dispatch(fetchNovels(skip, limit, roomId, userId)),
   pushNovel: (novel: Novel) => dispatch(pushNovel(novel)),
   setOffset: (offset: number) => dispatch(setOffset(offset)),
   fetchNovelTotal: (roomId: string) => dispatch(fetchNovelTotal(roomId)),

@@ -122,7 +122,7 @@ class CreateRoomPage extends React.Component<IProps> {
         // 방 못 만든것 예외처리
         console.log(err);
         if (!err.response) return;
-        alert(`Cannot create more room: ${err.response.data.message}`);
+        alert(`Cannot create more room: ${JSON.stringify(err.response.data.message)}`);
       });
   };
 

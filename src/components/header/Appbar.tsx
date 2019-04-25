@@ -144,6 +144,7 @@ const Appbar: React.SFC<IProps> = props => {
                   <FormattedMessage id="appbar_menu_logout" />
                 </MenuItem>
               </Menu>
+              <span>{props.user.nickname}</span>
             </div>
           ) : (
             <div>

@@ -6,7 +6,7 @@ export const socketConfig = {
   forceNew: true // 소켓 재사용 여부
 };
 
-export default (room: string, errHandler): SocketIOClient.Socket => {
+export default (room: string, errHandler: any): SocketIOClient.Socket => {
   const socket = io(`${config.REACT_APP_SOCKET_URL}/${room}`, socketConfig);
 
   socket.on("connect", () => {
@@ -20,15 +20,8 @@ export default (room: string, errHandler): SocketIOClient.Socket => {
 
   socket.on("reconnect_failed", () => {
     console.log("리커넥트 실패");
+    socket.close();
   });
-
-  // socket.on("ping", () => {
-  //   console.log("ping");
-  // });
-
-  // socket.on("pong", latnecy => {
-  //   console.log("pong", latnecy);
-  // });
 
   socket.on("reconnecting", attemptNumber => {
     console.log(`리커넥트 ${attemptNumber}에서 실행 중...`);
@@ -44,10 +37,12 @@ export default (room: string, errHandler): SocketIOClient.Socket => {
 
   socket.on("disconnect", reason => {
     console.log("디스커넥트", reason);
+    socket.close();
   });
 
   socket.on("error", (err: Error) => {
     console.log("소켓 에러 발생", err);
+    socket.close();
     errHandler(err);
   });
 

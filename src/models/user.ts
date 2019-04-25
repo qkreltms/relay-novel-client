@@ -3,23 +3,33 @@ export interface User {
   nickname: string;
   email: string;
   thumbnail: string;
-  isAdmin: boolean;
+  userType: UserType;
   isBlocked: boolean;
-  type: string;
+  type: LoginType;
   updatedAt: Date;
   createdAt: Date;
 }
 
-export const newUser = () => {
+export enum UserType {
+  ADMIN = "ADMIN",
+  USER = "USER"
+}
+
+export enum LoginType {
+  LOCAL = "LOCAL",
+  FACEBOOK = "FACEBOOK"
+}
+
+export const newUser = (user: User = {} as User) => {
   return {
-    id: 0,
-    nickname: "",
-    email: "",
-    thumbnail: "",
-    isAdmin: false,
-    isBlocked: false,
-    type: "",
-    updatedAt: new Date(),
-    createdAt: new Date()
+    id: user.id || 0,
+    nickname: user.nickname || "",
+    email: user.email || "",
+    thumbnail: user.thumbnail || "",
+    userType: user.userType || "",
+    isBlocked: user.isBlocked || false,
+    type: user.type || "",
+    updatedAt: user.updatedAt || null,
+    createdAt: user.createdAt || new Date()
   } as User;
 };

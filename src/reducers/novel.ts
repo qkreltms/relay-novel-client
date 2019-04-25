@@ -1,4 +1,4 @@
-import { INovelAction, SET_NOVEL, PUSH_NOVEL, FETCH_NOVELS, SET_NOVEL_TOTAL, FETCH_NOVEL_TOTAL } from "../actions";
+import { INovelAction, SET_NOVEL, PUSH_NOVEL, FETCH_NOVELS, SET_NOVEL_TOTAL, FETCH_NOVEL_TOTAL, SET_NOVEL_LIKE } from "../actions";
 import { Novel, newNovel } from "../models";
 
 export interface INovelState {
@@ -9,8 +9,8 @@ export interface INovelState {
 
 const createEmpty = () => ({
   novel: newNovel(),
-  novels: Array<Novel>(newNovel()),
-  total: 0
+  novels: new Array<Novel>(newNovel()),
+  total: 0,
 });
 
 export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
@@ -49,6 +49,14 @@ export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
         total: action.total
       }
     }
+    
+    case SET_NOVEL_LIKE: {
+      return {
+        ...state,
+        like: action.like
+      }
+    }
+
     default:
       return state;
   }
