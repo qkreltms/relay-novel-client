@@ -64,7 +64,7 @@ const styles = (theme: Theme) =>
 class NovelPage extends React.Component<IProps> {
   private roomId: string = "0";
   private socket: any = null;
-  private paginationBtnLimit: number = 5;
+  private paginationBtnLimit: number = 10;
   // 보여줄 총 소설 개수
   private novelNumToShow: number = 0;
 
@@ -263,31 +263,9 @@ class NovelPage extends React.Component<IProps> {
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
-          <Grid container alignItems="stretch" direction="row">
-            <Grid xs={3} item />
-            <Grid xs={9} item>
-              <div>
-                {this.props.isWriteable || this.props.slot < 0 ? (
-                  <span />
-                ) : (
-                  <CustomButton
-                    isDisable={false}
-                    onClick={this.handleJoinToWrite}
-                    formattedMessageId="novelpage_join_btn"
-                  />
-                )}
-                <span>
-                  {this.props.slot} / {this.props.limit}
-                </span>
-              </div>
-            </Grid>
-          </Grid>
           <Grid container>
-            {/* 댓글 */}
             <Grid xs={3} item>
-              <Paper className={classes.paper}>댓글 들어갈 부분</Paper>
             </Grid>
-            {/* 소설 글 */}
             <Grid xs={6} item>
               <CustomNovelList
                 novels={this.props.novels}
@@ -312,23 +290,34 @@ class NovelPage extends React.Component<IProps> {
               ) : (
                 <div />
               )}
-            </Grid>
-            {/* 접속한 유저 표시 */}
-            <Grid xs={3} item>
-              <Paper className={classes.paper}>접속한 유저 넣을 부분</Paper>
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Grid xs={12} item>
+
+              <div>
+                {this.props.isWriteable || this.props.slot < 0 ? (
+                  <span />
+                ) : (
+                  <CustomButton
+                    isDisable={false}
+                    onClick={this.handleJoinToWrite}
+                    formattedMessageId="novelpage_join_btn"
+                  />
+                )}
+                <span>
+                  {this.props.slot} / {this.props.limit}
+                </span>
+              </div>
               <CustomPagination
                 handleClickEvent={this.handlePaginationBtnClick}
                 offset={this.props.offset}
                 total={this.novelNumToShow}
               />
+              <Paper className={classes.paper}>댓글 넣을 부분</Paper>
+            </Grid>
+            <Grid xs={3} item>
+              {/* 참가한 유저 넣을 부분 */}
             </Grid>
           </Grid>
+          </Grid>
         </Grid>
-      </Grid>
     );
   }
 }
