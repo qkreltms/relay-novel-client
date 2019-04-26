@@ -48,6 +48,7 @@ interface IProps extends WithStyles<typeof styles> {
   fetchRoomAvailableSlot: (roomId: string) => void;
   limit: number;
   fetchRoomSpaceLimitaion: (roomId: string) => void;
+  updateNovel: (novel: Novel) => void;
 }
 
 const styles = (theme: Theme) =>
@@ -234,6 +235,8 @@ class NovelPage extends React.Component<IProps> {
       roomId: this.roomId || "0",
       userId: this.props.user.id || 0
     };
+
+    this.props.updateNovel({id: sentenceId, isLike: type === "LIKE" ? 1 : 0} as Novel);
   
     axios
       .post(

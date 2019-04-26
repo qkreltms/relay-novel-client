@@ -11,7 +11,8 @@ import {
   setIsWriteable,
   setNovelTotal,
   fetchRoomAvailableSlot,
-  fetchRoomSpaceLimitaion
+  fetchRoomSpaceLimitaion,
+  updateNovel,
 } from "../../actions";
 import { Novel } from "../../models";
 
@@ -40,7 +41,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   fetchRoomAvailableSlot: (roomId: string) =>
     dispatch(fetchRoomAvailableSlot(roomId)),
   fetchRoomSpaceLimitaion: (roomId: string) =>
-    dispatch(fetchRoomSpaceLimitaion(roomId))
+    dispatch(fetchRoomSpaceLimitaion(roomId)),
+  updateNovel: (novel: Novel) => dispatch(updateNovel(novel))
 });
 
 export const NovelPageContainer = connect(

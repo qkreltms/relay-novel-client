@@ -19,6 +19,7 @@ interface IProps {
   classes: any;
   handleLikeDislikeBtnClick: (type: "LIKE" | "DISLIKE", sentenceId: number) => any;
   novels: Array<Novel>;
+  isReadingMod?: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -40,57 +41,28 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface IState {
-  selectedIndex: number;
-}
-
-class CustomList extends React.Component<IProps, IState> {
+class CustomList extends React.Component<IProps> {
   private classes;
 
   constructor(props) {
     super(props);
     this.classes = props.classes;
-    this.state = {
-      selectedIndex: -1
-    };
   }
 
-  private handleMouseEnter = (index: number) => (
-    event: React.MouseEvent<HTMLElement, MouseEvent>
-  ) => {
-    this.setState({
-      selectedIndex: index
-    });
-  };
-
-  private handleMouseLeave = () => {
-    this.setState({
-      selectedIndex: -1
-    });
-  };
-
-  private isSecondListVisible = (index: number) => {
-    if (this.state.selectedIndex === index) return true;
-    return false;
-  };
-
   public render() {
-    console.log(this.props.novels)
 
     return (
       <List disablePadding>
         {this.props.novels.map((novel, index) => (
           <div
             key={index}
-            onMouseEnter={this.handleMouseEnter(index)}
-            onMouseLeave={this.handleMouseLeave}
           >
             <ListItem alignItems="flex-start">
               <ListItemText
                 primary={<p className={this.classes.sentence}>{novel.text}</p>}
               />
             </ListItem>
-            {this.isSecondListVisible(index) ? (
+            {this.props.isReadingMod || true ? (
               <div className={this.classes.sentenceActionButtons}>
                 <RadioGroup aria-label="position" name="position" row>
                   <FormControlLabel
@@ -130,7 +102,7 @@ class CustomList extends React.Component<IProps, IState> {
   }
 }
 
-(CustomList as React.ComponentClass<IProps, IState>).propTypes = {
+(CustomList as React.ComponentClass<IProps>).propTypes = {
   classes: PropTypes.object.isRequired
 } as any;
 

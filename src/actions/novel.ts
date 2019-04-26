@@ -5,6 +5,7 @@ export const SET_NOVEL_TOTAL = "SET_NOVEL_TOTAL";
 export const FETCH_NOVEL_TOTAL = "FETCH_NOVEL_TOTAL";
 export const SET_NOVEL_LIKE = "SET_NOVEL_LIKE";
 export const SET_NOVEL_DISLIKE = "SET_NOVEL_DISLIKE";
+export const UPDATE_NOVEL = "UPDATE_NOVEL";
 
 import { Novel, newNovel } from "../models";
 import axios from "axios";
@@ -49,6 +50,12 @@ export const handleNovelCallCompleted = (
   } as INovelAction;
 };
 
+export const updateNovel = (novel: Novel) => {
+  return {
+    novel,
+    type: UPDATE_NOVEL
+  }
+}
 export const setNovelTotal = (total: number) => {
   return {
     total,
