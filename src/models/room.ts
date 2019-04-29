@@ -7,7 +7,6 @@ export interface Room {
   updatedAt: Date;
   createdAt: Date;
   like: number;
-  dislike: number;
 }
 
 export const newRoom = (room: Room = {} as Room) => {
@@ -19,7 +18,6 @@ export const newRoom = (room: Room = {} as Room) => {
     desc: room.desc || "",
     updatedAt: room.updatedAt || null,
     createdAt: room.createdAt || new Date(),
-    like: room.like || 0,
-    dislike: room.dislike || 0
+    like: room.like || 0
   } as Room;
 };

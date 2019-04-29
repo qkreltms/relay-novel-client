@@ -12,12 +12,9 @@ import {
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import { Room } from "../../models";
-import { ThumbUp, ThumbDown } from "@material-ui/icons";
+import { Favorite } from "@material-ui/icons";
 import CustomButton from "../common/CustomButton";
-import config from "../../config";
 import socket, { mainPage } from "../../socket";
-import axios from "axios";
-import axiosConfig from "../../config/axios";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -57,20 +54,25 @@ class MainPage extends React.Component<IProps> {
   }
 
   public componentDidMount() {
-    this.props.fetchRooms(0, 30);
-    this.props.fetchRoomTotal();
     this.initSocket();
+    this.initState();
   }
 
   public componentWillUnmount() {
     this.exitSocket();
   }
 
+  private initState = () => {
+    this.props.fetchRooms(0, 30);
+    this.props.fetchRoomTotal();
+  }
+
   initSocket = () => {
     this.socket.emit("join", {});
-    this.socket.on("message", roomId => {
-      console.log(`소켓 message 값 받음:`, JSON.stringify(roomId));
-      this.getARoom(roomId);
+    this.socket.on("createdRoom", (room: Room) => {
+      console.log(`소켓 message 값 받음:`, JSON.stringify(room.id));
+      this.props.setRooms([room, ...this.props.rooms] as Array<Room>);
+      this.props.setRoomTotal(this.props.total + 1);
     });
   };
 
@@ -80,35 +82,9 @@ class MainPage extends React.Component<IProps> {
     console.log(`소켓 해제됨`);
   };
 
-  getARoom = roomId => {
-    // 소켓에서 roomId가 잘 전달 됬는지 확인
-    if (!roomId) {
-      console.log("roomId가 undefined 값이 들어옴 ", roomId);
-      return;
-    }
-
-    return axios
-      .get(
-        `${config.REACT_APP_SERVER_URL}/api/rooms?roomId=${roomId}`,
-        axiosConfig
-      )
-      .then(res => {
-        if (!res.data) return;
-
-        const room = res.data.message;
-        this.props.setRooms([room[0], ...this.props.rooms] as Array<Room>);
-        this.props.setRoomTotal(this.props.total + 1);
-      })
-      .catch(err => {
-        // 방 못 가져온 것 예외처리
-        console.log(err);
-        if (!err.response) return;
-      });
-  };
-
   // 클릭시 방안으로 리다이렉트
   handleListItemClick = (roomId: number) => () => {
-    this.socket.emit("joinChannal", {roomId});
+    this.socket.emit("joinChannal", {id: roomId} as Room);
     this.props.history.push(`/room/${roomId}`);
   };
 
@@ -116,9 +92,8 @@ class MainPage extends React.Component<IProps> {
   handleCreateRoomClick = () => {
     if (this.props.isLoggedIn) {
       this.props.history.push(`/create/room`);
-      
     } else {
-      alert(`로그인을 먼저 해주세요!`);
+      alert(`로그인을 먼저 해주세요.`);
     }
   };
 
@@ -142,10 +117,8 @@ class MainPage extends React.Component<IProps> {
             >
               <ListItemText primary={room.title} />
               <ListItemSecondaryAction>
-                <ThumbUp fontSize="small" />
+                <Favorite fontSize="small" />
                 <span>{room.like}</span>
-                <ThumbDown fontSize="small" />
-                <span>{room.dislike}</span>
               </ListItemSecondaryAction>
             </ListItem>
           ))}

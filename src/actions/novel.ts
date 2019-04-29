@@ -74,8 +74,7 @@ export const fetchNovelTotal = (roomId: string) => (dispatch: any) => {
   axios
     .get(`${config.REACT_APP_SERVER_URL}/api/sentences/total?roomId=${roomId}`)
     .then(res => {
-      if (!res.data) return;
-      const total: number = res.data.message[0].total;
+      const total: number = res.data.message.total;
       return dispatch(fetchNovelTotalCompleted(total));
     })
     .catch(err => {

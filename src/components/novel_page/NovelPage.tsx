@@ -5,7 +5,8 @@ import {
   WithStyles,
   withStyles,
   Grid,
-  Paper
+  Paper,
+  IconButton
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -18,6 +19,7 @@ import axios from "axios";
 import axiosConfig from "../../config/axios";
 import config from "../../config";
 import CustomPagination from "../common/CustomPagination";
+import { Favorite, FavoriteBorder } from "@material-ui/icons";
 
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
@@ -42,13 +44,17 @@ interface IProps extends WithStyles<typeof styles> {
   isLoggedIn: boolean;
   user: User;
   isWriteable: boolean;
-  fetchIsWriteable: (roomId: string) => void;
+  fetchIsWriteable: (roomId: string, userId: number) => void;
   setIsWriteable: (writeable: boolean) => void;
   slot: number;
   fetchRoomAvailableSlot: (roomId: string) => void;
   limit: number;
   fetchRoomSpaceLimitaion: (roomId: string) => void;
   updateNovel: (novel: Novel) => void;
+  isLikeRoom: boolean;
+  setRoomIsLike: (isLike: boolean) => void;
+  fetchRoomIsLike: (roomId: string, userId: number) => void;
+  postRoomIsLike: (roomId: string, userId: number, isLike: boolean) => void;
 }
 
 const styles = (theme: Theme) =>
@@ -81,29 +87,30 @@ class NovelPage extends React.Component<IProps> {
 
   public componentDidMount() {
     this.initSocket();
+    this.initState();
+  }
+
+  private initState = () => {
     this.fetchNovels(0, this.paginationBtnLimit);
-    this.props.setOffset(0);
-    this.props.setIsWriteable(false);
     this.props.fetchRoomAvailableSlot(this.roomId);
     this.props.fetchNovelTotal(this.roomId);
     this.props.fetchRoomSpaceLimitaion(this.roomId);
-    if (this.props.isLoggedIn) this.props.fetchIsWriteable(this.roomId);
+    if (this.props.isLoggedIn) {
+      this.props.fetchIsWriteable(this.roomId, this.props.user.id);
+      this.props.fetchRoomIsLike(this.roomId, this.props.user.id);
+    } else {
+      this.props.setIsWriteable(false);
+      this.props.setOffset(0);
+    }
   }
 
   public componentWillUnmount() {
     this.exitSocket();
-    // state 초기화 액션
-    this.props.setIsWriteable(false);
-    // 슬롯값 초기화
-    // 소설 내용 삭제
-    // limit 초기화
-    // novel total 값 초기화
-    this.props.setOffset(0);
   }
 
   private initSocket = () => {
     this.socket.emit("join", {
-      roomId: this.roomId,
+      id: this.roomId,
       userId: this.props.user.id
     });
 
@@ -172,6 +179,7 @@ class NovelPage extends React.Component<IProps> {
     const userId: number = this.props.user.id || 0;
 
     // TODO: 글 길이에 따라서도 return 하기
+    if (roomId === "0") return;
     if (!this.props.novel.text) return;
     if (!this.props.isWriteable) return alert("글쓰기에 참가하지 않았습니다.");
 
@@ -191,6 +199,7 @@ class NovelPage extends React.Component<IProps> {
   private handleJoinToWrite = () => {
     const roomId: string = this.roomId;
 
+    if (roomId === "0") return;
     if (!this.props.isLoggedIn) return alert("로그인이 필요합니다.");
 
     const body = { roomId };
@@ -199,7 +208,7 @@ class NovelPage extends React.Component<IProps> {
       .post(`${config.REACT_APP_SERVER_URL}/api/rooms/join`, body, axiosConfig)
       .then(res => {
         this.props.setIsWriteable(true);
-        // 방 참가가 성공하면 re-render함
+        // 방 참가가 성공하면 참가 버튼 가리기 위해 re-render함
         this.forceUpdate();
       })
       .catch(err => {
@@ -236,18 +245,26 @@ class NovelPage extends React.Component<IProps> {
       userId: this.props.user.id || 0
     };
 
-    this.props.updateNovel({id: sentenceId, isLike: type === "LIKE" ? 1 : 0} as Novel);
-  
     axios
       .post(
         `${config.REACT_APP_SERVER_URL}/api/sentences/likedislikes`,
         body,
         axiosConfig
       )
-      .then(res => {})
+      .then(res => {
+        this.props.updateNovel({
+          id: sentenceId,
+          isLike: type === "LIKE" ? 1 : 0
+        } as Novel);
+      })
       .catch(err => {
         console.log(err.response);
       });
+  };
+
+  private handleFavoriteBtnClick = (type: boolean) => (event: any) => {
+    if (!this.props.isLoggedIn) return alert("로그인 해주세요.");
+    this.props.postRoomIsLike(this.roomId, this.props.user.id, type);
   };
 
   private isLastPage = () => {
@@ -257,7 +274,9 @@ class NovelPage extends React.Component<IProps> {
   };
 
   public shouldComponentUpdate(nextProps) {
-    this.novelNumToShow = Math.ceil(nextProps.totalNumOfNovel / this.paginationBtnLimit);
+    this.novelNumToShow = Math.ceil(
+      nextProps.totalNumOfNovel / this.paginationBtnLimit
+    );
     return true;
   }
 
@@ -268,6 +287,7 @@ class NovelPage extends React.Component<IProps> {
         <Grid item xs={12}>
           <Grid container>
             <Grid xs={3} item>
+              {/* 참가한 유저 넣을 부분 */}
             </Grid>
             <Grid xs={6} item>
               <CustomNovelList
@@ -316,11 +336,29 @@ class NovelPage extends React.Component<IProps> {
               <Paper className={classes.paper}>댓글 넣을 부분</Paper>
             </Grid>
             <Grid xs={3} item>
-              {/* 참가한 유저 넣을 부분 */}
+              {this.props.isLikeRoom ? (
+                <IconButton
+                  color="secondary"
+                  aria-label="favorite"
+                  onClick={this.handleFavoriteBtnClick(false)}
+                >
+                  <Favorite />
+                </IconButton>
+              ) : (
+                <IconButton
+                  color="secondary"
+                  aria-label="favorite-border"
+                  onClick={this.handleFavoriteBtnClick(true)}
+                >
+                  <FavoriteBorder />
+                </IconButton>
+              )}
+
+              {/* 방에대한 정보 넣기 */}
             </Grid>
           </Grid>
-          </Grid>
         </Grid>
+      </Grid>
     );
   }
 }

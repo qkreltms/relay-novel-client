@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import CustomInput from "../common/CustomInput";
 import CustomRadioButtons from "../common/CustomRadioButtons";
-import { RadioContents, Directions } from "../../models";
+import { RadioContents, Directions, Room, newRoom } from "../../models";
 import CustomButton from "../common/CustomButton";
 import axios from "axios";
 import config from "../../config";
@@ -67,15 +67,12 @@ class CreateRoomPage extends React.Component<IProps> {
   }
 
   public componentDidMount() {
-    this.initProps()
+    this.initState()
   }
  
-  public componentWillUnmount() {
-    this.initProps()
-  }
+  public componentWillUnmount() {}
 
-  private initProps = () => {
-    // TODO : redux에서 처리하기
+  private initState = () => {
     this.props.setDesc("")
     this.props.setTitle("")
     this.props.setWriterLimit("100")
@@ -88,19 +85,19 @@ class CreateRoomPage extends React.Component<IProps> {
     return false;
   };
 
-  private sendEventToSocket = (roomId: string) => {
+  private sendEventToSocket = (room: Room) => {
     this.socket.emit("create", {
-      roomId
-    });
+      id: room.id,
+      writerLimit: room.writerLimit,
+      title: room.title,
+      desc: room.desc
+    } as Room);
   };
 
   private handleCreateRoomClick = () => {
     if (this.isEmpty()) return;
-    if (!this.props.isLoggedIn) {
-      alert("로그인을 해주세요.");
-      return;
-    }
-    console.log(this.props.writerLimit)
+    if (!this.props.isLoggedIn) return alert("로그인을 해주세요.");
+      
     const body = {
       writerLimit: this.props.writerLimit,
       title: this.props.title,
@@ -111,17 +108,21 @@ class CreateRoomPage extends React.Component<IProps> {
       .post(`${config.REACT_APP_SERVER_URL}/api/rooms`, body, axiosConfig)
       .then(res => {
         const data = res.data;
-        if (!data) return;
         const roomId: string = data.message.insertId;
 
-        this.sendEventToSocket(roomId);
+        const room: Room = newRoom({
+          id: Number(roomId), 
+          writerLimit: Number(this.props.writerLimit), 
+          title: this.props.title, 
+          desc: this.props.desc
+        } as Room)
+
+        this.sendEventToSocket(room);
 
         return this.props.history.push(`/room/${roomId}`);
       })
       .catch(err => {
-        // 방 못 만든것 예외처리
-        console.log(err);
-        if (!err.response) return;
+        console.log(err.response);
         alert(`Cannot create more room: ${JSON.stringify(err.response.data.message)}`);
       });
   };

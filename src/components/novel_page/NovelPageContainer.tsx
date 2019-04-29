@@ -13,6 +13,9 @@ import {
   fetchRoomAvailableSlot,
   fetchRoomSpaceLimitaion,
   updateNovel,
+  setRoomIsLike,
+  fetchRoomIsLike,
+  postRoomIsLike,
 } from "../../actions";
 import { Novel } from "../../models";
 
@@ -25,7 +28,8 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   user: state.auth.user,
   isWriteable: state.rooms.isWriteable,
   slot: state.rooms.slot,
-  limit: state.rooms.limit
+  limit: state.rooms.limit,
+  isLikeRoom: state.rooms.isLike
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -36,13 +40,16 @@ const mapDispatchToProps = (dispatch: any) => ({
   setOffset: (offset: number) => dispatch(setOffset(offset)),
   fetchNovelTotal: (roomId: string) => dispatch(fetchNovelTotal(roomId)),
   setNovelTotal: (total: number) => dispatch(setNovelTotal(total)),
-  fetchIsWriteable: (roomId: string) => dispatch(fetchIsWriteable(roomId)),
+  fetchIsWriteable: (roomId: string, userId: number) => dispatch(fetchIsWriteable(roomId, userId)),
   setIsWriteable: (writeable: boolean) => dispatch(setIsWriteable(writeable)),
   fetchRoomAvailableSlot: (roomId: string) =>
     dispatch(fetchRoomAvailableSlot(roomId)),
   fetchRoomSpaceLimitaion: (roomId: string) =>
     dispatch(fetchRoomSpaceLimitaion(roomId)),
-  updateNovel: (novel: Novel) => dispatch(updateNovel(novel))
+  updateNovel: (novel: Novel) => dispatch(updateNovel(novel)),
+  setRoomIsLike: (isLike: boolean) => dispatch(setRoomIsLike(isLike)),
+  fetchRoomIsLike: (roomId: string, userId: number) => dispatch(fetchRoomIsLike(roomId, userId)),
+  postRoomIsLike: (roomId: string, userId: number, isLike: boolean) => dispatch(postRoomIsLike(roomId, userId, isLike))
 });
 
 export const NovelPageContainer = connect(

@@ -1,4 +1,4 @@
-import { SET_ROOMS, IRoomAction, SET_ROOM_AVAILABLE_SLOT, SET_IS_WRITEABLE, SET_ROOM_TOTAL, SET_ROOM_SPACE_LIMITATION } from "../actions";
+import { SET_ROOMS, IRoomAction, SET_ROOM_AVAILABLE_SLOT, SET_IS_WRITEABLE, SET_ROOM_TOTAL, SET_ROOM_SPACE_LIMITATION, SET_ROOM_IS_LIKE } from "../actions";
 import { Room, newRoom } from "../models";
 
 export interface IRoomState {
@@ -7,6 +7,7 @@ export interface IRoomState {
   total: number;
   slot: number;
   limit: number;
+  isLike: boolean;
 }
 
 const createEmpty = () => ({
@@ -14,11 +15,19 @@ const createEmpty = () => ({
   isWriteable: false,
   total: 0,
   slot: 0,
-  limit: 0
+  limit: 0,
+  isLike: false,
 });
 
 export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
   switch (action.type) {    
+    case SET_ROOM_IS_LIKE: {
+      return {
+        ...state,
+        isLike: action.isLike
+      }
+    }
+
     case SET_ROOMS: {
       return {
         ...state,
