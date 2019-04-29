@@ -6,16 +6,11 @@ import {
   fetchNovels,
   pushNovel,
   setOffset,
-  fetchNovelTotal,
-  fetchIsWriteable,
-  setIsWriteable,
   setNovelTotal,
-  fetchRoomAvailableSlot,
-  fetchRoomSpaceLimitaion,
   updateNovel,
-  setRoomIsLike,
-  fetchRoomIsLike,
   postRoomIsLike,
+  setRoomIsLike,
+  fetchRoomInfo,
 } from "../../actions";
 import { Novel } from "../../models";
 
@@ -23,12 +18,12 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   novel: state.novel.novel,
   novels: state.novel.novels,
   offset: state.pagination.offset,
-  totalNumOfNovel: state.novel.total,
+  totalNumOfNovel: state.rooms.novelTotal,
   isLoggedIn: state.auth.isLoggedIn,
   user: state.auth.user,
   isWriteable: state.rooms.isWriteable,
-  slot: state.rooms.slot,
-  limit: state.rooms.limit,
+  joinedUserTotal: state.rooms.joinedUserTotal,
+  writerLimit: state.rooms.writerLimit,
   isLikeRoom: state.rooms.isLike
 });
 
@@ -38,17 +33,10 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(fetchNovels(skip, limit, roomId, userId)),
   pushNovel: (novel: Novel) => dispatch(pushNovel(novel)),
   setOffset: (offset: number) => dispatch(setOffset(offset)),
-  fetchNovelTotal: (roomId: string) => dispatch(fetchNovelTotal(roomId)),
   setNovelTotal: (total: number) => dispatch(setNovelTotal(total)),
-  fetchIsWriteable: (roomId: string, userId: number) => dispatch(fetchIsWriteable(roomId, userId)),
-  setIsWriteable: (writeable: boolean) => dispatch(setIsWriteable(writeable)),
-  fetchRoomAvailableSlot: (roomId: string) =>
-    dispatch(fetchRoomAvailableSlot(roomId)),
-  fetchRoomSpaceLimitaion: (roomId: string) =>
-    dispatch(fetchRoomSpaceLimitaion(roomId)),
   updateNovel: (novel: Novel) => dispatch(updateNovel(novel)),
   setRoomIsLike: (isLike: boolean) => dispatch(setRoomIsLike(isLike)),
-  fetchRoomIsLike: (roomId: string, userId: number) => dispatch(fetchRoomIsLike(roomId, userId)),
+  fetchRoomInfo: (roomId: string, userId: number, isLoggedIn: boolean) => dispatch(fetchRoomInfo(roomId, userId, isLoggedIn)),
   postRoomIsLike: (roomId: string, userId: number, isLike: boolean) => dispatch(postRoomIsLike(roomId, userId, isLike))
 });
 

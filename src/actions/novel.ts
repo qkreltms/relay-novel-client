@@ -1,7 +1,6 @@
 export const SET_NOVEL = "SET_NOVEL";
 export const FETCH_NOVELS = "FETCH_NOVELS";
 export const PUSH_NOVEL = "PUSH_NOVEL";
-export const SET_NOVEL_TOTAL = "SET_NOVEL_TOTAL";
 export const FETCH_NOVEL_TOTAL = "FETCH_NOVEL_TOTAL";
 export const SET_NOVEL_LIKE = "SET_NOVEL_LIKE";
 export const SET_NOVEL_DISLIKE = "SET_NOVEL_DISLIKE";
@@ -56,32 +55,6 @@ export const updateNovel = (novel: Novel) => {
     type: UPDATE_NOVEL
   }
 }
-export const setNovelTotal = (total: number) => {
-  return {
-    total,
-    type: SET_NOVEL_TOTAL
-  } as INovelAction;
-};
-
-export const fetchNovelTotalCompleted = (total: number) => {
-  return {
-    total,
-    type: FETCH_NOVEL_TOTAL
-  };
-};
-
-export const fetchNovelTotal = (roomId: string) => (dispatch: any) => {
-  axios
-    .get(`${config.REACT_APP_SERVER_URL}/api/sentences/total?roomId=${roomId}`)
-    .then(res => {
-      const total: number = res.data.message.total;
-      return dispatch(fetchNovelTotalCompleted(total));
-    })
-    .catch(err => {
-      console.log(err.response);
-      return dispatch(fetchNovelTotalCompleted(0));
-    });
-};
 
 export const fetchNovels = (
   skip: number = 0,

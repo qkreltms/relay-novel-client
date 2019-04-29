@@ -38,23 +38,19 @@ interface IProps extends WithStyles<typeof styles> {
   pushNovel: (novel: Novel) => void;
   offset: number;
   setOffset: (offset: number) => void;
-  fetchNovelTotal: (roomId: string) => void;
   totalNumOfNovel: number;
   setNovelTotal: (totalNumOfNovel: number) => void;
   isLoggedIn: boolean;
   user: User;
   isWriteable: boolean;
-  fetchIsWriteable: (roomId: string, userId: number) => void;
-  setIsWriteable: (writeable: boolean) => void;
-  slot: number;
-  fetchRoomAvailableSlot: (roomId: string) => void;
-  limit: number;
-  fetchRoomSpaceLimitaion: (roomId: string) => void;
+  joinedUserTotal: number;
+  writerLimit: number;
   updateNovel: (novel: Novel) => void;
   isLikeRoom: boolean;
   setRoomIsLike: (isLike: boolean) => void;
-  fetchRoomIsLike: (roomId: string, userId: number) => void;
   postRoomIsLike: (roomId: string, userId: number, isLike: boolean) => void;
+  fetchRoomInfo: (roomId: string, userId: number, isLoggedIn: boolean) => void;
+  setIsWriteable: (isWriteable: boolean) => void;
 }
 
 const styles = (theme: Theme) =>
@@ -72,8 +68,7 @@ class NovelPage extends React.Component<IProps> {
   private roomId: string = "0";
   private socket: any = null;
   private paginationBtnLimit: number = 10;
-  // 보여줄 총 소설 개수
-  private novelNumToShow: number = 0;
+  private totalPaginationBtn: number = 0;
 
   constructor(props) {
     super(props);
@@ -92,17 +87,12 @@ class NovelPage extends React.Component<IProps> {
 
   private initState = () => {
     this.fetchNovels(0, this.paginationBtnLimit);
-    this.props.fetchRoomAvailableSlot(this.roomId);
-    this.props.fetchNovelTotal(this.roomId);
-    this.props.fetchRoomSpaceLimitaion(this.roomId);
-    if (this.props.isLoggedIn) {
-      this.props.fetchIsWriteable(this.roomId, this.props.user.id);
-      this.props.fetchRoomIsLike(this.roomId, this.props.user.id);
-    } else {
-      this.props.setIsWriteable(false);
-      this.props.setOffset(0);
-    }
-  }
+    this.props.fetchRoomInfo(
+      this.roomId,
+      this.props.user.id,
+      this.props.isLoggedIn
+    );
+  };
 
   public componentWillUnmount() {
     this.exitSocket();
@@ -140,7 +130,7 @@ class NovelPage extends React.Component<IProps> {
     }
   };
 
-  private handlePaginationBtnClick = offset => {
+  private handlePaginationBtnClick = (offset: number) => {
     const skip = offset * this.paginationBtnLimit;
     const limit = this.paginationBtnLimit;
     this.props.setOffset(offset);
@@ -268,13 +258,13 @@ class NovelPage extends React.Component<IProps> {
   };
 
   private isLastPage = () => {
-    if (this.novelNumToShow === 0) return true;
-    if (this.novelNumToShow === this.props.offset + 1) return true;
+    if (this.totalPaginationBtn === 0) return true;
+    if (this.totalPaginationBtn === this.props.offset + 1) return true;
     return false;
   };
 
   public shouldComponentUpdate(nextProps) {
-    this.novelNumToShow = Math.ceil(
+    this.totalPaginationBtn = Math.ceil(
       nextProps.totalNumOfNovel / this.paginationBtnLimit
     );
     return true;
@@ -282,6 +272,7 @@ class NovelPage extends React.Component<IProps> {
 
   public render() {
     const { classes } = this.props;
+
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
@@ -315,7 +306,7 @@ class NovelPage extends React.Component<IProps> {
               )}
 
               <div>
-                {this.props.isWriteable || this.props.slot < 0 ? (
+                {this.props.isWriteable || this.props.joinedUserTotal < 0 ? (
                   <span />
                 ) : (
                   <CustomButton
@@ -325,13 +316,13 @@ class NovelPage extends React.Component<IProps> {
                   />
                 )}
                 <span>
-                  {this.props.slot} / {this.props.limit}
+                  {this.props.joinedUserTotal} / {this.props.writerLimit}
                 </span>
               </div>
               <CustomPagination
                 handleClickEvent={this.handlePaginationBtnClick}
                 offset={this.props.offset}
-                total={this.novelNumToShow}
+                total={this.totalPaginationBtn}
               />
               <Paper className={classes.paper}>댓글 넣을 부분</Paper>
             </Grid>

@@ -3,24 +3,20 @@ import {
   SET_NOVEL,
   PUSH_NOVEL,
   FETCH_NOVELS,
-  SET_NOVEL_TOTAL,
   FETCH_NOVEL_TOTAL,
   SET_NOVEL_LIKE,
   UPDATE_NOVEL
 } from "../actions";
 import { Novel, newNovel } from "../models";
-import { AssignmentReturnRounded } from "@material-ui/icons";
 
 export interface INovelState {
   novel: Novel;
   novels: Array<Novel>;
-  total: number;
 }
 
 const createEmpty = () => ({
   novel: newNovel(),
   novels: new Array<Novel>(newNovel()),
-  total: 0
 });
 
 export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
@@ -43,13 +39,6 @@ export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
       return {
         ...state,
         novels: action.novels
-      } as INovelState;
-    }
-
-    case SET_NOVEL_TOTAL: {
-      return {
-        ...state,
-        total: action.total
       } as INovelState;
     }
 

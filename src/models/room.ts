@@ -9,6 +9,16 @@ export interface Room {
   like: number;
 }
 
+export interface RoomInfo {
+  room: Array<Room>,
+  joinedUserTotal: number,
+  isWriteable: boolean,
+  isLike: boolean,
+  writerLimit: number,
+  novelTotal: number
+}
+
+
 export const newRoom = (room: Room = {} as Room) => {
   return {
     id: room.id || 0,

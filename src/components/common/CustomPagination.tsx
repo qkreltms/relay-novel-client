@@ -15,7 +15,7 @@ interface IProps extends WithStyles<typeof styles> {
 const styles = (theme: Theme) => createStyles({});
 
 const CustomPagination: React.SFC<IProps> = props => {
-  const handleClick = offset => {
+  const handleClick = (offset: number) => {
     props.handleClickEvent(offset);
   };
 

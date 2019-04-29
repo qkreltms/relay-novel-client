@@ -6,7 +6,7 @@ export interface IPaginationState {
 
 const createEmpty = () => ({
   offset: 0
-});
+} as IPaginationState);
 
 export const paginationReducer = (
   state = createEmpty(),

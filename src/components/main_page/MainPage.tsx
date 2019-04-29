@@ -34,8 +34,6 @@ interface IProps extends WithStyles<typeof styles> {
   setRooms: (rooms: Array<Room>) => void;
   rooms: Array<Room>;
   fetchRooms: (skip: number, limit: number) => void;
-  fetchRoomTotal: () => void;
-  setRoomTotal: (total: number) => void;
   total: number;
 }
 
@@ -63,8 +61,9 @@ class MainPage extends React.Component<IProps> {
   }
 
   private initState = () => {
+    // TODO: 최적화
     this.props.fetchRooms(0, 30);
-    this.props.fetchRoomTotal();
+    // this.props.fetchRoomTotal();
   }
 
   initSocket = () => {
@@ -72,7 +71,7 @@ class MainPage extends React.Component<IProps> {
     this.socket.on("createdRoom", (room: Room) => {
       console.log(`소켓 message 값 받음:`, JSON.stringify(room.id));
       this.props.setRooms([room, ...this.props.rooms] as Array<Room>);
-      this.props.setRoomTotal(this.props.total + 1);
+      // this.props.setRoomTotal(this.props.total + 1);
     });
   };
 
