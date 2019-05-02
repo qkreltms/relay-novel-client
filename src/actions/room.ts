@@ -1,4 +1,4 @@
-import { Room, newRoom } from "../models";
+import { Room, newRoom, User } from "../models";
 import config from "../config";
 import axios from "axios";
 
@@ -20,9 +20,21 @@ export interface IRoomAction {
   isWriteable: boolean;
   availableSlot: number;
   novelTotal: number;
+  tags: string;
+  title: string;
+  genre: string;
+  desc: string;
+  coverImage: string;
+  user: User;
 }
 
 export const setIsWriteable = (isWriteable: boolean) =>
+  ({
+    isWriteable,
+    type: SET_IS_WRITEABLE
+  } as IRoomAction);
+
+  export const setRoom = (isWriteable: boolean) =>
   ({
     isWriteable,
     type: SET_IS_WRITEABLE
@@ -46,7 +58,7 @@ export const setRooms = (rooms: Array<Room>) =>
     type: SET_ROOMS
   } as IRoomAction);
 
-export const setRoomInfo = (roomInfo: any) =>
+export const setRoomInfo = (roomInfo: Room) =>
   ({
     roomInfo,
     type: SET_ROOM_INFO
@@ -77,19 +89,25 @@ export const fetchRoomInfo = (
     .get(url)
     .then(res => {
       const message = res.data.message;
-      const roomInfo = {
+      const room = {
         joinedUserTotal: message.joinedUserTotal,
         isWriteable: message.isWriteable,
         isLike: message.isLike,
-        writerLimit: message.writerLimit,
-        novelTotal: message.novelTotal
-      };
+        novelTotal: message.novelTotal,
+        user: message.user,
+        coverImage: message.coverImage,
+        desc: message.desc,
+        genre: message.genre,
+        title: message.title,
+        tags: message.tags,
+        writerLimit: message.writerLimit
+      } as Room;
 
-      return dispatch(setRoomInfo(roomInfo));
+      return dispatch(setRoomInfo(room));
     })
     .catch(err => {
       console.log(err.response);
-      return dispatch(setRoomInfo({}));
+      return dispatch(setRoomInfo({} as Room));
     });
 };
 

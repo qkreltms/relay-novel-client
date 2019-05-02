@@ -51,6 +51,12 @@ interface IProps extends WithStyles<typeof styles> {
   postRoomIsLike: (roomId: string, userId: number, isLike: boolean) => void;
   fetchRoomInfo: (roomId: string, userId: number, isLoggedIn: boolean) => void;
   setIsWriteable: (isWriteable: boolean) => void;
+  tags: string;
+  title: string;
+  genre: string;
+  desc: string;
+  coverImage: string;
+  creatorId: number;
 }
 
 const styles = (theme: Theme) =>
@@ -281,10 +287,14 @@ class NovelPage extends React.Component<IProps> {
               {/* 참가한 유저 넣을 부분 */}
             </Grid>
             <Grid xs={6} item>
+            <Paper className={classes.paper}>
+            {/* 방 정보 넣는 부분 */}
+            <div>{this.props.title}/{this.props.desc}</div>
               <CustomNovelList
                 novels={this.props.novels}
                 handleLikeDislikeBtnClick={this.handleLikeDislikeBtnClick}
               />
+              </Paper>
               {this.props.isWriteable &&
               this.props.novels.length <= this.paginationBtnLimit &&
               this.isLastPage() ? (

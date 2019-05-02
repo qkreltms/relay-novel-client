@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface Room {
   id: number;
   writerLimit: number;
@@ -7,17 +9,15 @@ export interface Room {
   updatedAt: Date;
   createdAt: Date;
   like: number;
+  genre: string;
+  creatorId: number;
+  coverImage: string;
+  novelTotal: number;
+  isLike: boolean;
+  joinedUserTotal: number;
+  isWriteable: boolean;
+  user: User;
 }
-
-export interface RoomInfo {
-  room: Array<Room>,
-  joinedUserTotal: number,
-  isWriteable: boolean,
-  isLike: boolean,
-  writerLimit: number,
-  novelTotal: number
-}
-
 
 export const newRoom = (room: Room = {} as Room) => {
   return {
@@ -26,8 +26,6 @@ export const newRoom = (room: Room = {} as Room) => {
     tags: room.tags || "",
     title: room.title || "",
     desc: room.desc || "",
-    updatedAt: room.updatedAt || null,
-    createdAt: room.createdAt || new Date(),
     like: room.like || 0
   } as Room;
 };

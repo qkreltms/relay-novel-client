@@ -32,7 +32,58 @@ export default {
   createroom_desc: "Description",
   createroom_writerlimit: "Writer Limit",
   createroom_btn: "Create Room",
+  createroom_tags: "Tags",
+  createroom_genre: "Genre",
   novelpage_input: "Input",
   novelpage_btn: "Submit",
-  novelpage_join_btn: "Join to write"
+  novelpage_join_btn: "Join to write",
+  select_SF_AND_FANTACY: "Sci-Fi & Fantasy",
+  select_MYSTERY: "Mystery & Suspense",
+  select_LIGHT_NOVEL: "Light Novel",
+  select_CHIVALRY: "Chivalry",
+  select_HORROR: "Horror",
+  select_DRAMA: "Drama",
+  select_ROMANCE: "Romance",
+  select_ACTION_AND_ADVENTURE: "Action & Adventure",
+  select_COMEDY: "Comedy"
 };
+
+
+export const options = [
+  {
+    id: "select_ACTION_AND_ADVENTURE",
+    value: "ACTION_AND_ADVENTURE"
+  },
+  {
+    id: "select_COMEDY",
+    value: "COMEDY"
+  },
+  {
+    id: "select_DRAMA",
+    value: "DRAMA"
+  },
+  {
+    id: "select_HORROR",
+    value: "HORROR"
+  },
+  {
+    id: "select_ROMANCE",
+    value: "ROMANCE"
+  },
+  {
+    id: "select_LIGHT_NOVEL",
+    value: "LIGHT_NOVEL"
+  },
+  {
+    id: "select_SF_AND_FANTACY",
+    value: "SF_AND_FANTACY"
+  },
+  {
+    id: "select_CHIVALRY",
+    value: "CHIVALRY"
+  },
+  {
+    id: "select_MYSTERY",
+    value: "MYSTERY"
+  }
+];

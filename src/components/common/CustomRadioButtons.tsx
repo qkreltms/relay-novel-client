@@ -23,7 +23,7 @@ interface IProps {
 
 const styles = (theme: Theme) => createStyles({});
 
-const RadioButtons: React.SFC<IProps> = props => {
+const CustomRadioButtons: React.SFC<IProps> = props => {
   return (
     <FormControl>
       <FormLabel>
@@ -50,8 +50,8 @@ const RadioButtons: React.SFC<IProps> = props => {
   );
 };
 
-(RadioButtons as React.SFC<IProps>).propTypes = {
+(CustomRadioButtons as React.SFC<IProps>).propTypes = {
   classes: PropTypes.object.isRequired
 } as any;
 
-export default withStyles(styles)(RadioButtons);
+export default withStyles(styles)(CustomRadioButtons);

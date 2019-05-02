@@ -24,7 +24,12 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   isWriteable: state.rooms.isWriteable,
   joinedUserTotal: state.rooms.joinedUserTotal,
   writerLimit: state.rooms.writerLimit,
-  isLikeRoom: state.rooms.isLike
+  isLikeRoom: state.rooms.isLike,
+  tags: state.rooms.tags,
+  title: state.rooms.title,
+  genre: state.rooms.genre,
+  desc: state.rooms.desc,
+  coverImage: state.rooms.coverImage
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

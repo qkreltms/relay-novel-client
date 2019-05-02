@@ -8,16 +8,22 @@ import {
   SET_ROOM_WRITER_LIMIT,
   SET_NOVEL_TOTAL
 } from "../actions";
-import { Room, newRoom } from "../models";
+import { Room, newRoom, newUser, User } from "../models";
 
 export interface IRoomState {
   rooms: Array<Room>;
   novelTotal: number;
   roomTotal: number;
-  writerLimit: number;
   isLike: boolean;
   joinedUserTotal: number;
   isWriteable: boolean;
+  coverImage: string;
+  desc: string;
+  genre: string;
+  title: string;
+  tags: string;
+  writerLimit: number;
+  user: User;
 }
 
 const createEmpty = () => ({
@@ -28,6 +34,12 @@ const createEmpty = () => ({
   isLike: false,
   joinedUserTotal: 0,
   isWriteable: false,
+  tags: "",
+  title: "",
+  genre: "",
+  desc: "",
+  coverImage: "",
+  user: newUser()
 } as IRoomState);
 
 export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
@@ -52,7 +64,13 @@ export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
         isLike: action.roomInfo.isLike,
         isWriteable: action.roomInfo.isWriteable,
         writerLimit: action.roomInfo.writerLimit,
-        novelTotal: action.roomInfo.novelTotal
+        novelTotal: action.roomInfo.novelTotal,
+        user: action.roomInfo.user,
+        coverImage: action.roomInfo.coverImage,
+        desc: action.roomInfo.desc,
+        genre: action.roomInfo.genre,
+        title: action.roomInfo.title,
+        tags: action.roomInfo.tags
       } as IRoomState;
 
     case SET_ROOMS:
