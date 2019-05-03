@@ -6,7 +6,11 @@ import {
   withStyles,
   Grid,
   Paper,
-  IconButton
+  IconButton,
+  ListSubheader,
+  ListItemIcon,
+  ListItem,
+  List
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -19,7 +23,7 @@ import axios from "axios";
 import axiosConfig from "../../config/axios";
 import config from "../../config";
 import CustomPagination from "../common/CustomPagination";
-import { Favorite, FavoriteBorder } from "@material-ui/icons";
+import { Favorite, FavoriteBorder, Book } from "@material-ui/icons";
 
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
@@ -57,6 +61,8 @@ interface IProps extends WithStyles<typeof styles> {
   desc: string;
   coverImage: string;
   creatorId: number;
+  like: number;
+  createdAt: Date;
 }
 
 const styles = (theme: Theme) =>
@@ -278,7 +284,24 @@ class NovelPage extends React.Component<IProps> {
 
   public render() {
     const { classes } = this.props;
-
+    const FavoriteBtn = this.props.isLikeRoom ? (
+      <IconButton
+        color="secondary"
+        aria-label="favorite"
+        onClick={this.handleFavoriteBtnClick(false)}
+      >
+        <Favorite />
+      </IconButton>
+    ) : (
+      <IconButton
+        color="secondary"
+        aria-label="favorite-border"
+        onClick={this.handleFavoriteBtnClick(true)}
+      >
+        <FavoriteBorder />
+      </IconButton>
+    );
+  
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
@@ -287,13 +310,35 @@ class NovelPage extends React.Component<IProps> {
               {/* 참가한 유저 넣을 부분 */}
             </Grid>
             <Grid xs={6} item>
-            <Paper className={classes.paper}>
-            {/* 방 정보 넣는 부분 */}
-            <div>{this.props.title}/{this.props.desc}</div>
-              <CustomNovelList
-                novels={this.props.novels}
-                handleLikeDislikeBtnClick={this.handleLikeDislikeBtnClick}
-              />
+              <Paper className={classes.paper}>
+                {/* 방 정보 넣는 부분 */}
+                <div>
+                  <List
+                    subheader={
+                      <ListSubheader>
+                        <Book />
+                        {this.props.title}
+                        {FavoriteBtn}
+                      </ListSubheader>
+                    }
+                    className={classes.root}
+                  >
+                    <ListSubheader>설명</ListSubheader>
+                    <ListItem>{this.props.desc}</ListItem>
+                    <ListSubheader>장르</ListSubheader>
+                    <ListItem>{this.props.genre}</ListItem>
+                    <ListSubheader>태그</ListSubheader>
+                    <ListItem>{this.props.tags}</ListItem>
+                    <ListSubheader>like</ListSubheader>
+                    <ListItem>{this.props.like}</ListItem>
+                    <ListSubheader>생성날짜</ListSubheader>
+                    <ListItem>{JSON.stringify(this.props.createdAt)}</ListItem>
+                  </List>
+                </div>
+                <CustomNovelList
+                  novels={this.props.novels}
+                  handleLikeDislikeBtnClick={this.handleLikeDislikeBtnClick}
+                />
               </Paper>
               {this.props.isWriteable &&
               this.props.novels.length <= this.paginationBtnLimit &&
@@ -336,27 +381,7 @@ class NovelPage extends React.Component<IProps> {
               />
               <Paper className={classes.paper}>댓글 넣을 부분</Paper>
             </Grid>
-            <Grid xs={3} item>
-              {this.props.isLikeRoom ? (
-                <IconButton
-                  color="secondary"
-                  aria-label="favorite"
-                  onClick={this.handleFavoriteBtnClick(false)}
-                >
-                  <Favorite />
-                </IconButton>
-              ) : (
-                <IconButton
-                  color="secondary"
-                  aria-label="favorite-border"
-                  onClick={this.handleFavoriteBtnClick(true)}
-                >
-                  <FavoriteBorder />
-                </IconButton>
-              )}
-
-              {/* 방에대한 정보 넣기 */}
-            </Grid>
+            <Grid xs={3} item />
           </Grid>
         </Grid>
       </Grid>

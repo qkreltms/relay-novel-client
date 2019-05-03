@@ -29,7 +29,9 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   title: state.rooms.title,
   genre: state.rooms.genre,
   desc: state.rooms.desc,
-  coverImage: state.rooms.coverImage
+  coverImage: state.rooms.coverImage,
+  like: state.rooms.like,
+  createdAt: state.rooms.createdAt
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

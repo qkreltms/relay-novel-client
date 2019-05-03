@@ -100,9 +100,11 @@ export const fetchRoomInfo = (
         genre: message.genre,
         title: message.title,
         tags: message.tags,
-        writerLimit: message.writerLimit
+        writerLimit: message.writerLimit,
+        like: message.like,
+        createdAt: message.createdAt
       } as Room;
-
+    
       return dispatch(setRoomInfo(room));
     })
     .catch(err => {

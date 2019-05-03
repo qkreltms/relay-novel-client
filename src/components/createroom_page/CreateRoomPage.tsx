@@ -146,7 +146,9 @@ class CreateRoomPage extends React.Component<IProps, IState> {
       userId: this.props.user.id,
       writerLimit: this.props.writerLimit,
       title: this.props.title,
-      desc: this.props.desc
+      desc: this.props.desc,
+      genre: this.props.genre,
+      tags: this.props.tags
     };
 
     return axios

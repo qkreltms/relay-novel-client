@@ -32,7 +32,7 @@ const CustomButton: React.SFC<IProps> = props => {
       fullWidth={props.fullWidth || false}
       label={<FormattedMessage id={props.formattedMessageId}/>}
       onChange={(chips: Array<string>) => {
-          props.onChange(chips.join(''))
+          props.onChange(chips.join(''));
       }}
     />
   );

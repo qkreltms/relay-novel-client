@@ -24,6 +24,8 @@ export interface IRoomState {
   tags: string;
   writerLimit: number;
   user: User;
+  like: number;
+  createdAt: Date;
 }
 
 const createEmpty = () => ({
@@ -39,7 +41,9 @@ const createEmpty = () => ({
   genre: "",
   desc: "",
   coverImage: "",
-  user: newUser()
+  user: newUser(),
+  like: 0,
+  createdAt: new Date()
 } as IRoomState);
 
 export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
@@ -70,7 +74,9 @@ export const roomReducer = (state = createEmpty(), action: IRoomAction) => {
         desc: action.roomInfo.desc,
         genre: action.roomInfo.genre,
         title: action.roomInfo.title,
-        tags: action.roomInfo.tags
+        tags: action.roomInfo.tags,
+        createdAt: action.roomInfo.createdAt,
+        like: action.roomInfo.like
       } as IRoomState;
 
     case SET_ROOMS:
