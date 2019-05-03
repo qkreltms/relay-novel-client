@@ -31,8 +31,12 @@ interface IProps extends WithStyles<typeof styles> {
   setPassword: (password: string) => void;
   setPasswordVisibility: (passwordVisibility: boolean) => void;
   setEmail: (email: string) => void;
-  setIsIncorrectEmail: (isIncorrectEmail: boolean) => void;
   setNickname: (nickname: string) => void;
+  setIsEmailError: (isError: boolean) => void;
+  setIsPasswordError: (isError: boolean) => void;
+  setIsEmailDuplicated: (isDuplicated: boolean) => void;
+  setIsNicknameError: (isError: boolean) => void;
+  isEmailDuplicated: boolean;
   isDialogOpen: boolean;
   passwordVisibility: boolean;
   password: string;
@@ -73,14 +77,13 @@ class SignupPage extends React.Component<IProps> {
     this.props.setNickname(event.target.value);
   };
 
-  private isEmpty = (): boolean => {
-    if (this.props.nickname.length <= 0) return true;
-    if (this.props.password.length <= 0) return true;
-    if (this.props.email.length <= 0) return true;
-    return false;
-  };
-
   private handleSignupClick = () => {
+    if (this.props.nickname.length === 0) this.props.setIsNicknameError(true); 
+    if (this.props.password.length === 0) this.props.setIsPasswordError(true); 
+    if (this.props.email.length === 0) this.props.setIsEmailError(true); 
+
+    if (this.props.nickname.length === 0 || this.props.password.length === 0 || this.props.email.length === 0) return;
+    
     const body = {
       email: this.props.email,
       nickname: this.props.nickname,
@@ -96,8 +99,8 @@ class SignupPage extends React.Component<IProps> {
         if (!err.response) return;
 
         const message = err.response.data.message;
-        if (typeof message === "string" && message.includes("User")) return this.props.setIsIncorrectEmail(true);
-        else return this.props.setIsIncorrectEmail(false);
+        if (typeof message === "string" && message.includes("User")) return this.props.setIsEmailDuplicated(true);
+        else return this.props.setIsEmailDuplicated(false);
       });
   };
 
@@ -132,19 +135,11 @@ class SignupPage extends React.Component<IProps> {
         <CustomButton
           onClick={this.handleSignupClick}
           formattedMessageId="signup_btn"
-          isDisable={
-            this.isEmpty() ||
-            this.props.isEmailError ||
-            this.props.isIncorrectEmail ||
-            this.props.isEmailError ||
-            this.props.isNicknameError ||
-            this.props.isPasswordError
-          }
         />
         <FormLabel>
           {this.props.isDialogOpen ? (
             <div />
-          ) : this.props.isIncorrectEmail ? (
+          ) : this.props.isEmailDuplicated ? (
             <FormattedMessage id="signup_duplicated_email" />
           ) : this.props.isPasswordError ? (
             <FormattedMessage id="signup_err_password" />

@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { ICombineReducersState } from "../../reducers";
 import CreateRoomPage from "./CreateRoomPage";
-import { setCreateRoomDesc, setCreateRoomWriterLimit, setCreateRoomTitle, setCreateRoomTags, setCreateRoomGenre, setCreateRoomCoverImage, initCreateRoomState } from "../../actions";
+import { setCreateRoomDesc, setCreateRoomWriterLimit, setCreateRoomTitle, setCreateRoomTags, setCreateRoomGenre, setCreateRoomCoverImage, initCreateRoomState, setIsTitleError, setIsGenreError } from "../../actions";
 
 const mapStateToProps = (state: ICombineReducersState) => ({
   writerLimit: state.createRoom.writerLimit,
@@ -12,7 +12,9 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   tags: state.createRoom.tags,
   coverImage: state.createRoom.coverImage,
   user: state.auth.user,
-  lang: state.locale.lang
+  lang: state.locale.lang,
+  isTitleError: state.createRoom.isTitleError,
+  isGenreError: state.createRoom.isGenreError
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -23,6 +25,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   setGenre: (genre: string) => dispatch(setCreateRoomGenre(genre)),
   setCoverImage: (coverImage: string) => dispatch(setCreateRoomCoverImage(coverImage)),
   initCreateRoomState: () => dispatch(initCreateRoomState()),
+  setIsTitleError: (isError: boolean) => dispatch(setIsTitleError(isError)),
+  setIsGenreError: (isError: boolean) => dispatch(setIsGenreError(isError))
 });
 
 export const CreateRoomPageContainer = connect(

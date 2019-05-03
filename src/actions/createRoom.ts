@@ -5,6 +5,8 @@ export const SET_CREATEROOM_TAGS = "SET_CREATEROOM_TAGS";
 export const SET_CREATEROOM_GENRE = "SET_CREATEROOM_GENRE";
 export const SET_CREATEROOM_COVERIMAGE = "SET_CREATEROOM_COVERIMAGE";
 export const INIT_CREATEROOM_STATE = "INIT_CREATEROOM_STATE";
+export const SET_CREATEROOM_TITLE_ERROR = "SET_CREATEROOM_TITLE_ERROR";
+export const SET_CREATEROOM_GENRE_ERROR = "SET_CREATEROOM_GENRE_ERROR";
 
 export interface ICreateRoomAction {
   writerLimit: string;
@@ -14,6 +16,22 @@ export interface ICreateRoomAction {
   genre: string;
   tags: string;
   coverImage: string;
+  isTitleError: boolean;
+  isGenreError: boolean;
+}
+
+export const setIsTitleError = (isTitleError: boolean) => {
+  return {
+    isTitleError,
+    type: SET_CREATEROOM_TITLE_ERROR
+  } as ICreateRoomAction;
+}
+
+export const setIsGenreError = (isGenreError: boolean) => {
+  return {
+    isGenreError,
+    type: SET_CREATEROOM_GENRE_ERROR
+  } as ICreateRoomAction;
 }
 
 export const initCreateRoomState = () => {

@@ -5,7 +5,10 @@ import {
   setEmail,
   setNickname,
   setIsIncorrectEmail,
-  initAuth
+  initAuth,
+  setIsEmailError,
+  setIsNicknameError,
+  setIsPasswordError
 } from "../../actions";
 import { ICombineReducersState } from "../../reducers";
 import SignupPage from "./SignupPage";
@@ -17,7 +20,7 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   nickname: state.auth.nickname,
   isPasswordError: state.auth.isPasswordError,
   isEmailError: state.auth.isEmailError,
-  isIncorrectEmail: state.auth.isIncorrectEmail,
+  isEmailDuplicated: state.auth.isIncorrectEmail,
   isDialogOpen: state.open.isDialogOpen,
   isNicknameError: state.auth.isNicknameError
 });
@@ -28,9 +31,12 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setPasswordVisibility(passwordVisibility)),
   setEmail: (email: string) => dispatch(setEmail(email)),
   setNickname: (nickname: string) => dispatch(setNickname(nickname)),
-  setIsIncorrectEmail: (isIncorrectEmail: boolean) =>
-    dispatch(setIsIncorrectEmail(isIncorrectEmail)),
-  initAuth: () => dispatch(initAuth())
+  setIsEmailDuplicated: (isDuplicated: boolean) =>
+    dispatch(setIsIncorrectEmail(isDuplicated)),
+  initAuth: () => dispatch(initAuth()),
+  setIsEmailError: (isError: boolean) => dispatch(setIsEmailError(isError)),
+  setIsNicknameError: (isError: boolean) => dispatch(setIsNicknameError(isError)),
+  setIsPasswordError: (isError: boolean) => dispatch(setIsPasswordError(isError))
 });
 
 export const SignupPageContainer = connect(

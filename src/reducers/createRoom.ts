@@ -6,7 +6,9 @@ import {
   SET_CREATEROOM_COVERIMAGE,
   SET_CREATEROOM_TAGS,
   ICreateRoomAction,
-  INIT_CREATEROOM_STATE
+  INIT_CREATEROOM_STATE,
+  SET_CREATEROOM_GENRE_ERROR,
+  SET_CREATEROOM_TITLE_ERROR
 } from "../actions";
 
 export interface ICreateRoomState {
@@ -16,6 +18,8 @@ export interface ICreateRoomState {
   genre: string;
   tags: string;
   coverImage: string;
+  isTitleError: boolean;
+  isGenreError: boolean;
 }
 
 const createEmpty = () => ({
@@ -24,14 +28,28 @@ const createEmpty = () => ({
   desc: "",
   genre: "",
   tags: "",
-  coverImage: ""
-});
+  coverImage: "",
+  isTitleError: false,
+  isGenreError: false
+} as ICreateRoomState);
 
 export const createRoomReducer = (
   state = createEmpty(),
   action: ICreateRoomAction
 ) => {
   switch (action.type) {
+    case SET_CREATEROOM_GENRE_ERROR: {
+      return {
+        ...state,
+        isGenreError: action.isGenreError
+      } as ICreateRoomState;
+    }
+    case SET_CREATEROOM_TITLE_ERROR: {
+      return {
+        ...state,
+        isTitleError: action.isTitleError
+      } as ICreateRoomState;
+    }
     case SET_CREATEROOM_DESC: {
       return {
         ...state,
@@ -41,7 +59,8 @@ export const createRoomReducer = (
     case SET_CREATEROOM_TITLE: {
       return {
         ...state,
-        title: action.title
+        title: action.title,
+        isTitleError: isPassedTitleForm(action.title)
       } as ICreateRoomState;
     }
     case SET_CREATEROOM_WRITERLIMIT: {
@@ -61,7 +80,8 @@ export const createRoomReducer = (
     case SET_CREATEROOM_GENRE: {
       return {
         ...state,
-        genre: action.genre
+        genre: action.genre,
+        isGenreError: isPassedGenreForm(action.genre)
       } as ICreateRoomState;
     }
 
@@ -69,7 +89,7 @@ export const createRoomReducer = (
       return {
         ...state,
         coverImage: action.coverImage
-      }
+      } as ICreateRoomState;
     }
     case INIT_CREATEROOM_STATE: {
       return createEmpty();
@@ -78,3 +98,14 @@ export const createRoomReducer = (
       return state;
   }
 };
+
+const isPassedTitleForm = (title: string) => {
+  if (title.length <= 0) return false; 
+  if (title.length >= 0 && title.length <= 100) return false;
+  return true;
+} 
+
+const isPassedGenreForm = (genre: string) => {
+  if (genre.length > 0) return false;
+  return true;
+}

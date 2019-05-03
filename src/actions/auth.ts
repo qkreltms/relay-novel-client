@@ -9,6 +9,10 @@ export const SET_NICKNAME = "SET_NICKNAME";
 export const SET_USER = "SET_USER";
 export const SET_IS_INCORRECT_PASSWORD = "SET_IS_INCORRECT_PASSWORD";
 export const INIT_AUTH = "INIT_AUTH";
+export const SET_IS_PASSWORD_ERROR = "SET_IS_PASSWORD_ERROR";
+export const SET_IS_NICKNAME_ERROR = "SET_IS_NICKNAME_ERROR";
+export const SET_IS_EMAIL_ERROR = "SET_IS_EMAIL_ERROR";
+
 export interface IAuthAction {
   type: string;
   isLoggedIn: boolean;
@@ -19,6 +23,9 @@ export interface IAuthAction {
   passwordVisibility: boolean;
   nickname: string;
   user: User;
+  isPasswordError: boolean;
+  isEmailError: boolean;
+  isNicknameError: boolean;
 }
 
 export const initAuth = () => {
@@ -41,6 +48,24 @@ export const setEmail = (email: string) => {
   } as IAuthAction;
 };
 
+export const setIsPasswordError = (isPasswordError: boolean) => {
+  return {
+    isPasswordError,
+    type: SET_IS_PASSWORD_ERROR
+  }
+}
+export const setIsNicknameError = (isNicknameError: boolean) => {
+  return {
+    isNicknameError,
+    type: SET_IS_NICKNAME_ERROR
+  }
+}
+export const setIsEmailError = (isEmailError: boolean) => {
+  return {
+    isEmailError,
+    type: SET_IS_EMAIL_ERROR
+  }
+}
 export const setIsIncorrectEmail = (isIncorrectEmail: boolean) => {
   return {
     isIncorrectEmail,

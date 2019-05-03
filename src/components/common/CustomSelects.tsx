@@ -17,6 +17,7 @@ interface IProps {
   handleValueChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   formattedMessageId: string;
   options: Array<Option>;
+  isError?: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -26,7 +27,7 @@ const styles = (theme: Theme) =>
       minWidth: 120
     }
   });
-// TODO: 코드 리펙토링 id, value 
+
 const CustomSelects: React.SFC<IProps> = props => {
   const classes = props.classes;
 
@@ -35,7 +36,7 @@ const CustomSelects: React.SFC<IProps> = props => {
       <InputLabel htmlFor="genre">
         <FormattedMessage id={props.formattedMessageId} />
       </InputLabel>
-      <Select native value={props.value} onChange={props.handleValueChange}>
+      <Select error={props.isError} native value={props.value} onChange={props.handleValueChange}>
         <option value="" />
         {props.options.map((o: Option, index: number) => (
           <FormattedMessage key={index} id={o.id}>

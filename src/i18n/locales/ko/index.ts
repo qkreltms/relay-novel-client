@@ -36,6 +36,8 @@ export default {
   createroom_btn: "방 만들기",
   createroom_tags: "태그",
   createroom_genre: "장르",
+  createroom_title_error: "제목의 길이는 1자 이상 또는 100자 이하입니다.",
+  createroom_genre_error: "장르를 한 가지 선택하세요.",
   novelpage_input: "입력",
   novelpage_btn: "글쓰기",
   novelpage_join_btn: "글쓰기 참가하기",

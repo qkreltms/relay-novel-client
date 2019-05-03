@@ -18,6 +18,8 @@ import axiosConfig from "../../config/axios";
 import socket, { mainPage } from "../../socket";
 import CustomSelects from "../common/CustomSelects";
 import { Option } from "../../models/option";
+import CustomChipInput from "../common/CustomChipInput";
+import { FormattedMessage } from "react-intl";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -33,6 +35,8 @@ interface IProps extends WithStyles<typeof styles> {
   setDesc: (desc: string) => void;
   setWriterLimit: (writerLimit: string) => void;
   initCreateRoomState: () => void;
+  setIsTitleError: (isError: boolean) => void;
+  setIsGenreError: (isError: boolean) => void;
   classes: any;
   match: any;
   location: any;
@@ -40,6 +44,8 @@ interface IProps extends WithStyles<typeof styles> {
   isLoggedIn: boolean;
   user: User;
   lang: string;
+  isTitleError: boolean;
+  isGenreError: boolean;
 }
 
 interface IState {
@@ -116,13 +122,6 @@ class CreateRoomPage extends React.Component<IProps, IState> {
         options: o.options
       });
     });
-  }
-
-  private isEmpty = (): boolean => {
-    if (this.props.desc.length <= 0) return true;
-    if (this.props.title.length <= 0) return true;
-    if (this.props.writerLimit.length <= 0) return true;
-    return false;
   };
 
   private sendEventToSocket = (room: Room) => {
@@ -138,9 +137,11 @@ class CreateRoomPage extends React.Component<IProps, IState> {
   };
 
   private handleCreateRoomClick = () => {
-    if (this.isEmpty()) return;
     if (!this.props.isLoggedIn) return alert("로그인을 해주세요.");
+    if (this.props.title.length === 0) this.props.setIsTitleError(true);   
+    if (this.props.genre.length === 0) this.props.setIsGenreError(true);
 
+    if (this.props.title.length === 0 || this.props.genre.length === 0) return;
     const body = {
       userId: this.props.user.id,
       writerLimit: this.props.writerLimit,
@@ -198,8 +199,8 @@ class CreateRoomPage extends React.Component<IProps, IState> {
     this.props.setCoverImage(event.target.value);
   };
 
-  private handleTagsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.props.setTags(event.target.value);
+  private handleTagsChange = (chip: string) => {
+    this.props.setTags(chip);
   };
 
   private handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -220,6 +221,7 @@ class CreateRoomPage extends React.Component<IProps, IState> {
                 handleChange={this.handleTitleChange}
                 formattedMessageId="createroom_title"
                 name="title"
+                isError={this.props.isTitleError}
               />
 
               <CustomInput
@@ -236,16 +238,15 @@ class CreateRoomPage extends React.Component<IProps, IState> {
                   formattedMessageId="createroom_genre"
                   value={this.props.genre}
                   handleValueChange={this.handleGenreChange}
+                  isError={this.props.isGenreError}
                 />
               ) : (
                 <div />
               )}
 
-              <CustomInput
-                value={this.props.tags}
-                handleChange={this.handleTagsChange}
+              <CustomChipInput
+                onChange={this.handleTagsChange}
                 formattedMessageId="createroom_tags"
-                name="tags"
               />
 
               <CustomRadioButtons
@@ -259,6 +260,14 @@ class CreateRoomPage extends React.Component<IProps, IState> {
                 onClick={this.handleCreateRoomClick}
                 formattedMessageId="createroom_btn"
               />
+
+              {this.props.isTitleError ? (
+                <FormattedMessage id="createroom_title_error" />
+              ) : this.props.isGenreError ? (
+                <FormattedMessage id="createroom_genre_error" />
+              ) : (
+                <div />
+              )}
             </Grid>
             <Grid xs={3} item />
           </Grid>

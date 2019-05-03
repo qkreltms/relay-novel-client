@@ -8,7 +8,10 @@ import {
   SHOW_PASSWORD,
   SET_NICKNAME,
   SET_USER,
-  INIT_AUTH
+  INIT_AUTH,
+  SET_IS_PASSWORD_ERROR,
+  SET_IS_NICKNAME_ERROR,
+  SET_IS_EMAIL_ERROR
 } from "../actions";
 import { User, newUser } from "../models";
 
@@ -17,12 +20,12 @@ export interface IAuthState {
   isEmailError: boolean;
   isIncorrectEmail: boolean;
   isIncorrectPassword: boolean;
+  isNicknameError: boolean;
   isLoggedIn: boolean;
   password: string;
   passwordVisibility: boolean;
   isPasswordError: boolean;
   nickname: string;
-  isNicknameError: boolean;
   user: User;
 }
 
@@ -46,6 +49,27 @@ export const authReducer = (state = createEmpty(), action: IAuthAction) => {
   switch (action.type) {
     case INIT_AUTH: {
       return createEmpty();
+    }
+
+    case SET_IS_PASSWORD_ERROR: {
+      return {
+        ...state,
+        isPasswordError: action.isPasswordError
+      } as IAuthState;
+    }
+
+    case SET_IS_NICKNAME_ERROR: {
+      return {
+        ...state,
+        isNicknameError: action.isNicknameError
+      } as IAuthState;
+    }
+
+    case SET_IS_EMAIL_ERROR: {
+      return {
+        ...state,
+        isEmailError: action.isEmailError
+      } as IAuthState;
     }
 
     case SET_EMAIL: {
