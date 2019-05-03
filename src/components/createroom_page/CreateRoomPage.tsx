@@ -1,11 +1,10 @@
-import React, { Suspense } from "react";
+import React from "react";
 import {
   Theme,
   createStyles,
   WithStyles,
   withStyles,
-  Grid,
-  Paper
+  Grid
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -18,7 +17,7 @@ import config from "../../config";
 import axiosConfig from "../../config/axios";
 import socket, { mainPage } from "../../socket";
 import CustomSelects from "../common/CustomSelects";
-import { async } from "q";
+import { Option } from "../../models/option";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -44,9 +43,8 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 interface IState {
-  asyncComponent: any;
+  options: Array<Option>;
 }
-
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -64,7 +62,7 @@ class CreateRoomPage extends React.Component<IProps, IState> {
 
   constructor(props) {
     super(props);
-    this.state = { asyncComponent: null };
+    this.state = { options: null };
     this.socket = socket(mainPage, (err: Error) => {
       alert(
         "서버 에러가 발생했습니다. F5를 눌러 새로고침해주세요. 에러메시지:" +
@@ -103,22 +101,22 @@ class CreateRoomPage extends React.Component<IProps, IState> {
 
   public componentDidMount() {
     this.props.initCreateRoomState();
-
-    import(`../../i18n/locales/${this.props.lang}`).then(o => {
-      this.setState({
-        asyncComponent: (
-          <CustomSelects
-            options={o.option}
-            formattedMessageId="createroom_genre"
-            value={this.props.genre}
-            handleValueChange={this.handleGenreChange}
-          />
-        )
-      });
-    });
+    this.getSelectsIntl();
   }
 
   public componentWillUnmount() {}
+
+  public componentWillReceiveProps() {
+    this.getSelectsIntl();
+  }
+
+  private getSelectsIntl = () => {
+    import(`../../i18n/locales/${this.props.lang}`).then(o => {
+      this.setState({
+        options: o.options
+      });
+    });
+  }
 
   private isEmpty = (): boolean => {
     if (this.props.desc.length <= 0) return true;
@@ -208,7 +206,7 @@ class CreateRoomPage extends React.Component<IProps, IState> {
     this.props.setGenre(event.target.value);
   };
 
-  public async render() {
+  public render() {
     const classes = this.props.classes;
 
     return (
@@ -217,47 +215,50 @@ class CreateRoomPage extends React.Component<IProps, IState> {
           <Grid container>
             <Grid xs={3} item />
             <Grid xs={6} item>
-              <Paper className={classes.paper}>
-                <CustomInput
-                  value={this.props.title}
-                  handleChange={this.handleTitleChange}
-                  formattedMessageId="createroom_title"
-                  name="title"
-                />
+              <CustomInput
+                value={this.props.title}
+                handleChange={this.handleTitleChange}
+                formattedMessageId="createroom_title"
+                name="title"
+              />
 
-                <CustomInput
-                  value={this.props.desc}
-                  handleChange={this.handleDescChange}
-                  formattedMessageId="createroom_desc"
-                  name="desc"
-                  multiline
-                />
+              <CustomInput
+                value={this.props.desc}
+                handleChange={this.handleDescChange}
+                formattedMessageId="createroom_desc"
+                name="desc"
+                multiline
+              />
 
-                {this.state.asyncComponent ? (
-                  this.state.asyncComponent
-                ) : (
-                  <div />
-                )}
-
-                <CustomInput
-                  value={this.props.tags}
-                  handleChange={this.handleTagsChange}
-                  formattedMessageId="createroom_tags"
-                  name="tags"
+              {this.state.options ? (
+                <CustomSelects
+                  options={this.state.options}
+                  formattedMessageId="createroom_genre"
+                  value={this.props.genre}
+                  handleValueChange={this.handleGenreChange}
                 />
+              ) : (
+                <div />
+              )}
 
-                <CustomRadioButtons
-                  value={this.props.writerLimit}
-                  handleValueChange={this.handleWriterLimitChange}
-                  radioContents={this.radioContents}
-                  formattedMessageId="createroom_writerlimit"
-                />
+              <CustomInput
+                value={this.props.tags}
+                handleChange={this.handleTagsChange}
+                formattedMessageId="createroom_tags"
+                name="tags"
+              />
 
-                <CustomButton
-                  onClick={this.handleCreateRoomClick}
-                  formattedMessageId="createroom_btn"
-                />
-              </Paper>
+              <CustomRadioButtons
+                value={this.props.writerLimit}
+                handleValueChange={this.handleWriterLimitChange}
+                radioContents={this.radioContents}
+                formattedMessageId="createroom_writerlimit"
+              />
+
+              <CustomButton
+                onClick={this.handleCreateRoomClick}
+                formattedMessageId="createroom_btn"
+              />
             </Grid>
             <Grid xs={3} item />
           </Grid>

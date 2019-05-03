@@ -9,13 +9,14 @@ import {
   Select
 } from "@material-ui/core";
 import PropTypes from "prop-types";
+import { Option } from "../../models/option";
 
 interface IProps {
   classes: any;
   value: string;
   handleValueChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   formattedMessageId: string;
-  options: Array<any>;
+  options: Array<Option>;
 }
 
 const styles = (theme: Theme) =>
@@ -25,7 +26,7 @@ const styles = (theme: Theme) =>
       minWidth: 120
     }
   });
-
+// TODO: 코드 리펙토링 id, value 
 const CustomSelects: React.SFC<IProps> = props => {
   const classes = props.classes;
 
@@ -36,11 +37,11 @@ const CustomSelects: React.SFC<IProps> = props => {
       </InputLabel>
       <Select native value={props.value} onChange={props.handleValueChange}>
         <option value="" />
-        {props.options.map(i => {
-          <FormattedMessage id={i.id}>
-            {(text: string) => <option value={i.value}>{text}</option>}
-          </FormattedMessage>;
-        })}
+        {props.options.map((o: Option, index: number) => (
+          <FormattedMessage key={index} id={o.id}>
+            {(text) => <option value={o.value}>{text}</option>}
+          </FormattedMessage>
+        ))}
       </Select>
     </FormControl>
   );

@@ -1,3 +1,5 @@
+import { Option } from "../../../models/option";
+
 /* tslint:disable */
 
 export default {
@@ -48,7 +50,7 @@ export default {
   select_COMEDY: "코미디"
 };
 
-export const options = [
+export const options: Array<Option> = [
   {
     id: "select_SF_AND_FANTACY",
     value: "SF_AND_FANTACY"
