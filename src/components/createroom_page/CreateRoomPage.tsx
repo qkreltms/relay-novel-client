@@ -19,7 +19,7 @@ import socket, { mainPage } from "../../socket";
 import CustomSelects from "../common/CustomSelects";
 import CustomChipInput from "../common/CustomChipInput";
 import { FormattedMessage } from "react-intl";
-import { options } from "../../i18n/locales/common";
+import { Option } from "../../models/option";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -58,12 +58,17 @@ const styles = (theme: Theme) =>
     }
   });
 
-class CreateRoomPage extends React.Component<IProps> {
+interface IState {
+  options: Array<Option>;
+}
+
+class CreateRoomPage extends React.Component<IProps, IState> {
   private radioContents: Array<RadioContents>;
   private socket: any = null;
 
   constructor(props) {
     super(props);
+    this.state = { options: null };
     this.socket = socket(mainPage, (err: Error) => {
       alert(
         "서버 에러가 발생했습니다. F5를 눌러 새로고침해주세요. 에러메시지:" +
@@ -102,9 +107,22 @@ class CreateRoomPage extends React.Component<IProps> {
 
   public componentDidMount() {
     this.props.initCreateRoomState();
+    this.getSelectsIntl();
   }
 
   public componentWillUnmount() {}
+
+  public UNSAFE_componentWillReceiveProps() {
+    this.getSelectsIntl();
+  }
+
+  private getSelectsIntl = () => {
+    import(`../../i18n/locales/${this.props.lang}`).then(o => {
+      this.setState({
+        options: o.options
+      });
+    });
+  };
 
   private sendEventToSocket = (room: Room) => {
     this.socket.emit("create", {
@@ -155,6 +173,7 @@ class CreateRoomPage extends React.Component<IProps> {
         return this.props.history.push(`/room/${roomId}`);
       })
       .catch(err => {
+        if (!err.response) return;
         console.log(err.response);
         alert(
           `Cannot create room: ${JSON.stringify(err.response.data.message)}`
@@ -216,13 +235,17 @@ class CreateRoomPage extends React.Component<IProps> {
                 multiline
               />
 
-              <CustomSelects
-                options={options}
-                formattedMessageId="createroom_genre"
-                value={this.props.genre}
-                handleValueChange={this.handleGenreChange}
-                isError={this.props.isGenreError}
-              />
+              {this.state.options ? (
+                <CustomSelects
+                  options={this.state.options}
+                  formattedMessageId="createroom_genre"
+                  value={this.props.genre}
+                  handleValueChange={this.handleGenreChange}
+                  isError={this.props.isGenreError}
+                />
+              ) : (
+                <div />
+              )}
 
               <CustomChipInput
                 onChange={this.handleTagsChange}

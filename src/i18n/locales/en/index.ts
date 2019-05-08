@@ -51,3 +51,33 @@ export default {
   select_ACTION_AND_ADVENTURE: "Action & Adventure",
   select_COMEDY: "Comedy"
 };
+
+export const options: Array<Option> = [
+    {
+      id: "ACTION_AND_ADVENTURE"
+    },
+    {
+      id: "COMEDY"
+    },
+    {
+      id: "DRAMA"
+    },
+    {
+      id: "HORROR"
+    },
+    {
+      id: "ROMANCE"
+    },
+    {
+      id: "LIGHT_NOVEL"
+    },
+    {
+      id: "SF_AND_FANTACY"
+    },
+    {
+      id: "CHIVALRY"
+    },
+    {
+      id: "MYSTERY"
+    }
+  ];

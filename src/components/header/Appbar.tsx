@@ -95,6 +95,7 @@ const Appbar: React.SFC<IProps> = props => {
         }
       })
       .catch(err => {
+        if (!err.response) return;
         console.log("로그아웃 실패", err.response);
       })
       .finally(() => {

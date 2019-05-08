@@ -89,6 +89,8 @@ class LoginDialog extends React.Component<IProps> {
         return this.props.history.push("/");
       })
       .catch(err => {
+        console.log(err);
+        if (!err.response) return;
         //패스워드 혹은 이메일 틀릴때 예외처리
         console.log(err.response);
         if (err.response.data.message.includes("username"))

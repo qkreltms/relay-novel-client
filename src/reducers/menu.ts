@@ -8,7 +8,7 @@ const createEmpty = () => ({
   anchorElement: null
 });
 
-export const AppbarReducer = (state = createEmpty(), action: IAppbarAction) => {
+export const appbarReducer = (state = createEmpty(), action: IAppbarAction) => {
   switch (action.type) {
     case SET_HTML_ELEMENT_ON_MENU: {
       return {

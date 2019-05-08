@@ -1,12 +1,13 @@
 import { combineReducers } from "redux";
 import { ILocaleState, localeReducer } from "./locale";
-import { AppbarReducer, IAppbarState } from "./menu";
+import { appbarReducer, IAppbarState } from "./menu";
 import { IOpenState, openReducer } from "./open";
 import { roomReducer, IRoomState } from "./room";
 import { ICreateRoomState, createRoomReducer } from "./createRoom";
 import { IAuthState, authReducer } from "./auth";
-import { INovelState, NovelReducer } from "./novel";
+import { INovelState, novelReducer } from "./novel";
 import { paginationReducer, IPaginationState } from "./pagination";
+import { commentReducer, ICommentState } from "./comment";
 
 export interface ICombineReducersState {
   appbar: IAppbarState;
@@ -17,15 +18,17 @@ export interface ICombineReducersState {
   auth: IAuthState;
   novel: INovelState;
   pagination: IPaginationState;
+  comment: ICommentState;
 }
 
 export const rootReducer = combineReducers<ICombineReducersState>({
-  appbar: AppbarReducer,
+  appbar: appbarReducer,
   locale: localeReducer,
   open: openReducer,
   rooms: roomReducer,
   createRoom: createRoomReducer,
   auth: authReducer,
-  novel: NovelReducer,
-  pagination: paginationReducer
+  novel: novelReducer,
+  pagination: paginationReducer,
+  comment: commentReducer
 });

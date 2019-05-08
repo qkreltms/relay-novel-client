@@ -108,6 +108,7 @@ export const fetchRoomInfo = (
       return dispatch(setRoomInfo(room));
     })
     .catch(err => {
+      if (!err.response) return;
       console.log(err.response);
       return dispatch(setRoomInfo({} as Room));
     });
@@ -123,6 +124,7 @@ export const fetchRooms = (skip: number = 0, limit: number = 30) => (
       return dispatch(setRooms(rooms));
     })
     .catch(err => {
+      if (!err.response) return;
       console.log(err.response);
       const rooms: Array<Room> = new Array<Room>(newRoom());
 
@@ -146,6 +148,7 @@ export const postRoomIsLike = (
       return dispatch(setRoomIsLike(isLike));
     })
     .catch(err => {
+      if (!err.response) return;
       console.log(err.response);
       return dispatch(setRoomIsLike(false));
     });

@@ -12,14 +12,16 @@ import { Novel, newNovel } from "../models";
 export interface INovelState {
   novel: Novel;
   novels: Array<Novel>;
+  total: number;
 }
 
 const createEmpty = () => ({
   novel: newNovel(),
   novels: new Array<Novel>(newNovel()),
+  total: 0
 });
 
-export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
+export const novelReducer = (state = createEmpty(), action: INovelAction) => {
   switch (action.type) {
     case PUSH_NOVEL: {
       return {
@@ -59,6 +61,7 @@ export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
     case UPDATE_NOVEL: {
       const newNovels: Array<Novel> = state.novels.map<Novel>(
         (novel: Novel) => {
+          // 일치하지 않는 novel.id 는 무시함
           if (novel.id !== action.novel.id) return novel;
           // 좋아요 싫어요 중복 시
           if (novel.isLike == action.novel.isLike) {
@@ -92,7 +95,7 @@ export const NovelReducer = (state = createEmpty(), action: INovelAction) => {
       return {
         ...state,
         novels: newNovels
-      };
+      } as INovelState;
     }
 
     default:

@@ -40,12 +40,11 @@ export const pushNovel = (novel: Novel) => {
 };
 
 export const handleNovelCallCompleted = (
-  novels: Array<Novel>,
-  type: string
+  novels: Array<Novel>
 ) => {
   return {
     novels,
-    type
+    type: FETCH_NOVELS
   } as INovelAction;
 };
 
@@ -78,14 +77,14 @@ export const fetchNovels = (
   axios
     .get(url)
     .then(res => {
-      if (!res.data) return;
       const novels: Array<Novel> = res.data.message as Array<Novel>;
-      return dispatch(handleNovelCallCompleted(novels, FETCH_NOVELS));
+      return dispatch(handleNovelCallCompleted(novels));
     })
     .catch(err => {
+      if (!err.response) return;
       console.log(err.response);
       const novels: Array<Novel> = new Array<Novel>(newNovel());
 
-      return dispatch(handleNovelCallCompleted(novels, FETCH_NOVELS));
+      return dispatch(handleNovelCallCompleted(novels));
     });
 };
