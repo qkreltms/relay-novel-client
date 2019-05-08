@@ -39,8 +39,8 @@ const CustomSelects: React.SFC<IProps> = props => {
       <Select error={props.isError} native value={props.value} onChange={props.handleValueChange}>
         <option value="" />
         {props.options.map((o: Option, index: number) => (
-          <FormattedMessage key={index} id={o.id}>
-            {(text) => <option value={o.value}>{text}</option>}
+          <FormattedMessage key={index} id={`select_${o.id}`}>
+            {(text: string) => <option value={`select_${o.id}`}>{text}</option>}
           </FormattedMessage>
         ))}
       </Select>

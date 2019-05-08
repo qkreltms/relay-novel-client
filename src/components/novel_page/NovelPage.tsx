@@ -8,7 +8,6 @@ import {
   Paper,
   IconButton,
   ListSubheader,
-  ListItemIcon,
   ListItem,
   List
 } from "@material-ui/core";
@@ -24,6 +23,8 @@ import axiosConfig from "../../config/axios";
 import config from "../../config";
 import CustomPagination from "../common/CustomPagination";
 import { Favorite, FavoriteBorder, Book } from "@material-ui/icons";
+import { FormattedMessage } from "react-intl";
+import easyDateFormat from "easy-date-format";
 
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
@@ -301,7 +302,7 @@ class NovelPage extends React.Component<IProps> {
         <FavoriteBorder />
       </IconButton>
     );
-  
+
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
@@ -326,13 +327,19 @@ class NovelPage extends React.Component<IProps> {
                     <ListSubheader>설명</ListSubheader>
                     <ListItem>{this.props.desc}</ListItem>
                     <ListSubheader>장르</ListSubheader>
-                    <ListItem>{this.props.genre}</ListItem>
+                    {this.props.genre ? (
+                      <FormattedMessage id={this.props.genre}>
+                        {(text: string) => <ListItem>{text}</ListItem>}
+                      </FormattedMessage>
+                    ) : (
+                      <div />
+                    )}
                     <ListSubheader>태그</ListSubheader>
                     <ListItem>{this.props.tags}</ListItem>
                     <ListSubheader>like</ListSubheader>
                     <ListItem>{this.props.like}</ListItem>
                     <ListSubheader>생성날짜</ListSubheader>
-                    <ListItem>{JSON.stringify(this.props.createdAt)}</ListItem>
+                    <ListItem>{easyDateFormat(new Date(this.props.createdAt))}</ListItem>
                   </List>
                 </div>
                 <CustomNovelList
