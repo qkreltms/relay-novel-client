@@ -44,19 +44,19 @@ export const novelReducer = (state = createEmpty(), action: INovelAction) => {
       } as INovelState;
     }
 
-    case FETCH_NOVEL_TOTAL: {
-      return {
-        ...state,
-        total: action.total
-      };
-    }
+    // case FETCH_NOVEL_TOTAL: {
+    //   return {
+    //     ...state,
+    //     total: action.total
+    //   };
+    // }
 
-    case SET_NOVEL_LIKE: {
-      return {
-        ...state,
-        like: action.like
-      };
-    }
+    // case SET_NOVEL_LIKE: {
+    //   return {
+    //     ...state,
+    //     like: action.like
+    //   };
+    // }
 
     case UPDATE_NOVEL: {
       const newNovels: Array<Novel> = state.novels.map<Novel>(

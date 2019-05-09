@@ -12,7 +12,6 @@ import { ICombineReducersState } from "./reducers";
 import { SignupSuccessPageContainer as SignupSuccessPage } from "./components/signup_success_page";
 import { NotfoundPageContainer as NotfoundPage } from "./components/notfound_page";
 import { NovelPageContainer as NovelPage } from "./components/novel_page";
-import { CreateRoomPageContainer as CreateRoomPage } from "./components/createroom_page";
 
 addLocaleData([...en, ...ko]);
 
@@ -32,9 +31,9 @@ const Router: React.SFC<IProps> = props => {
             <Route exact path="/signup" component={SignupPage} />
             <Route exact path="/signup/success" component={SignupSuccessPage} />
             <Route exact path="/room/:id" component={NovelPage} />
-            <Route exact path="/create/room" component={CreateRoomPage} />
             <Route component={NotfoundPage} />
           </Switch>
+          {/* TODO: footer 구현 */}
           <footer />
         </div>
       </HashRouter>

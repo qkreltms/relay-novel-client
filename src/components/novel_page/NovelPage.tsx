@@ -70,7 +70,12 @@ interface IProps extends WithStyles<typeof styles> {
   comments: Array<Comment>;
   updateComment: (comment: Comment) => void;
   pushComment: (comment: Comment) => void;
-  fetchComments: (skip: number, limit: number, roomId: string, userId?: number) => void;
+  fetchComments: (
+    skip: number,
+    limit: number,
+    roomId: string,
+    userId?: number
+  ) => void;
 }
 
 const styles = (theme: Theme) =>
@@ -322,7 +327,6 @@ class NovelPage extends React.Component<IProps> {
       });
   };
 
-  
   private postComment = (
     text: string = "",
     roomId: string = "",
@@ -358,12 +362,14 @@ class NovelPage extends React.Component<IProps> {
     if (roomId === "0") return;
     if (!text) return;
 
-    this.postComment(text, roomId, userId)((commentId: number, text: string) => {
-      const comment: Comment = newComment({ id: commentId, text } as Comment);
-      this.props.pushComment(comment);
-      this.props.setComment(newComment());
-    });
-  }
+    this.postComment(text, roomId, userId)(
+      (commentId: number, text: string) => {
+        const comment: Comment = newComment({ id: commentId, text } as Comment);
+        this.props.pushComment(comment);
+        this.props.setComment(newComment());
+      }
+    );
+  };
 
   private handleFavoriteBtnClick = (type: boolean) => (event: any) => {
     if (!this.props.isLoggedIn) return alert("로그인 해주세요.");
@@ -416,18 +422,21 @@ class NovelPage extends React.Component<IProps> {
                 <div>
                   <List
                     subheader={
-                      <ListSubheader>
+                      <ListItem>
                         <Book />
                         {this.props.title}
                         {FavoriteBtn}
-                      </ListSubheader>
+                      </ListItem>
                     }
                     className={classes.root}
                   >
-                  {/* TODO: 영/한 변경가능하게 */}
-                    <ListSubheader>설명</ListSubheader>
+                    <ListItem>
+                      <FormattedMessage id="novelpage_desc" />
+                    </ListItem>
                     <ListItem>{this.props.desc}</ListItem>
-                    <ListSubheader>장르</ListSubheader>
+                    <ListItem>
+                      <FormattedMessage id="novelpage_desc_genre" />
+                    </ListItem>
                     {this.props.genre ? (
                       <FormattedMessage id={this.props.genre}>
                         {(text: string) => <ListItem>{text}</ListItem>}
@@ -435,11 +444,15 @@ class NovelPage extends React.Component<IProps> {
                     ) : (
                       <div />
                     )}
-                    <ListSubheader>태그</ListSubheader>
+                    <ListItem>
+                      <FormattedMessage id="novelpage_desc_tags" />
+                    </ListItem>
                     <ListItem>{this.props.tags}</ListItem>
                     <ListSubheader>like</ListSubheader>
                     <ListItem>{this.props.like}</ListItem>
-                    <ListSubheader>생성날짜</ListSubheader>
+                    <ListItem>
+                      <FormattedMessage id="novelpage_desc_created_date" />
+                    </ListItem>
                     <ListItem>
                       {easyDateFormat(new Date(this.props.createdAt))}
                     </ListItem>
