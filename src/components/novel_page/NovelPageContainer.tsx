@@ -37,7 +37,8 @@ const mapStateToProps = (state: ICombineReducersState) => ({
   like: state.rooms.like,
   createdAt: state.rooms.createdAt,
   comment: state.comment.comment,
-  comments: state.comment.comments
+  comments: state.comment.comments,
+  roomCreatedUser: state.rooms.user
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

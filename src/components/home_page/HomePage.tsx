@@ -86,7 +86,7 @@ class CreateRoomPage extends React.Component<IProps, IState> {
 
     return (
       <div className={classes.root}>
-        <Grid spacing={0} container>    
+        <Grid spacing={0} container>
           <Grid item xs={8} className={classes.swipeableView}>
             <CustomSwipeableViews
               isAutoPlay
@@ -110,13 +110,34 @@ class CreateRoomPage extends React.Component<IProps, IState> {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <CustomCard />
+            <CustomCard
+              writerLimit={100}
+              like={100}
+              genre={"genre"}
+              title={"title"}
+              tags={"tags"}
+              author={"author"}
+            />
           </Grid>
           <Grid item xs={4}>
-            <CustomCard />
+            <CustomCard
+              writerLimit={100}
+              like={100}
+              genre={"genre"}
+              title={"title"}
+              tags={"tags"}
+              author={"author"}
+            />
           </Grid>
           <Grid item xs={4}>
-            <CustomCard />
+            <CustomCard
+              writerLimit={100}
+              like={100}
+              genre={"genre"}
+              title={"title"}
+              tags={"tags"}
+              author={"author"}
+            />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h6">
@@ -124,13 +145,34 @@ class CreateRoomPage extends React.Component<IProps, IState> {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <CustomCard />
+            <CustomCard
+              writerLimit={100}
+              like={100}
+              genre={"genre"}
+              title={"title"}
+              tags={"tags"}
+              author={"author"}
+            />
           </Grid>
           <Grid item xs={4}>
-            <CustomCard />
+            <CustomCard
+              writerLimit={100}
+              like={100}
+              genre={"genre"}
+              title={"title"}
+              tags={"tags"}
+              author={"author"}
+            />
           </Grid>
           <Grid item xs={4}>
-            <CustomCard />
+            <CustomCard
+              writerLimit={100}
+              like={100}
+              genre={"genre"}
+              title={"title"}
+              tags={"tags"}
+              author={"author"}
+            />
           </Grid>
         </Grid>
       </div>

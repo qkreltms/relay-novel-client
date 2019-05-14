@@ -16,6 +16,7 @@ export interface Room {
   isLike: boolean;
   joinedUserTotal: number;
   isWriteable: boolean;
+  nickname: string;
   user: User;
 }
 

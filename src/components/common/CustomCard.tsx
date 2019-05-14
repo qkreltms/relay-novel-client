@@ -10,12 +10,20 @@ import {
   CardContent,
   Typography,
   CardActions,
-  Button
+  IconButton
 } from "@material-ui/core";
 import image from "../../static/images/test.jpg";
+import { Favorite } from "@material-ui/icons";
 
 interface IProps {
   classes: any;
+  title: string;
+  genre: string;
+  author: string;
+  tags: string;
+  like: number;
+  writerLimit: number;
+  onClick?: () => void;
 }
 
 const styles = (theme: Theme) => createStyles({});
@@ -25,7 +33,7 @@ const CustomCard: React.SFC<IProps> = props => {
 
   return (
     <div>
-      <Card className={classes.card}>
+      <Card className={classes.card} onClick={props.onClick}>
         <CardActionArea>
           <CardMedia
             className={classes.media}
@@ -34,22 +42,20 @@ const CustomCard: React.SFC<IProps> = props => {
             title="Contemplative Reptile"
           />
           <CardContent>
+            <Typography component="p">{props.genre}</Typography>
             <Typography gutterBottom variant="h5" component="h2">
-              Lizard
+              {props.title}
             </Typography>
-            <Typography component="p">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
+            <Typography component="p">{props.author ? props.author : ""}</Typography>
+            <Typography component="p">{props.tags}</Typography>
+            <Typography component="p">{props.writerLimit}</Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
-            Share
-          </Button>
-          <Button size="small" color="primary">
-            Learn More
-          </Button>
+          <Typography component="p">{props.like}</Typography>
+          <IconButton color="secondary" aria-label="favorite">
+            <Favorite fontSize="small" />
+          </IconButton>
         </CardActions>
       </Card>
     </div>

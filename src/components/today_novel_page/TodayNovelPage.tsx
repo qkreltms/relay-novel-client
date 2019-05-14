@@ -4,24 +4,20 @@ import {
   createStyles,
   Theme,
   WithStyles,
-  ListItem,
-  ListItemText,
-  List,
-  ListItemSecondaryAction
+  Grid
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import { Room } from "../../models";
-import { Favorite } from "@material-ui/icons";
 import socket, { mainPage } from "../../socket";
+import CustomCard from "../common/CustomCard";
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.paper,
       flexGrow: 1
-    },
-    list: {}
+    }
   });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -60,7 +56,6 @@ class TodayNovelPage extends React.Component<IProps> {
   }
 
   private initState = () => {
-    // TODO: 최적화
     this.props.fetchRooms(0, 30);
     // this.props.fetchRoomTotal();
   };
@@ -91,24 +86,22 @@ class TodayNovelPage extends React.Component<IProps> {
 
     return (
       <div className={classes.root}>
-        <List>
+        <Grid spacing={0} container>
           {this.props.rooms &&
-            this.props.rooms.map((room, index) => (
-              <ListItem
-                alignItems="flex-start"
-                key={index}
-                button
-                role={undefined}
-                onClick={this.handleListItemClick(room.id)}
-              >
-                <ListItemText primary={room.title} />
-                <ListItemSecondaryAction>
-                  <Favorite fontSize="small" />
-                  <span>{room.like}</span>
-                </ListItemSecondaryAction>
-              </ListItem>
+            this.props.rooms.map((room: Room, index: number) => (
+              <Grid item xs={3} key={index}>
+                <CustomCard
+                  onClick={this.handleListItemClick(room.id)}
+                  title={room.title}
+                  genre={room.genre}
+                  tags={room.tags}
+                  author={room.user && room.user.nickname}
+                  writerLimit={room.writerLimit}
+                  like={room.like}
+                />
+              </Grid>
             ))}
-        </List>
+        </Grid>
       </div>
     );
   }

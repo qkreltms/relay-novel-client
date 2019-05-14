@@ -9,9 +9,7 @@ import {
   createStyles,
   Theme,
   Button,
-  withStyles,
-  Paper,
-  Typography
+  withStyles
 } from "@material-ui/core";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -80,10 +78,6 @@ const CustomSwipeableViews: React.SFC<IProps> = props => {
 
   return (
     <div className={classes.root}>
-      <Paper square elevation={0} className={classes.header}>
-        <Typography>{tutorialSteps[props.activeStep].label}</Typography>
-      </Paper>
-
       {props.isAutoPlay ? (
         <AutoPlaySwipeableViews
           //   theme.direction이 right to left 일 때 x축 반전 아니면 x축 그대로 둠

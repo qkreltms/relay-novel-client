@@ -76,6 +76,7 @@ interface IProps extends WithStyles<typeof styles> {
     roomId: string,
     userId?: number
   ) => void;
+  roomCreatedUser: User;
 }
 
 const styles = (theme: Theme) =>
@@ -449,8 +450,10 @@ class NovelPage extends React.Component<IProps> {
                         <FormattedMessage id="novelpage_desc_tags" />
                       </ListItem>
                       <ListItem>{this.props.tags}</ListItem>
-                      <ListSubheader>like</ListSubheader>
+                      <ListItem>like</ListItem>
                       <ListItem>{this.props.like}</ListItem>
+                      <ListItem>creator</ListItem>
+                      <ListItem>{this.props.roomCreatedUser && this.props.roomCreatedUser.nickname}</ListItem>
                       <ListItem>
                         <FormattedMessage id="novelpage_desc_created_date" />
                       </ListItem>
