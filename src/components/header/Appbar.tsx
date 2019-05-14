@@ -16,14 +16,18 @@ import config from "../../config";
 import axiosConfig from "../../config/axios";
 import { User, newUser } from "../../models";
 import CustomButton from "../common/CustomButton";
+import { ArrowDropDown } from "@material-ui/icons";
 
 const styles = {
   root: {
     flexGrow: 1
   },
   logo: {
-    cursor:'pointer',
+    cursor: "pointer",
     flexGrow: 1 // nav 컨텐츠 오른쪽으로 치우치게함
+  },
+  profile: {
+    verticalAlign: "middle" // 중앙 정렬
   }
 };
 
@@ -115,7 +119,7 @@ const Appbar: React.SFC<IProps> = props => {
       {props.isDialogOpen ? <LoginDialogContainer /> : <div />}
       <AppBar position="static">
         <Toolbar>
-          <Typography 
+          <Typography
             variant="h6"
             color="inherit"
             className={classes.logo}
@@ -126,14 +130,8 @@ const Appbar: React.SFC<IProps> = props => {
           {changeLanguageButtons}
           {props.isLoggedIn ? (
             <div>
-              <IconButton
-                aria-owns={isProfileClicked ? "menu-appbar" : undefined}
-                aria-haspopup="true"
-                onClick={handlePopup}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+              {/* TODO: 프로필 이미지 쓰기 */}
+              <AccountCircle className={classes.profile} />
               <Menu
                 id="menu-appbar"
                 anchorEl={props.anchorElement}
@@ -156,6 +154,14 @@ const Appbar: React.SFC<IProps> = props => {
                 </MenuItem>
               </Menu>
               <span>{props.user.nickname}</span>
+              <IconButton
+                aria-owns={isProfileClicked ? "menu-appbar" : undefined}
+                aria-haspopup="true"
+                onClick={handlePopup}
+                color="inherit"
+              >
+                <ArrowDropDown />
+              </IconButton>
             </div>
           ) : (
             <div>
