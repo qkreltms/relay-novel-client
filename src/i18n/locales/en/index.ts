@@ -55,7 +55,9 @@ export default {
   select_DRAMA: "Drama",
   select_ROMANCE: "Romance",
   select_ACTION_AND_ADVENTURE: "Action & Adventure",
-  select_COMEDY: "Comedy"
+  select_COMEDY: "Comedy",
+  customswipeableviews_next: "Next",
+  customswipeableviews_prev: "Prev"
 };
 
 export const options: Array<Option> = [

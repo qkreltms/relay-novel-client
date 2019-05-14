@@ -56,7 +56,9 @@ export default {
   select_DRAMA: "드라마",
   select_ROMANCE: "로맨스",
   select_ACTION_AND_ADVENTURE: "액션/모험",
-  select_COMEDY: "코미디"
+  select_COMEDY: "코미디",
+  customswipeableviews_next: "다음",
+  customswipeableviews_prev: "이전"
 };
 
 export const options: Array<Option> = [
