@@ -57,7 +57,9 @@ export default {
   select_ACTION_AND_ADVENTURE: "Action & Adventure",
   select_COMEDY: "Comedy",
   customswipeableviews_next: "Next",
-  customswipeableviews_prev: "Prev"
+  customswipeableviews_prev: "Prev",
+  homepage_today_novels: "Today's Novels",
+  homepage_popular_novels: "Popular Novels"
 };
 
 export const options: Array<Option> = [

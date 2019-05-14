@@ -58,7 +58,9 @@ export default {
   select_ACTION_AND_ADVENTURE: "액션/모험",
   select_COMEDY: "코미디",
   customswipeableviews_next: "다음",
-  customswipeableviews_prev: "이전"
+  customswipeableviews_prev: "이전",
+  homepage_today_novels: "오늘의 소설",
+  homepage_popular_novels: "인기 소설"
 };
 
 export const options: Array<Option> = [

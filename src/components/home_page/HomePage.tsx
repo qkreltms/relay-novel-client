@@ -4,11 +4,14 @@ import {
   createStyles,
   WithStyles,
   withStyles,
-  Grid
+  Grid,
+  Typography
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import CustomSwipeableViews from "../common/CustomSwipeableViews";
+import CustomCard from "../common/CustomCard";
+import { FormattedMessage } from "react-intl";
 
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
@@ -83,7 +86,7 @@ class CreateRoomPage extends React.Component<IProps, IState> {
 
     return (
       <div className={classes.root}>
-        <Grid spacing={0} container>
+        <Grid spacing={0} container>    
           <Grid item xs={8} className={classes.swipeableView}>
             <CustomSwipeableViews
               isAutoPlay
@@ -101,23 +104,33 @@ class CreateRoomPage extends React.Component<IProps, IState> {
               handleStepChange={this.handleSubStepChange}
             />
           </Grid>
-          <Grid item xs={4}>
-            4
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              <FormattedMessage id="homepage_today_novels" />
+            </Typography>
           </Grid>
           <Grid item xs={4}>
-            4
+            <CustomCard />
           </Grid>
           <Grid item xs={4}>
-            4
+            <CustomCard />
           </Grid>
           <Grid item xs={4}>
-            4
+            <CustomCard />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              <FormattedMessage id="homepage_popular_novels" />
+            </Typography>
           </Grid>
           <Grid item xs={4}>
-            4
+            <CustomCard />
           </Grid>
           <Grid item xs={4}>
-            4
+            <CustomCard />
+          </Grid>
+          <Grid item xs={4}>
+            <CustomCard />
           </Grid>
         </Grid>
       </div>
