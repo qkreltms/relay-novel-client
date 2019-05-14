@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { setHtmlElementOnMenu, setLocale, setIsDialogOpen, setIsLoggedIn, setUser } from "../../actions";
+import { setHtmlElementOnMenu, setLocale, setIsDialogOpen, setIsLoggedIn, setUser, setPageNumber } from "../../actions";
 import { ICombineReducersState } from "../../reducers";
 import Appbar from "./Appbar";
 import { User } from "../../models";
@@ -16,7 +16,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   setLocale: (lang: string) => dispatch(setLocale(lang)),
   setIsDialogOpen: (isOpen: boolean) => dispatch(setIsDialogOpen(isOpen)),
   setIsLoggedIn: (isLoggedIn: boolean) => dispatch(setIsLoggedIn(isLoggedIn)),
-  setUser: (user: User) => dispatch(setUser(user))
+  setUser: (user: User) => dispatch(setUser(user)),
+  setPageNumber: (pageNumber: number) => dispatch(setPageNumber(pageNumber))
 });
 
 export const AppbarContainer = connect(

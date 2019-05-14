@@ -7,3 +7,4 @@ export * from "./auth";
 export * from "./novel";
 export * from "./pagination";
 export * from "./comment";
+export * from "./tab";

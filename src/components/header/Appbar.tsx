@@ -9,7 +9,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import PropTypes from "prop-types";
 import React from "react";
 import { FormattedMessage } from "react-intl";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { LoginDialogContainer } from "../common/login_dialog";
 import axios from "axios";
 import config from "../../config";
@@ -18,11 +18,12 @@ import { User, newUser } from "../../models";
 import CustomButton from "../common/CustomButton";
 
 const styles = {
-  grow: {
-    flexGrow: 1
-  },
   root: {
     flexGrow: 1
+  },
+  logo: {
+    cursor:'pointer',
+    flexGrow: 1 // nav 컨텐츠 오른쪽으로 치우치게함
   }
 };
 
@@ -40,6 +41,7 @@ export interface IProps extends WithStyles<typeof styles> {
   setIsLoggedIn: (isLoggedIn: boolean) => void;
   user: User;
   setUser: (user: User) => void;
+  setPageNumber: (pageNumber: number) => void;
 }
 
 const Appbar: React.SFC<IProps> = props => {
@@ -103,15 +105,23 @@ const Appbar: React.SFC<IProps> = props => {
       });
   };
 
+  const handleTitleClick = () => {
+    props.history.push("/");
+    props.setPageNumber(0);
+  };
+
   return (
     <div className={classes.root}>
       {props.isDialogOpen ? <LoginDialogContainer /> : <div />}
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" color="inherit" className={classes.grow}>
-            <Link to="/">
-              <FormattedMessage id="title" />
-            </Link>
+          <Typography 
+            variant="h6"
+            color="inherit"
+            className={classes.logo}
+            onClick={handleTitleClick}
+          >
+            <FormattedMessage id="title" />
           </Typography>
           {changeLanguageButtons}
           {props.isLoggedIn ? (

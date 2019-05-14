@@ -34,24 +34,15 @@ interface IProps extends WithStyles<typeof styles> {
   history: any;
   classes: any;
   isLoggedIn: boolean;
+  pageNumber: number;
+  setPageNumber: (pageNumber: number) => void;
 }
 
-interface IState {
-  value: number;
-}
-
-class MainPage extends React.Component<IProps, IState> {
-  public constructor(props) {
-    super(props);
-    this.state = {
-      value: 0
-    };
-  }
-
-  private handleTabsChange = (value: number) => (
+class MainPage extends React.Component<IProps> {
+  private handleTabsChange = (pageNumber: number) => (
     event: React.ChangeEvent<{ checked: boolean }>
   ) => {
-    this.setState({ value });
+    this.props.setPageNumber(pageNumber);
   };
 
   public render() {
@@ -63,7 +54,7 @@ class MainPage extends React.Component<IProps, IState> {
           <AppBar position="static">
             <Tabs
               variant="fullWidth"
-              value={this.state.value}
+              value={this.props.pageNumber}
               indicatorColor="secondary"
               textColor="primary"
             >
@@ -87,9 +78,9 @@ class MainPage extends React.Component<IProps, IState> {
             </Tabs>
           </AppBar>
           <div className={classes.contents}>
-            {this.state.value === 0 && <HomePage />}
-            {this.state.value === 1 && <TodayNovelPage />}
-            {this.state.value === 2 && <CreateRoomPage />}
+            {this.props.pageNumber === 0 && <HomePage />}
+            {this.props.pageNumber === 1 && <TodayNovelPage />}
+            {this.props.pageNumber === 2 && <CreateRoomPage />}
           </div>
         </div>
       </NoSsr>

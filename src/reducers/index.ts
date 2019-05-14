@@ -8,6 +8,7 @@ import { IAuthState, authReducer } from "./auth";
 import { INovelState, novelReducer } from "./novel";
 import { paginationReducer, IPaginationState } from "./pagination";
 import { commentReducer, ICommentState } from "./comment";
+import { ITabState, tabReducer } from "./tab";
 
 export interface ICombineReducersState {
   appbar: IAppbarState;
@@ -19,6 +20,7 @@ export interface ICombineReducersState {
   novel: INovelState;
   pagination: IPaginationState;
   comment: ICommentState;
+  tab: ITabState;
 }
 
 export const rootReducer = combineReducers<ICombineReducersState>({
@@ -30,5 +32,6 @@ export const rootReducer = combineReducers<ICombineReducersState>({
   auth: authReducer,
   novel: novelReducer,
   pagination: paginationReducer,
-  comment: commentReducer
+  comment: commentReducer,
+  tab: tabReducer
 });
