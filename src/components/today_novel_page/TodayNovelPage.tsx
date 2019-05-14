@@ -91,6 +91,7 @@ class TodayNovelPage extends React.Component<IProps> {
             this.props.rooms.map((room: Room, index: number) => (
               <Grid item xs={3} key={index}>
                 <CustomCard
+                  isFavoriteOn
                   onClick={this.handleListItemClick(room.id)}
                   title={room.title}
                   genre={room.genre}

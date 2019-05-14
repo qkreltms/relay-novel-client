@@ -24,6 +24,8 @@ const styles = {
   },
   logo: {
     cursor: "pointer",
+  },
+  grow: {
     flexGrow: 1 // nav 컨텐츠 오른쪽으로 치우치게함
   },
   profile: {
@@ -119,13 +121,10 @@ const Appbar: React.SFC<IProps> = props => {
       {props.isDialogOpen ? <LoginDialogContainer /> : <div />}
       <AppBar position="static">
         <Toolbar>
-          <Typography
-            variant="h6"
-            color="inherit"
-            className={classes.logo}
-            onClick={handleTitleClick}
-          >
-            <FormattedMessage id="title" />
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            <span className={classes.logo} onClick={handleTitleClick}>
+              <FormattedMessage id="title" />
+            </span>
           </Typography>
           {changeLanguageButtons}
           {props.isLoggedIn ? (

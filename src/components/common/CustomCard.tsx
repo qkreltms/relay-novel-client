@@ -24,6 +24,7 @@ interface IProps {
   like: number;
   writerLimit: number;
   onClick?: () => void;
+  isFavoriteOn?: boolean;
 }
 
 const styles = (theme: Theme) => createStyles({});
@@ -46,16 +47,22 @@ const CustomCard: React.SFC<IProps> = props => {
             <Typography gutterBottom variant="h5" component="h2">
               {props.title}
             </Typography>
-            <Typography component="p">{props.author ? props.author : ""}</Typography>
+            <Typography component="p">
+              {props.author ? props.author : ""}
+            </Typography>
             <Typography component="p">{props.tags}</Typography>
             <Typography component="p">{props.writerLimit}</Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
           <Typography component="p">{props.like}</Typography>
-          <IconButton color="secondary" aria-label="favorite">
-            <Favorite fontSize="small" />
-          </IconButton>
+          {props.isFavoriteOn ? (
+            <IconButton aria-label="favorite">
+              <Favorite color="secondary" fontSize="small" />
+            </IconButton>
+          ) : (
+            <Favorite color="secondary" fontSize="small" />
+          )}
         </CardActions>
       </Card>
     </div>
