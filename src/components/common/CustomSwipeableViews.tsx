@@ -74,7 +74,7 @@ const styles = (theme: Theme) =>
     }
   });
 
-const CustomSelects: React.SFC<IProps> = props => {
+const CustomSwipeableViews: React.SFC<IProps> = props => {
   const { classes, theme } = props;
   const maxStep = tutorialSteps.length;
 
@@ -140,11 +140,11 @@ const CustomSelects: React.SFC<IProps> = props => {
   );
 };
 
-(CustomSelects as React.SFC<IProps>).propTypes = {
+(CustomSwipeableViews as React.SFC<IProps>).propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 } as any;
 
 export default withStyles(styles, {
   withTheme: true
-})(CustomSelects);
+})(CustomSwipeableViews);
