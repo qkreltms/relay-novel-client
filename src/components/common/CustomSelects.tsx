@@ -29,7 +29,7 @@ const styles = (theme: Theme) =>
   });
 
 const CustomSelects: React.SFC<IProps> = props => {
-  const classes = props.classes;
+  const { classes } = props;
 
   return (
     <FormControl className={classes.formControl}>
