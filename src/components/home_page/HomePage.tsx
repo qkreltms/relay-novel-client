@@ -1,5 +1,11 @@
 import React from "react";
-import { Theme, createStyles, WithStyles, withStyles } from "@material-ui/core";
+import {
+  Theme,
+  createStyles,
+  WithStyles,
+  withStyles,
+  Grid
+} from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import CustomSwipeableViews from "../common/CustomSwipeableViews";
@@ -12,47 +18,108 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 interface IState {
-  activeStep: number;
+  mainActiveStep: number;
+  subActiveStep: number;
 }
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1
+    },
+    swipeableView: {
+      alignItems: "center"
+    }
+  });
 
 class CreateRoomPage extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
-    this.state = { activeStep: 0 };
+    this.state = { mainActiveStep: 0, subActiveStep: 0 };
   }
 
-  private handleNext = () => {
+  private handleMainNext = () => {
     this.setState((prevState: Readonly<IState>) => ({
-      activeStep: (prevState.activeStep + 1) % 5
+      mainActiveStep: (prevState.mainActiveStep + 1) % 5
     }));
   };
 
-  private handleBack = () => {
+  private handleMainBack = () => {
     this.setState((prevState: Readonly<IState>) => {
       // length - 1
       return {
-        activeStep: prevState.activeStep <= 0 ? 4 : prevState.activeStep - 1
+        mainActiveStep:
+          prevState.mainActiveStep <= 0 ? 4 : prevState.mainActiveStep - 1
       };
     });
   };
 
-  private handleStepChange = (activeStep: number) => {
-    this.setState({ activeStep });
+  private handleMainStepChange = (mainActiveStep: number) => {
+    this.setState({ mainActiveStep });
+  };
+
+  private handleSubNext = () => {
+    this.setState((prevState: Readonly<IState>) => ({
+      subActiveStep: (prevState.subActiveStep + 1) % 5
+    }));
+  };
+
+  private handleSubBack = () => {
+    this.setState((prevState: Readonly<IState>) => {
+      // length - 1
+      return {
+        subActiveStep:
+          prevState.subActiveStep <= 0 ? 4 : prevState.subActiveStep - 1
+      };
+    });
+  };
+
+  private handleSubStepChange = (subActiveStep: number) => {
+    this.setState({ subActiveStep });
   };
 
   public render() {
-    const { classes, theme } = this.props.classes;
+    const { classes } = this.props;
 
     return (
-      <div>
-        <CustomSwipeableViews
-          activeStep={this.state.activeStep}
-          handleBack={this.handleBack}
-          handleNext={this.handleNext}
-          handleStepChange={this.handleStepChange}
-        />
+      <div className={classes.root}>
+        <Grid spacing={0} container>
+          <Grid item xs={8} className={classes.swipeableView}>
+            <CustomSwipeableViews
+              isAutoPlay
+              activeStep={this.state.mainActiveStep}
+              handleBack={this.handleMainBack}
+              handleNext={this.handleMainNext}
+              handleStepChange={this.handleMainStepChange}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <CustomSwipeableViews
+              activeStep={this.state.subActiveStep}
+              handleBack={this.handleSubBack}
+              handleNext={this.handleSubNext}
+              handleStepChange={this.handleSubStepChange}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            4
+          </Grid>
+          <Grid item xs={4}>
+            4
+          </Grid>
+          <Grid item xs={4}>
+            4
+          </Grid>
+          <Grid item xs={4}>
+            4
+          </Grid>
+          <Grid item xs={4}>
+            4
+          </Grid>
+          <Grid item xs={4}>
+            4
+          </Grid>
+        </Grid>
       </div>
     );
   }

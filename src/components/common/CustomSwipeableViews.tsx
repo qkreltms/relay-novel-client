@@ -1,5 +1,4 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
@@ -51,25 +50,25 @@ interface IProps {
   handleStepChange: (activeStep: number) => void;
   handleNext: () => void;
   handleBack: () => void;
+  isAutoPlay?: boolean;
 }
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      maxWidth: 400,
+      width: "100%",
       flexGrow: 1
     },
     header: {
+      width: "100%",
       display: "flex",
       alignItems: "center",
       height: 50,
-      paddingLeft: theme.spacing.unit * 4,
       backgroundColor: theme.palette.background.default
     },
     img: {
       height: 255,
       display: "block",
-      maxWidth: 400,
       overflow: "hidden",
       width: "100%"
     }
@@ -85,25 +84,34 @@ const CustomSelects: React.SFC<IProps> = props => {
         <Typography>{tutorialSteps[props.activeStep].label}</Typography>
       </Paper>
 
-      <AutoPlaySwipeableViews
-        //   theme.direction이 right to left 일 때 x축 반전 아니면 x축 그대로 둠
-        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-        index={props.activeStep}
-        onChangeIndex={props.handleStepChange}
-        enableMouseEvents
-      >
-        {tutorialSteps.map((step, index) => (
-          <div key={index}>
-            {Math.abs(props.activeStep - index) <= 2 ? (
-              <img
-                className={classes.img}
-                src={step.imgPath}
-                alt={step.label}
-              />
-            ) : null}
-          </div>
-        ))}
-      </AutoPlaySwipeableViews>
+      {props.isAutoPlay ? (
+        <AutoPlaySwipeableViews
+          //   theme.direction이 right to left 일 때 x축 반전 아니면 x축 그대로 둠
+          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+          index={props.activeStep}
+          onChangeIndex={props.handleStepChange}
+          enableMouseEvents
+        >
+          {tutorialSteps.map((step, index) => (
+            <div key={index}>
+              {Math.abs(props.activeStep - index) <= 2 ? (
+                <img
+                  className={classes.img}
+                  src={step.imgPath}
+                  alt={step.label}
+                />
+              ) : null}
+            </div>
+          ))}
+        </AutoPlaySwipeableViews>
+      ) : (
+        <img
+          className={classes.img}
+          src={tutorialSteps[props.activeStep].imgPath}
+          alt={tutorialSteps[props.activeStep].label}
+        />
+      )}
+
       <MobileStepper
         steps={maxStep}
         position="static"
@@ -116,7 +124,6 @@ const CustomSelects: React.SFC<IProps> = props => {
             ) : (
               <KeyboardArrowRight />
             )}
-            <FormattedMessage id="customswipeableviews_next"/>
           </Button>
         }
         backButton={
@@ -126,7 +133,6 @@ const CustomSelects: React.SFC<IProps> = props => {
             ) : (
               <KeyboardArrowLeft />
             )}
-            <FormattedMessage id="customswipeableviews_prev"/>
           </Button>
         }
       />

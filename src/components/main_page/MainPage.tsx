@@ -15,13 +15,16 @@ import { CreateRoomPageContainer as CreateRoomPage } from "../createroom_page";
 import { TodayNovelPageContainer as TodayNovelPage } from "../today_novel_page";
 import { HomePageContainer as HomePage } from "../home_page";
 import { FormattedMessage } from "react-intl";
-import { LoginDialogContainer as LoginDialog } from "../common/login_dialog";
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      backgroundColor: theme.palette.background.paper,
       flexGrow: 1
+    },
+    contents: {
+      width: "90%",
+      margin: "0 auto",
+      overflow: "visible"
     }
   });
 
@@ -74,16 +77,20 @@ class MainPage extends React.Component<IProps, IState> {
                   <Tab label={text} onChange={this.handleTabsChange(1)} />
                 )}
               </FormattedMessage>
-              <FormattedMessage id="mainpage_create_room">
-                {(text: string) => (
-                  <Tab label={text} onChange={this.handleTabsChange(2)} />
-                )}
-              </FormattedMessage>
+              {this.props.isLoggedIn && (
+                <FormattedMessage id="mainpage_create_room">
+                  {(text: string) => (
+                    <Tab label={text} onChange={this.handleTabsChange(2)} />
+                  )}
+                </FormattedMessage>
+              )}
             </Tabs>
           </AppBar>
-          {this.state.value === 0 && <HomePage />}
-          {this.state.value === 1 && <TodayNovelPage />}
-          {this.state.value === 2 && <CreateRoomPage />}
+          <div className={classes.contents}>
+            {this.state.value === 0 && <HomePage />}
+            {this.state.value === 1 && <TodayNovelPage />}
+            {this.state.value === 2 && <CreateRoomPage />}
+          </div>
         </div>
       </NoSsr>
     );

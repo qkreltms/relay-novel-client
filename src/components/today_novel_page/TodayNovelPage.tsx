@@ -63,14 +63,14 @@ class TodayNovelPage extends React.Component<IProps> {
     // TODO: 최적화
     this.props.fetchRooms(0, 30);
     // this.props.fetchRoomTotal();
-  }
+  };
 
   initSocket = () => {
     this.socket.emit("join", {});
     this.socket.on("createdRoom", (room: Room) => {
       console.log(`소켓 message 값 받음:`, JSON.stringify(room.id));
       this.props.setRooms([room, ...this.props.rooms] as Array<Room>);
-    //   this.props.setRoomTotal(this.props.total + 1);
+      //   this.props.setRoomTotal(this.props.total + 1);
     });
   };
 
@@ -82,7 +82,7 @@ class TodayNovelPage extends React.Component<IProps> {
 
   // 클릭시 방안으로 리다이렉트
   handleListItemClick = (roomId: number) => () => {
-    this.socket.emit("joinChannal", {id: roomId} as Room);
+    this.socket.emit("joinChannal", { id: roomId } as Room);
     this.props.history.push(`/room/${roomId}`);
   };
 
@@ -92,21 +92,22 @@ class TodayNovelPage extends React.Component<IProps> {
     return (
       <div className={classes.root}>
         <List>
-          {this.props.rooms && this.props.rooms.map((room, index) => (
-            <ListItem
-              alignItems="flex-start"
-              key={index}
-              button
-              role={undefined}
-              onClick={this.handleListItemClick(room.id)}
-            >
-              <ListItemText primary={room.title} />
-              <ListItemSecondaryAction>
-                <Favorite fontSize="small" />
-                <span>{room.like}</span>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
+          {this.props.rooms &&
+            this.props.rooms.map((room, index) => (
+              <ListItem
+                alignItems="flex-start"
+                key={index}
+                button
+                role={undefined}
+                onClick={this.handleListItemClick(room.id)}
+              >
+                <ListItemText primary={room.title} />
+                <ListItemSecondaryAction>
+                  <Favorite fontSize="small" />
+                  <span>{room.like}</span>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
         </List>
       </div>
     );

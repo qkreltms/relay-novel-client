@@ -410,117 +410,121 @@ class NovelPage extends React.Component<IProps> {
     );
 
     return (
-      <Grid container className={classes.root}>
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid xs={3} item>
-              {/* 참가한 유저 넣을 부분 */}
-            </Grid>
-            <Grid xs={6} item>
-              <Paper className={classes.paper}>
-                {/* 방 정보 넣는 부분 */}
-                <div>
-                  <List
-                    subheader={
+      <div className={classes.root}>
+        <Grid container>
+          <Grid item xs={12}>
+            <Grid container>
+              <Grid xs={3} item>
+                {/* 참가한 유저 넣을 부분 */}
+              </Grid>
+              <Grid xs={6} item>
+                <Paper className={classes.paper}>
+                  {/* 방 정보 넣는 부분 */}
+                  <div>
+                    <List
+                      subheader={
+                        <ListItem>
+                          <Book />
+                          {this.props.title}
+                          {FavoriteBtn}
+                        </ListItem>
+                      }
+                      className={classes.root}
+                    >
                       <ListItem>
-                        <Book />
-                        {this.props.title}
-                        {FavoriteBtn}
+                        <FormattedMessage id="novelpage_desc" />
                       </ListItem>
+                      <ListItem>{this.props.desc}</ListItem>
+                      <ListItem>
+                        <FormattedMessage id="novelpage_desc_genre" />
+                      </ListItem>
+                      {this.props.genre ? (
+                        <FormattedMessage id={this.props.genre}>
+                          {(text: string) => <ListItem>{text}</ListItem>}
+                        </FormattedMessage>
+                      ) : (
+                        <div />
+                      )}
+                      <ListItem>
+                        <FormattedMessage id="novelpage_desc_tags" />
+                      </ListItem>
+                      <ListItem>{this.props.tags}</ListItem>
+                      <ListSubheader>like</ListSubheader>
+                      <ListItem>{this.props.like}</ListItem>
+                      <ListItem>
+                        <FormattedMessage id="novelpage_desc_created_date" />
+                      </ListItem>
+                      <ListItem>
+                        {easyDateFormat(new Date(this.props.createdAt))}
+                      </ListItem>
+                    </List>
+                  </div>
+                  <CustomNovelList
+                    novels={this.props.novels}
+                    handleLikeDislikeBtnClick={
+                      this.handleSentenceLikeDislikeBtnClick
                     }
-                    className={classes.root}
-                  >
-                    <ListItem>
-                      <FormattedMessage id="novelpage_desc" />
-                    </ListItem>
-                    <ListItem>{this.props.desc}</ListItem>
-                    <ListItem>
-                      <FormattedMessage id="novelpage_desc_genre" />
-                    </ListItem>
-                    {this.props.genre ? (
-                      <FormattedMessage id={this.props.genre}>
-                        {(text: string) => <ListItem>{text}</ListItem>}
-                      </FormattedMessage>
-                    ) : (
-                      <div />
-                    )}
-                    <ListItem>
-                      <FormattedMessage id="novelpage_desc_tags" />
-                    </ListItem>
-                    <ListItem>{this.props.tags}</ListItem>
-                    <ListSubheader>like</ListSubheader>
-                    <ListItem>{this.props.like}</ListItem>
-                    <ListItem>
-                      <FormattedMessage id="novelpage_desc_created_date" />
-                    </ListItem>
-                    <ListItem>
-                      {easyDateFormat(new Date(this.props.createdAt))}
-                    </ListItem>
-                  </List>
-                </div>
-                <CustomNovelList
-                  novels={this.props.novels}
-                  handleLikeDislikeBtnClick={
-                    this.handleSentenceLikeDislikeBtnClick
-                  }
-                />
-              </Paper>
-              {this.props.isWriteable &&
-              this.props.novels.length <= this.paginationBtnLimit &&
-              this.isLastPage() ? (
-                <div>
-                  <CustomInput
-                    name="novel"
-                    formattedMessageId="novelpage_input"
-                    value={this.props.novel.text}
-                    handleChange={this.handleNovelInputValueChange}
-                    multiline
                   />
-                  <CustomButton
-                    onClick={this.handleSubmitButtonClick}
-                    formattedMessageId="novelpage_btn"
-                  />
-                </div>
-              ) : (
-                <div />
-              )}
-
-              <div>
-                {this.props.isWriteable || this.props.joinedUserTotal < 0 ? (
-                  <span />
+                </Paper>
+                {this.props.isWriteable &&
+                this.props.novels.length <= this.paginationBtnLimit &&
+                this.isLastPage() ? (
+                  <div>
+                    <CustomInput
+                      name="novel"
+                      formattedMessageId="novelpage_input"
+                      value={this.props.novel.text}
+                      handleChange={this.handleNovelInputValueChange}
+                      multiline
+                    />
+                    <CustomButton
+                      onClick={this.handleSubmitButtonClick}
+                      formattedMessageId="novelpage_btn"
+                    />
+                  </div>
                 ) : (
-                  <CustomButton
-                    isDisable={false}
-                    onClick={this.handleJoinToWrite}
-                    formattedMessageId="novelpage_join_btn"
-                  />
+                  <div />
                 )}
-                <span>
-                  {this.props.joinedUserTotal} / {this.props.writerLimit}
-                </span>
-              </div>
-              <CustomPagination
-                handleClickEvent={this.handlePaginationBtnClick}
-                offset={this.props.offset}
-                total={this.totalPaginationBtn}
-              />
-              <Paper className={classes.paper}>
-                <CustomCommentList
-                  isLoggedIn={this.props.isLoggedIn}
-                  comment={this.props.comment}
-                  handleInputValueChange={this.handleCommentValueChange}
-                  comments={this.props.comments}
-                  handleLikeDislikeBtnClick={
-                    this.handleCommentLikeDislikeBtnClick
-                  }
-                  handleSubmitButtonClick={this.handleCommentSubmitButtonClick}
+
+                <div>
+                  {this.props.isWriteable || this.props.joinedUserTotal < 0 ? (
+                    <span />
+                  ) : (
+                    <CustomButton
+                      isDisable={false}
+                      onClick={this.handleJoinToWrite}
+                      formattedMessageId="novelpage_join_btn"
+                    />
+                  )}
+                  <span>
+                    {this.props.joinedUserTotal} / {this.props.writerLimit}
+                  </span>
+                </div>
+                <CustomPagination
+                  handleClickEvent={this.handlePaginationBtnClick}
+                  offset={this.props.offset}
+                  total={this.totalPaginationBtn}
                 />
-              </Paper>
+                <Paper className={classes.paper}>
+                  <CustomCommentList
+                    isLoggedIn={this.props.isLoggedIn}
+                    comment={this.props.comment}
+                    handleInputValueChange={this.handleCommentValueChange}
+                    comments={this.props.comments}
+                    handleLikeDislikeBtnClick={
+                      this.handleCommentLikeDislikeBtnClick
+                    }
+                    handleSubmitButtonClick={
+                      this.handleCommentSubmitButtonClick
+                    }
+                  />
+                </Paper>
+              </Grid>
+              <Grid xs={3} item />
             </Grid>
-            <Grid xs={3} item />
           </Grid>
         </Grid>
-      </Grid>
+      </div>
     );
   }
 }
