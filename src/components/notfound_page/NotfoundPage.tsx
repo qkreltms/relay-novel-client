@@ -4,7 +4,10 @@ import {
   Theme,
   createStyles,
   WithStyles,
-  withStyles
+  withStyles,
+  Grid,
+  Paper,
+  Typography
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -17,20 +20,35 @@ interface IProps extends WithStyles<typeof styles> {
   history: any;
 }
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      paddingTop: "25vh",
+      textAlign: "center"
+    }
+  });
 
 const NotfoundPage: React.SFC<IProps> = props => {
   const handleGoHomePageClick = () => {
     return props.history.push("/");
   };
 
+  const { classes } = props;
   return (
     <div>
-      <FormattedMessage id="notfound_msg" />
-      <CustomButton
-        onClick={handleGoHomePageClick}
-        formattedMessageId="notfound_btn"
-      />
+      <Grid container className={classes.root}>
+        <Grid item xs={12}>
+          <Typography variant="h6">
+            <FormattedMessage id="notfound_msg" />
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <CustomButton
+            onClick={handleGoHomePageClick}
+            formattedMessageId="notfound_btn"
+          />
+        </Grid>
+      </Grid>
     </div>
   );
 };

@@ -20,6 +20,7 @@ export default {
   signup_duplicated_email: "이메일이 이미 존재합니다.",
   signupsuccess_success: "회원가입 완료!",
   signupsuccess_btn: "홈페이지로 가기",
+  signupsuccess_login: "로그인",
   notfound_btn: "홈페이지로 가기",
   notfound_msg: "페이지를 찾을 수 없습니다. 에러 상태코드: 404",
   logindialog_title: "로그인",
@@ -61,7 +62,8 @@ export default {
   customswipeableviews_next: "다음",
   customswipeableviews_prev: "이전",
   homepage_today_novels: "오늘의 소설",
-  homepage_popular_novels: "인기 소설"
+  homepage_popular_novels: "인기 소설",
+  facebook: "페이스북 로그인"
 };
 
 export const options: Array<Option> = [

@@ -18,8 +18,9 @@ export default {
   signup_err_nickname: "Nickname's length is must be in 1~30.",
   signup_err_email: "Email format is invali.",
   signup_duplicated_email: "Email is already in use.",
-  signupsuccess_success: "Sing Up Completed!",
+  signupsuccess_success: "Sing Up is Completed!",
   signupsuccess_btn: "Go Homepage",
+  signupsuccess_login: "Login",
   notfound_btn: "Go Homepage",
   notfound_msg: "Page Not Found. Error status 404", 
   logindialog_title: "Login",
@@ -60,7 +61,8 @@ export default {
   customswipeableviews_next: "Next",
   customswipeableviews_prev: "Prev",
   homepage_today_novels: "Today's Novels",
-  homepage_popular_novels: "Popular Novels"
+  homepage_popular_novels: "Popular Novels",
+  facebook: "Facebook Login"
 };
 
 export const options: Array<Option> = [

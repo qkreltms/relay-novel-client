@@ -8,12 +8,13 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 import axios from "axios";
 import config from "../../config";
-import { FormLabel } from "@material-ui/core";
+import { FormLabel, Grid, IconButton } from "@material-ui/core";
 import CustomPasswordInput from "../common/CustomPasswordInput";
 import CustomInput from "../common/CustomInput";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import CustomButton from "../common/CustomButton";
+import facebookImg from "../../static/images/facebook.svg";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -21,8 +22,17 @@ const styles = (theme: Theme) =>
       margin: theme.spacing.unit
     },
     root: {
-      display: "flex",
-      flexWrap: "wrap"
+      textAlign: "center"
+    },
+    textField: {
+      width: "95%"
+    },
+    gridContent: {
+      margin: "auto"
+    },
+    facebookIcon: {
+      width: "35px",
+      height: "35px"
     }
   });
 
@@ -78,12 +88,17 @@ class SignupPage extends React.Component<IProps> {
   };
 
   private handleSignupClick = () => {
-    if (this.props.nickname.length === 0) this.props.setIsNicknameError(true); 
-    if (this.props.password.length === 0) this.props.setIsPasswordError(true); 
-    if (this.props.email.length === 0) this.props.setIsEmailError(true); 
+    if (this.props.nickname.length === 0) this.props.setIsNicknameError(true);
+    if (this.props.password.length === 0) this.props.setIsPasswordError(true);
+    if (this.props.email.length === 0) this.props.setIsEmailError(true);
 
-    if (this.props.nickname.length === 0 || this.props.password.length === 0 || this.props.email.length === 0) return;
-    
+    if (
+      this.props.nickname.length === 0 ||
+      this.props.password.length === 0 ||
+      this.props.email.length === 0
+    )
+      return;
+
     const body = {
       email: this.props.email,
       nickname: this.props.nickname,
@@ -99,58 +114,83 @@ class SignupPage extends React.Component<IProps> {
         if (!err.response) return;
 
         const message = err.response.data.message;
-        if (typeof message === "string" && message.includes("User")) return this.props.setIsEmailDuplicated(true);
+        if (typeof message === "string" && message.includes("User"))
+          return this.props.setIsEmailDuplicated(true);
         else return this.props.setIsEmailDuplicated(false);
       });
   };
 
   public render() {
+    const { classes } = this.props;
+
     return (
-      <div>
-        <CustomInput
-          isError={this.props.isDialogOpen ? false : this.props.isEmailError}
-          value={this.props.isDialogOpen ? "" : this.props.email}
-          handleChange={this.handleEmailChange}
-          formattedMessageId="signup_email"
-          name="email"
-        />
-
-        <CustomInput
-          isError={this.props.isDialogOpen ? false : this.props.isNicknameError}
-          value={this.props.isDialogOpen ? "" : this.props.nickname}
-          handleChange={this.handleNicknameChange}
-          formattedMessageId="signup_nickname"
-          name="nickname"
-        />
-
-        <CustomPasswordInput
-          name="signup_password_input"
-          isError={this.props.isDialogOpen ? false : this.props.isPasswordError}
-          isVisible={this.props.passwordVisibility}
-          value={this.props.isDialogOpen ? "" : this.props.password}
-          handleChange={this.handlePasswordChange}
-          handleVisibility={this.handlePasswordVisibility}
-        />
-
-        <CustomButton
-          onClick={this.handleSignupClick}
-          formattedMessageId="signup_btn"
-        />
-        <FormLabel>
-          {this.props.isDialogOpen ? (
-            <div />
-          ) : this.props.isEmailDuplicated ? (
-            <FormattedMessage id="signup_duplicated_email" />
-          ) : this.props.isPasswordError ? (
-            <FormattedMessage id="signup_err_password" />
-          ) : this.props.isEmailError ? (
-            <FormattedMessage id="signup_err_email" />
-          ) : this.props.isNicknameError ? (
-            <FormattedMessage id="signup_err_nickname" />
-          ) : (
-            <div />
-          )}
-        </FormLabel>
+      <div className={classes.root}>
+        <Grid container>
+          <Grid item xs={12} sm={6} lg={3} className={classes.gridContent}>
+            <CustomInput
+              classes={{ textField: classes.textField }}
+              isError={
+                this.props.isDialogOpen ? false : this.props.isEmailError
+              }
+              value={this.props.isDialogOpen ? "" : this.props.email}
+              handleChange={this.handleEmailChange}
+              formattedMessageId="signup_email"
+              name="email"
+            />
+          </Grid>
+          <Grid item xs={12} />
+          <Grid item xs={12} sm={6} lg={3} className={classes.gridContent}>
+            <CustomInput
+              classes={{ textField: classes.textField }}
+              isError={
+                this.props.isDialogOpen ? false : this.props.isNicknameError
+              }
+              value={this.props.isDialogOpen ? "" : this.props.nickname}
+              handleChange={this.handleNicknameChange}
+              formattedMessageId="signup_nickname"
+              name="nickname"
+            />
+          </Grid>
+          <Grid item xs={12} />
+          <Grid item xs={12} sm={6} lg={3} className={classes.gridContent}>
+            <CustomPasswordInput
+              classes={{ textField: classes.textField }}
+              name="signup_password_input"
+              isError={
+                this.props.isDialogOpen ? false : this.props.isPasswordError
+              }
+              isVisible={this.props.passwordVisibility}
+              value={this.props.isDialogOpen ? "" : this.props.password}
+              handleChange={this.handlePasswordChange}
+              handleVisibility={this.handlePasswordVisibility}
+            />
+          </Grid>
+          <Grid item xs={12} />
+          <Grid item xs={12}>
+            <CustomButton
+              onClick={this.handleSignupClick}
+              formattedMessageId="signup_btn"
+            />
+          </Grid>
+          <Grid item xs={12} />
+          <Grid item xs={12} sm={6} lg={3} className={classes.gridContent}>
+            <FormLabel>
+              {this.props.isDialogOpen ? (
+                <div />
+              ) : this.props.isEmailDuplicated ? (
+                <FormattedMessage id="signup_duplicated_email" />
+              ) : this.props.isPasswordError ? (
+                <FormattedMessage id="signup_err_password" />
+              ) : this.props.isEmailError ? (
+                <FormattedMessage id="signup_err_email" />
+              ) : this.props.isNicknameError ? (
+                <FormattedMessage id="signup_err_nickname" />
+              ) : (
+                <div />
+              )}
+            </FormLabel>
+          </Grid>
+        </Grid>
       </div>
     );
   }

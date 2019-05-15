@@ -9,7 +9,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  FormLabel
+  FormLabel,
+  Grid
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -115,59 +116,70 @@ class LoginDialog extends React.Component<IProps> {
   };
   public render() {
     return (
-      <Dialog
-        open={this.props.isDialogOpen}
-        onClose={this.handleOnClose}
-        aria-labelledby="login-dialog-slide-title"
-        aria-describedby="login-dialog-slide-description"
-        disableBackdropClick={true}
-        keepMounted
-      >
-        <DialogTitle id="login-dialog-slide-title">
-          <FormattedMessage id="logindialog_title" />
-        </DialogTitle>
-        <DialogContent>
-          <CustomInput
-            isError={this.props.isEmailError}
-            value={this.props.email}
-            handleChange={this.handleEmailChange}
-            formattedMessageId="signup_email"
-            name="dialog_email"
-          />
+      <div>
+        <Grid container>
+          <Dialog
+            open={this.props.isDialogOpen}
+            onClose={this.handleOnClose}
+            aria-labelledby="login-dialog-slide-title"
+            aria-describedby="login-dialog-slide-description"
+            disableBackdropClick={true}
+            keepMounted
+          >
+            <Grid item xs={12}>
+              <DialogTitle id="login-dialog-slide-title">
+                <FormattedMessage id="logindialog_title" />
+              </DialogTitle>
+            </Grid>
 
-          <CustomPasswordInput
-            name="login_dialog_password_input"
-            isError={this.props.isPasswordError}
-            isVisible={this.props.passwordVisibility}
-            value={this.props.password}
-            handleChange={this.handlePasswordChange}
-            handleVisibility={this.handlePasswordVisibility}
-          />
-          <FormLabel>
-            {this.props.isIncorrectPassword ? (
-              <FormattedMessage id="logindialog_incorrect_password" />
-            ) : this.props.isIncorrectEmail ? (
-              <FormattedMessage id="logindialog_notexists_email" />
-            ) : this.props.isPasswordError ? (
-              <FormattedMessage id="signup_err_password" />
-            ) : this.props.isEmailError ? (
-              <FormattedMessage id="signup_err_email" />
-            ) : (
-              <div />
-            )}
-          </FormLabel>
-        </DialogContent>
-        <DialogActions>
-          <CustomButton
-            onClick={this.handleOnClose}
-            formattedMessageId="logindialog_cancle_btn"
-          />
-          <CustomButton
-            onClick={this.handleOnLogin}
-            formattedMessageId="logindialog_ok_btn"
-          />
-        </DialogActions>
-      </Dialog>
+            <DialogContent>
+              <Grid item xs={12}>
+                <CustomInput
+                  isError={this.props.isEmailError}
+                  value={this.props.email}
+                  handleChange={this.handleEmailChange}
+                  formattedMessageId="signup_email"
+                  name="dialog_email"
+                />
+
+                <CustomPasswordInput
+                  name="login_dialog_password_input"
+                  isError={this.props.isPasswordError}
+                  isVisible={this.props.passwordVisibility}
+                  value={this.props.password}
+                  handleChange={this.handlePasswordChange}
+                  handleVisibility={this.handlePasswordVisibility}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormLabel>
+                  {this.props.isIncorrectPassword ? (
+                    <FormattedMessage id="logindialog_incorrect_password" />
+                  ) : this.props.isIncorrectEmail ? (
+                    <FormattedMessage id="logindialog_notexists_email" />
+                  ) : this.props.isPasswordError ? (
+                    <FormattedMessage id="signup_err_password" />
+                  ) : this.props.isEmailError ? (
+                    <FormattedMessage id="signup_err_email" />
+                  ) : (
+                    <div />
+                  )}
+                </FormLabel>
+              </Grid>
+            </DialogContent>
+            <DialogActions>
+              <CustomButton
+                onClick={this.handleOnClose}
+                formattedMessageId="logindialog_cancle_btn"
+              />
+              <CustomButton
+                onClick={this.handleOnLogin}
+                formattedMessageId="logindialog_ok_btn"
+              />
+            </DialogActions>
+          </Dialog>
+        </Grid>
+      </div>
     );
   }
 }
