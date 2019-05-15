@@ -10,7 +10,10 @@ import {
   DialogContent,
   DialogActions,
   FormLabel,
-  Grid
+  Grid,
+  Typography,
+  IconButton,
+  Divider
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -21,6 +24,7 @@ import config from "../../../config";
 import { User } from "../../../models";
 import axiosConfig from "../../../config/axios";
 import CustomButton from "../CustomButton";
+import facebookImg from "../../../static/images/facebook.svg";
 
 interface IProps extends WithStyles<typeof styles> {
   classes: any;
@@ -49,11 +53,16 @@ interface IProps extends WithStyles<typeof styles> {
 
 const styles = (theme: Theme) =>
   createStyles({
-    button: {
-      margin: theme.spacing.unit
+    facebookIcon: {
+      width: "35px",
+      height: "35px"
     },
-    margin: {
-      margin: theme.spacing.unit
+    otherPlatformAuthentication: {
+      textAlign: "center",
+      padding: "1vh"
+    },
+    divider: {
+      marginTop: "1vh"
     }
   });
 
@@ -115,6 +124,7 @@ class LoginDialog extends React.Component<IProps> {
     this.props.setEmail(event.target.value);
   };
   public render() {
+    const { classes } = this.props;
     return (
       <div>
         <Grid container>
@@ -150,6 +160,28 @@ class LoginDialog extends React.Component<IProps> {
                   handleChange={this.handlePasswordChange}
                   handleVisibility={this.handlePasswordVisibility}
                 />
+              </Grid>
+              <Grid item xs={12} className={classes.divider}>
+                <Divider />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                className={classes.otherPlatformAuthentication}
+              >
+                <Typography inline>
+                  <FormattedMessage id="or" />
+                </Typography>
+                <IconButton>
+                  <img
+                    className={classes.facebookIcon}
+                    src={facebookImg}
+                    alt="facebook"
+                  />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider />
               </Grid>
               <Grid item xs={12}>
                 <FormLabel>

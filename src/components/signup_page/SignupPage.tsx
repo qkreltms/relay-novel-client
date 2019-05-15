@@ -8,7 +8,7 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 import axios from "axios";
 import config from "../../config";
-import { FormLabel, Grid, IconButton } from "@material-ui/core";
+import { FormLabel, Grid, IconButton, Typography } from "@material-ui/core";
 import CustomPasswordInput from "../common/CustomPasswordInput";
 import CustomInput from "../common/CustomInput";
 import { withRouter } from "react-router-dom";
@@ -171,6 +171,16 @@ class SignupPage extends React.Component<IProps> {
               onClick={this.handleSignupClick}
               formattedMessageId="signup_btn"
             />
+            <Typography inline>
+              <FormattedMessage id="signup_facebook" />
+            </Typography>
+            <IconButton>
+              <img
+                className={classes.facebookIcon}
+                src={facebookImg}
+                alt="facebook"
+              />
+            </IconButton>
           </Grid>
           <Grid item xs={12} />
           <Grid item xs={12} sm={6} lg={3} className={classes.gridContent}>

@@ -3,6 +3,7 @@ import { Option } from "../../../models/option";
 /* tslint:disable */
 
 export default {
+  or: "또는",
   title: "릴레이 소설",
   appbar_menu_logout: "로그아웃",
   appbar_menu_myprofile: "프로필",
@@ -18,6 +19,7 @@ export default {
   signup_err_nickname: "닉네임 길이는 1자 이상 또는 30자 이하입니다.",
   signup_err_email: "이메일 형식이 맞는지 확인해 주세요.",
   signup_duplicated_email: "이메일이 이미 존재합니다.",
+  signup_facebook: "또는 페이스북 로그인",
   signupsuccess_success: "회원가입 완료!",
   signupsuccess_btn: "홈페이지로 가기",
   signupsuccess_login: "로그인",

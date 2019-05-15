@@ -3,6 +3,7 @@ import { Option } from "../../../models/option";
 /* tslint:disable */
 
 export default {
+  or: "OR",
   title: "Relay Novel",
   appbar_menu_myprofile: "Profile",
   appbar_menu_logout: "Log Out",
@@ -18,6 +19,7 @@ export default {
   signup_err_nickname: "Nickname's length is must be in 1~30.",
   signup_err_email: "Email format is invali.",
   signup_duplicated_email: "Email is already in use.",
+  signup_facebook: "Or Facebook Login",
   signupsuccess_success: "Sing Up is Completed!",
   signupsuccess_btn: "Go Homepage",
   signupsuccess_login: "Login",
