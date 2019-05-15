@@ -19,6 +19,7 @@ interface IProps {
   formattedMessageId: string;
   name: string;
   multiline?: boolean;
+  rows?: string | number;
 }
 
 const styles = (theme: Theme) =>
@@ -28,7 +29,7 @@ const styles = (theme: Theme) =>
     },
     textField: {
       flexBasis: 200
-    }
+    },
   });
 
 const CustomInput: React.SFC<IProps> = props => {
@@ -47,6 +48,7 @@ const CustomInput: React.SFC<IProps> = props => {
         type="text"
         value={props.value}
         onChange={props.handleChange}
+        rows={props.rows || 1}
       />
     </FormControl>
   );

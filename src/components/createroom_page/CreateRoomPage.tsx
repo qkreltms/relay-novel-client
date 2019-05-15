@@ -4,7 +4,9 @@ import {
   createStyles,
   WithStyles,
   withStyles,
-  Grid
+  Grid,
+  Paper,
+  Typography
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -20,6 +22,8 @@ import CustomSelects from "../common/CustomSelects";
 import CustomChipInput from "../common/CustomChipInput";
 import { FormattedMessage } from "react-intl";
 import { Option } from "../../models/option";
+import classNames from "classnames";
+import CustomSnackbar from "../common/CustomSnackbar";
 
 interface IProps extends WithStyles<typeof styles> {
   writerLimit: string;
@@ -52,14 +56,37 @@ const styles = (theme: Theme) =>
     root: {
       flexGrow: 1
     },
-    paper: {
-      color: theme.palette.text.secondary,
-      padding: theme.spacing.unit * 2
+    container: {
+      textAlign: "center"
+    },
+    textField: {
+      width: "90%"
+    },
+    radioContent: {
+      margin: "auto 0 0",
+      paddingRight: "4vw"
+    },
+    genreContent: {
+      paddingLeft: "2vw"
+    },
+    genreformControl: {
+      width: "86%"
+    },
+    chipContent: {
+      width: "90%"
+    },
+    createBtnContent: {
+      margin: "auto 0 0",
+      paddingRight: "2vw"
+    },
+    titleContent: {
+      paddingLeft: "1%"
     }
   });
 
 interface IState {
   options: Array<Option>;
+  isSnackbarOpen: boolean;
 }
 
 class CreateRoomPage extends React.Component<IProps, IState> {
@@ -68,7 +95,7 @@ class CreateRoomPage extends React.Component<IProps, IState> {
 
   constructor(props) {
     super(props);
-    this.state = { options: null };
+    this.state = { options: null, isSnackbarOpen: false };
     this.socket = socket(mainPage, (err: Error) => {
       alert(
         "서버 에러가 발생했습니다. F5를 눌러 새로고침해주세요. 에러메시지:" +
@@ -138,8 +165,14 @@ class CreateRoomPage extends React.Component<IProps, IState> {
 
   private handleCreateRoomClick = () => {
     if (!this.props.isLoggedIn) return alert("로그인을 해주세요.");
-    if (this.props.title.length === 0) this.props.setIsTitleError(true);
-    if (this.props.genre.length === 0) this.props.setIsGenreError(true);
+    if (this.props.title.length === 0) {
+      this.handleSnackbarOpen();
+      this.props.setIsTitleError(true);
+    }
+    if (this.props.genre.length === 0) {
+      this.handleSnackbarOpen();
+      this.props.setIsGenreError(true);
+    }
 
     if (this.props.title.length === 0 || this.props.genre.length === 0) return;
     const body = {
@@ -210,72 +243,118 @@ class CreateRoomPage extends React.Component<IProps, IState> {
     this.props.setGenre(event.target.value);
   };
 
+  private handleSnackbarClose = () => {
+    this.setState({
+      isSnackbarOpen: false
+    });
+  };
+
+  private handleSnackbarOpen = () => {
+    this.setState({
+      isSnackbarOpen: true
+    });
+  };
+
   public render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     return (
-      <Grid container className={classes.root}>
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid xs={3} item />
-            <Grid xs={6} item>
-              <CustomInput
-                value={this.props.title}
-                handleChange={this.handleTitleChange}
-                formattedMessageId="createroom_title"
-                name="title"
-                isError={this.props.isTitleError}
-              />
+      <Paper>
+        <Grid container className={classes.container}>
+          <Grid xs={10} item className={classes.titleContent}>
+            <CustomInput
+              value={this.props.title}
+              handleChange={this.handleTitleChange}
+              formattedMessageId="createroom_title"
+              name="title"
+              isError={this.props.isTitleError}
+              classes={{ textField: classes.textField }}
+            />
+          </Grid>
 
-              <CustomInput
-                value={this.props.desc}
-                handleChange={this.handleDescChange}
-                formattedMessageId="createroom_desc"
-                name="desc"
-                multiline
-              />
+          <Grid xs={2} item className={classes.createBtnContent}>
+            <CustomButton
+              onClick={this.handleCreateRoomClick}
+              formattedMessageId="createroom_btn"
+            />
+          </Grid>
 
-              {this.state.options ? (
-                <CustomSelects
-                  options={this.state.options}
-                  formattedMessageId="createroom_genre"
-                  value={this.props.genre}
-                  handleValueChange={this.handleGenreChange}
-                  isError={this.props.isGenreError}
+          <Grid xs={5} item className={classes.genreContent}>
+            {this.state.options ? (
+              <CustomSelects
+                classes={{ formControl: classes.genreformControl }}
+                options={this.state.options}
+                formattedMessageId="createroom_genre"
+                value={this.props.genre}
+                handleValueChange={this.handleGenreChange}
+                isError={this.props.isGenreError}
+              />
+            ) : (
+              <div />
+            )}
+          </Grid>
+
+          <Grid xs={7} item className={classes.radioContent}>
+            <CustomRadioButtons
+              value={this.props.writerLimit}
+              handleValueChange={this.handleWriterLimitChange}
+              radioContents={this.radioContents}
+              formattedMessageId="createroom_writerlimit"
+            />
+          </Grid>
+
+          <Grid xs={12} item>
+            <FormattedMessage id="createroom_chip_input">
+              {(text: string) => (
+                <CustomChipInput
+                  placeholder={text}
+                  onChange={this.handleTagsChange}
+                  formattedMessageId="createroom_tags"
+                  classes={{ root: classes.chipContent }}
                 />
-              ) : (
-                <div />
               )}
+            </FormattedMessage>
+          </Grid>
 
-              <CustomChipInput
-                onChange={this.handleTagsChange}
-                formattedMessageId="createroom_tags"
-              />
+          <Grid xs={12} item>
+            <CustomInput
+              value={this.props.desc}
+              handleChange={this.handleDescChange}
+              formattedMessageId="createroom_desc"
+              name="desc"
+              multiline
+              rows="25"
+              classes={{ textField: classes.textField }}
+            />
+          </Grid>
 
-              <CustomRadioButtons
-                value={this.props.writerLimit}
-                handleValueChange={this.handleWriterLimitChange}
-                radioContents={this.radioContents}
-                formattedMessageId="createroom_writerlimit"
-              />
-
-              <CustomButton
-                onClick={this.handleCreateRoomClick}
-                formattedMessageId="createroom_btn"
-              />
-
-              {this.props.isTitleError ? (
-                <FormattedMessage id="createroom_title_error" />
-              ) : this.props.isGenreError ? (
-                <FormattedMessage id="createroom_genre_error" />
-              ) : (
-                <div />
-              )}
-            </Grid>
-            <Grid xs={3} item />
+          <Grid xs={12} item>
+            {this.props.isTitleError ? (
+              <FormattedMessage id="createroom_title_error">
+                {(text: string) => (
+                  <CustomSnackbar
+                    message={text}
+                    handleClose={this.handleSnackbarClose}
+                    isOpen={this.state.isSnackbarOpen}
+                  />
+                )}
+              </FormattedMessage>
+            ) : this.props.isGenreError ? (
+              <FormattedMessage id="createroom_genre_error">
+                {(text: string) => (
+                  <CustomSnackbar
+                    message={text}
+                    handleClose={this.handleSnackbarClose}
+                    isOpen={this.state.isSnackbarOpen}
+                  />
+                )}
+              </FormattedMessage>
+            ) : (
+              <div />
+            )}
           </Grid>
         </Grid>
-      </Grid>
+      </Paper>
     );
   }
 }

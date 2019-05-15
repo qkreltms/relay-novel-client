@@ -1,14 +1,14 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import {
-  FormControl,
   FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
   withStyles,
   Theme,
-  createStyles
+  createStyles,
+  FormGroup
 } from "@material-ui/core";
 import { RadioContents } from "../../models";
 import PropTypes from "prop-types";
@@ -21,12 +21,18 @@ interface IProps {
   formattedMessageId: string;
 }
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) => createStyles({
+  radioLabel: {
+    margin: "auto"
+  }
+});
 
 const CustomRadioButtons: React.SFC<IProps> = props => {
+  const { classes } = props;
+  
   return (
-    <FormControl>
-      <FormLabel>
+    <FormGroup row>
+      <FormLabel className={classes.radioLabel}>
         <FormattedMessage id={props.formattedMessageId} />
       </FormLabel>
       <RadioGroup
@@ -46,7 +52,7 @@ const CustomRadioButtons: React.SFC<IProps> = props => {
           />
         ))}
       </RadioGroup>
-    </FormControl>
+    </FormGroup>
   );
 };
 

@@ -11,6 +11,7 @@ interface IProps {
   fullWidth?: boolean;
   formattedMessageId: string;
   onChange: (chip: string) => void;
+  placeholder?: string;
 }
 
 const styles = (theme: Theme) =>
@@ -27,6 +28,7 @@ const styles = (theme: Theme) =>
 const CustomButton: React.SFC<IProps> = props => {
   return (
     <ChipInput
+      placeholder={props.placeholder}
       allowDuplicates={props.allowDuplicates || false}
       classes={props.classes}
       fullWidth={props.fullWidth || false}

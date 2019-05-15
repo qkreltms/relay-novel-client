@@ -15,7 +15,6 @@ import CustomCard from "../common/CustomCard";
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      backgroundColor: theme.palette.background.paper,
       flexGrow: 1
     }
   });
