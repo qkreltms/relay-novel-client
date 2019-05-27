@@ -5,8 +5,7 @@ import {
   WithStyles,
   withStyles,
   Grid,
-  Paper,
-  Typography
+  Paper
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -31,8 +30,9 @@ interface IProps extends WithStyles<typeof styles> {
   desc: string;
   genre: string;
   coverImage: string;
-  tags: string;
-  setTags: (tags: string) => void;
+  tags: Array<string>;
+  pushTag: (tag: string) => void;
+  deleteTag: (tag: string) => void;
   setCoverImage: (coverImage: string) => void;
   setGenre: (genre: string) => void;
   setTitle: (title: string) => void;
@@ -235,8 +235,18 @@ class CreateRoomPage extends React.Component<IProps, IState> {
     this.props.setCoverImage(event.target.value);
   };
 
-  private handleTagsChange = (chip: string) => {
-    this.props.setTags(chip);
+  private handleOnTagAdd = (tag: string): void => {
+    // 길이 20 이상이면 태그 불가능
+    if (tag.length >= 20) return;
+    // 태그 총 20개 이상이면 태그 불가능
+    if (this.props.tags.length >= 20) return;
+    // TODO: 태그 길이, 갯수 초과시 유저에게 알려주기
+
+    this.props.pushTag(tag);
+  };
+
+  private handleOnTagDelete = (tag: string, index: number): void => {
+    this.props.deleteTag(tag);
   };
 
   private handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -308,7 +318,9 @@ class CreateRoomPage extends React.Component<IProps, IState> {
               {(text: string) => (
                 <CustomChipInput
                   placeholder={text}
-                  onChange={this.handleTagsChange}
+                  onAdd={this.handleOnTagAdd}
+                  onDelete={this.handleOnTagDelete}
+                  value={this.props.tags}
                   formattedMessageId="createroom_tags"
                   classes={{ root: classes.chipContent }}
                 />

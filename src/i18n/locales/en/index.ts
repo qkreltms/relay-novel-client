@@ -43,7 +43,7 @@ export default {
   createroom_genre: "Genre",
   createroom_title_error: "Title field's length must be in 1~100.",
   createroom_genre_error: "You must select a genre.",
-  createroom_chip_input: "Enter to input",
+  createroom_chip_input: "Press Enter to input",
   novelpage_input: "Input",
   novelpage_btn: "Submit",
   novelpage_join_btn: "Join to write",

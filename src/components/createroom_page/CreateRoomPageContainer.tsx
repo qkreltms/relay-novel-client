@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { ICombineReducersState } from "../../reducers";
 import CreateRoomPage from "./CreateRoomPage";
-import { setCreateRoomDesc, setCreateRoomWriterLimit, setCreateRoomTitle, setCreateRoomTags, setCreateRoomGenre, setCreateRoomCoverImage, initCreateRoomState, setIsTitleError, setIsGenreError } from "../../actions";
+import { setCreateRoomDesc, setCreateRoomWriterLimit, setCreateRoomTitle, pushCreateRoomTag, setCreateRoomGenre, setCreateRoomCoverImage, initCreateRoomState, setIsTitleError, setIsGenreError, deleteCreateRoomTag } from "../../actions";
 
 const mapStateToProps = (state: ICombineReducersState) => ({
   writerLimit: state.createRoom.writerLimit,
@@ -21,7 +21,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   setDesc: (desc: string) => dispatch(setCreateRoomDesc(desc)),
   setTitle: (title: string) => dispatch(setCreateRoomTitle(title)),
   setWriterLimit: (writerLimit: string) => dispatch(setCreateRoomWriterLimit(writerLimit)),
-  setTags: (tags: string) => dispatch(setCreateRoomTags(tags)),
+  pushTag: (tag: string) => dispatch(pushCreateRoomTag(tag)),
+  deleteTag: (tag: string) => dispatch(deleteCreateRoomTag(tag)),
   setGenre: (genre: string) => dispatch(setCreateRoomGenre(genre)),
   setCoverImage: (coverImage: string) => dispatch(setCreateRoomCoverImage(coverImage)),
   initCreateRoomState: () => dispatch(initCreateRoomState()),

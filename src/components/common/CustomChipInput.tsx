@@ -10,8 +10,10 @@ interface IProps {
   allowDuplicates?: boolean;
   fullWidth?: boolean;
   formattedMessageId: string;
-  onChange: (chip: string) => void;
   placeholder?: string;
+  onAdd: (chip: string) => void;
+  onDelete: (chip: string, index: number) => void;
+  value: Array<string>;
 }
 
 const styles = (theme: Theme) =>
@@ -33,9 +35,9 @@ const CustomButton: React.SFC<IProps> = props => {
       classes={props.classes}
       fullWidth={props.fullWidth || false}
       label={<FormattedMessage id={props.formattedMessageId}/>}
-      onChange={(chips: Array<string>) => {
-          props.onChange(chips.join(''));
-      }}
+      value={props.value}
+      onAdd={props.onAdd}
+      onDelete={props.onDelete}
     />
   );
 };

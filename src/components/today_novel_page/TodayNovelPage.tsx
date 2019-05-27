@@ -94,7 +94,8 @@ class TodayNovelPage extends React.Component<IProps> {
                   onClick={this.handleListItemClick(room.id)}
                   title={room.title}
                   genre={room.genre}
-                  tags={room.tags}
+                  // TODO: tags의 타입 변경시 로직 변경하기, db에서 tags: string 이므로 Array<string>으로 바꾸기전 임시작업 
+                  tags={typeof room.tags === 'string' ? room.tags : room.tags.join('') }
                   author={room.user && room.user.nickname}
                   writerLimit={room.writerLimit}
                   like={room.like}

@@ -3,7 +3,7 @@ import { User } from "./user";
 export interface Room {
   id: number;
   writerLimit: number;
-  tags: string;
+  tags: Array<string>;
   title: string;
   desc: string;
   updatedAt: Date;
@@ -24,7 +24,7 @@ export const newRoom = (room: Room = {} as Room) => {
   return {
     id: room.id || 0,
     writerLimit: room.writerLimit || 100,
-    tags: room.tags || "",
+    tags: room.tags || [],
     title: room.title || "",
     desc: room.desc || "",
     like: room.like || 0

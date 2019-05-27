@@ -4,11 +4,12 @@ import {
   SET_CREATEROOM_WRITERLIMIT,
   SET_CREATEROOM_GENRE,
   SET_CREATEROOM_COVERIMAGE,
-  SET_CREATEROOM_TAGS,
+  PUSH_CREATEROOM_TAG,
   ICreateRoomAction,
   INIT_CREATEROOM_STATE,
   SET_CREATEROOM_GENRE_ERROR,
-  SET_CREATEROOM_TITLE_ERROR
+  SET_CREATEROOM_TITLE_ERROR,
+  DELETE_CREATEROOM_TAG
 } from "../actions";
 
 export interface ICreateRoomState {
@@ -16,22 +17,24 @@ export interface ICreateRoomState {
   title: string;
   desc: string;
   genre: string;
-  tags: string;
+  tags: Array<string>;
   coverImage: string;
   isTitleError: boolean;
   isGenreError: boolean;
+  index: number;
 }
 
-const createEmpty = () => ({
-  writerLimit: "100",
-  title: "",
-  desc: "",
-  genre: "",
-  tags: "",
-  coverImage: "",
-  isTitleError: false,
-  isGenreError: false
-} as ICreateRoomState);
+const createEmpty = () =>
+  ({
+    writerLimit: "100",
+    title: "",
+    desc: "",
+    genre: "",
+    tags: [],
+    coverImage: "",
+    isTitleError: false,
+    isGenreError: false
+  } as ICreateRoomState);
 
 export const createRoomReducer = (
   state = createEmpty(),
@@ -70,11 +73,18 @@ export const createRoomReducer = (
       } as ICreateRoomState;
     }
 
-    case SET_CREATEROOM_TAGS: {
+    case PUSH_CREATEROOM_TAG: {
       return {
         ...state,
-        tags: action.tags
+        tags: [...state.tags, action.tag]
       } as ICreateRoomState;
+    }
+
+    case DELETE_CREATEROOM_TAG: {
+      return {
+        ...state,
+        tags: state.tags.filter((tag: string) => tag !== action.tag)
+      };
     }
 
     case SET_CREATEROOM_GENRE: {
@@ -91,21 +101,23 @@ export const createRoomReducer = (
         coverImage: action.coverImage
       } as ICreateRoomState;
     }
+
     case INIT_CREATEROOM_STATE: {
       return createEmpty();
     }
+
     default:
       return state;
   }
 };
 
 const isPassedTitleForm = (title: string) => {
-  if (title.length <= 0) return false; 
+  if (title.length <= 0) return false;
   if (title.length >= 0 && title.length <= 100) return false;
   return true;
-} 
+};
 
 const isPassedGenreForm = (genre: string) => {
   if (genre.length > 0) return false;
   return true;
-}
+};
