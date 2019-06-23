@@ -20,7 +20,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   setPageNumber: (pageNumber: number) => dispatch(setPageNumber(pageNumber))
 });
 
-export const AppbarContainer = connect(
+const AppbarContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Appbar);
+
+export default AppbarContainer;

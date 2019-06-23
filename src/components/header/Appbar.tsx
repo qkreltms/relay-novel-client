@@ -10,12 +10,12 @@ import PropTypes from "prop-types";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import { withRouter } from "react-router-dom";
-import { LoginDialogContainer } from "../common/login_dialog";
+import LoginDialog from "../login_dialog";
 import axios from "axios";
 import config from "../../config";
 import axiosConfig from "../../config/axios";
 import { User, newUser } from "../../models";
-import CustomButton from "../common/CustomButton";
+import CustomButton from "../CustomButton";
 import { ArrowDropDown } from "@material-ui/icons";
 
 const styles = {
@@ -118,7 +118,7 @@ const Appbar: React.SFC<IProps> = props => {
 
   return (
     <div className={classes.root}>
-      {props.isDialogOpen ? <LoginDialogContainer /> : <div />}
+      {props.isDialogOpen ? <LoginDialog /> : <div />}
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>
